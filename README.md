@@ -1,1 +1,1 @@
-Team-2 Habitizer Projects
+Team-2 Habitizer Project
