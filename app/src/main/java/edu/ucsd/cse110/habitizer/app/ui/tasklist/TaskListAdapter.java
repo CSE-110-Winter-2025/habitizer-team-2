@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
@@ -48,13 +49,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         // Populate the view with the task's data.
         binding.taskName.setText(task.name());
+        binding.taskName.setOnClickListener(v->{
+            binding.taskimg.setImageResource(R.drawable.silvringchecked);});
 
-        //Bind the delete button to the callback
-//        binding.taskDeleteButton.setOnClickListener(v -> {
-//            var id = task.id();
-//            assert id != null;
-//            onDeleteClick.accept(id);
-//        });
 
         return binding.getRoot();
     }

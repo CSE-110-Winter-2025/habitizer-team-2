@@ -63,12 +63,6 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
-        // show CreateTaskDialogFragement
-//        view.createTaskButton.setOnClickListener(v -> {
-//            var dialogFragment = CreateTaskDialogFragment.newInstance();
-//            dialogFragment.show(getParentFragmentManager(), "CreateTaskDialogFragment");
-//        });
-
         return view.getRoot();
     }
 }
