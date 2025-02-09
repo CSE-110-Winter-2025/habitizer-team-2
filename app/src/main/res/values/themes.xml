@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
 
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/habitizer_blue</item>
 
     </style>
 

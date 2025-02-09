@@ -12,21 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
+import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
-
-    Consumer<Integer> onDeleteClick;
+    MainViewModel activityModel;
     public TaskListAdapter(Context context,
-                           List<Task> tasks) {
+                           List<Task> tasks, MainViewModel activityModel) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
+        this.activityModel = activityModel;
     }
 
     @NonNull
@@ -49,9 +51,17 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         // Populate the view with the task's data.
         binding.taskName.setText(task.name());
-        binding.taskName.setOnClickListener(v->{
-            binding.taskimg.setImageResource(R.drawable.silvringchecked);});
 
+        binding.taskName.setOnClickListener(b -> {
+            activityModel.checkOff(task.id());
+            notifyDataSetChanged();
+        });
+
+        if(task.checkedOff()){
+            binding.taskImg.setImageResource(R.drawable.silvringchecked);
+        } else {
+            binding.taskImg.setImageResource(R.drawable.silvring);
+        }
 
         return binding.getRoot();
     }

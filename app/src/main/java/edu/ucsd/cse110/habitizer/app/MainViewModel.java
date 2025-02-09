@@ -5,10 +5,9 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -25,7 +24,6 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Double> elapsedTime;
     private final PlainMutableSubject<String> displayedText;
 
-    private final PlainMutableSubject<String> displayedImg;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -44,10 +42,8 @@ public class MainViewModel extends ViewModel {
         this.isCheckedOff = new PlainMutableSubject<>();
         this.elapsedTime  = new PlainMutableSubject<>();
         this.displayedText = new PlainMutableSubject<>();
-        this.displayedImg = new PlainMutableSubject<>();
 
         this.isCheckedOff.setValue(false);
-//        this.displayedImg.setValue("@drawable/silvring");
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
         taskRepository.findAll().observe(tasks -> {
@@ -59,10 +55,15 @@ public class MainViewModel extends ViewModel {
             orderedTasks.setValue(newOrderedTasks);
         });
 
-        isCheckedOff.observe(isCheckedOff -> {
-            if(isCheckedOff == null) return;
-            var img = isCheckedOff ? "@drawable/silvringchecked" : "@drawable/silvring";
-            displayedImg.setValue(img);
+        taskRepository.findAll().observe(tasks -> {
+            if(tasks == null) return;
+
+            var orderedTasks = getOrderedTasks();
+            Objects.requireNonNull(orderedTasks.getValue()).forEach(task -> {
+                if(task == null) return;
+                isCheckedOff.setValue(task.checkedOff());
+            });
+
         });
 
     }
@@ -79,14 +80,10 @@ public class MainViewModel extends ViewModel {
         return isCheckedOff;
     }
 
-    public PlainMutableSubject<String> getDisplayedImg() {
-        return displayedImg;
-    }
-
-    public void checkOff(){
-        var isCheckedOff = this.isCheckedOff.getValue();
-        if (isCheckedOff == null) return;
-        this.isCheckedOff.setValue(true);
+    public void checkOff(int id){
+        var task = taskRepository.find(id);
+        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true);
+        taskRepository.save(checkedOffTask);
     }
 
     public void remove(int id) {

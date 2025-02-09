@@ -20,12 +20,19 @@ public class TaskRepository {
         return dataSource.getAllTasksSubject();
     }
 
+
     public void save(Task task) {
         dataSource.putTask(task);
     }
 
     public void save(List<Task> tasks) {
         dataSource.putTasks(tasks);
+    }
+
+    public void saveAtSortOrder(Task task, int sortOrder){
+        dataSource.putTask(
+                task.withSortOrder(sortOrder)
+        );
     }
 
     public void remove(int id) {

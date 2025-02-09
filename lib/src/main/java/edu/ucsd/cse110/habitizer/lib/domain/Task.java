@@ -11,11 +11,14 @@ public class Task implements Serializable{
     private final int sortOrder;
     private final @NonNull String name;
 
+    private final @NonNull Boolean checkedOff;
 
-    public Task(@Nullable Integer id, int sortOrder, @NonNull String name){
+
+    public Task(@Nullable Integer id, int sortOrder, @NonNull String name, @NonNull Boolean checkedOff){
         this.id = id;
         this.sortOrder = sortOrder;
         this.name = name;
+        this.checkedOff = checkedOff;
     }
 
     public @Nullable Integer id() { return id; }
@@ -24,10 +27,12 @@ public class Task implements Serializable{
 
     public int sortOrder() { return sortOrder; }
 
-    public Task withId(int id){ return new Task(id, sortOrder, name); }
+    public @NonNull Boolean checkedOff(){ return checkedOff; }
+
+    public Task withId(int id){ return new Task(id, sortOrder, name, checkedOff); }
 
     public Task withSortOrder(int sortOrder) {
-        return new Task(id, sortOrder, name);
+        return new Task(id, sortOrder, name, checkedOff);
     }
 
     @Override
@@ -35,12 +40,12 @@ public class Task implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return sortOrder == task.sortOrder && Objects.equals(id, task.id) && Objects.equals(name, task.name);
+        return sortOrder == task.sortOrder && Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(checkedOff, task.checkedOff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sortOrder, name);
+        return Objects.hash(id, sortOrder, name, checkedOff);
     }
 }
 

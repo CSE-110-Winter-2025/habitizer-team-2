@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 
 
@@ -45,7 +44,7 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListAdapter(requireContext(), List.of());
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
@@ -59,6 +58,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
+
 
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);

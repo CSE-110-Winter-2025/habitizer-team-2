@@ -27,13 +27,13 @@ public class InMemoryDataSource {
 
     public final static List<Task> DEFAULT_TASKS = List.of(
 
-            new Task(0,0 , "Shower"),
-            new Task(1,1,"Brush Teeth"),
-            new Task(2,2,"Dress"),
-            new Task(3,3,"Make Coffee"),
-            new Task(4,4,"Make Lunch"),
-            new Task(5,5,"Dinner Prep"),
-            new Task(6,6,"Pack Bag")
+            new Task(0,0 , "Shower", false),
+            new Task(1,1,"Brush Teeth", false),
+            new Task(2,2,"Dress", false),
+            new Task(3,3,"Make Coffee", false),
+            new Task(4,4,"Make Lunch", false),
+            new Task(5,5,"Dinner Prep", false),
+            new Task(6,6,"Pack Bag", false)
 
     );
 
