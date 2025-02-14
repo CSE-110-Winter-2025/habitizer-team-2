@@ -40,10 +40,10 @@ public class HomePageRoutineFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homepage_routine, container, false);
 
-        Button btnMorningTasks = view.findViewById(R.id.morning_routine_button);
+        Button btnMorningTasks = view.findViewById(R.id.morning_routine_button); //added for home buttons binding
         Button btnEveningTasks = view.findViewById(R.id.evening_routine_button);
 
-        btnMorningTasks.setOnClickListener(v -> openFragment(new TaskListMorningFragment()));
+        btnMorningTasks.setOnClickListener(v -> openFragment(new TaskListMorningFragment())); //routine button binding
         btnEveningTasks.setOnClickListener(v -> openFragment(new TaskListEveningFragment()));
 
         return view;
