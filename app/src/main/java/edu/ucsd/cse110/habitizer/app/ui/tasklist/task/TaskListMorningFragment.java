@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.habitizer.app.ui.tasklist;
+package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,17 +17,17 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 
 
-public class TaskListFragment extends Fragment {
+public class TaskListMorningFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
-    private TaskListAdapter adapter;
+    private TaskListMorningAdapter adapter;
 
-    public TaskListFragment() {
+    public TaskListMorningFragment() {
         // Required empty public constructor
     }
 
-    public static TaskListFragment newInstance() {
-        TaskListFragment fragment = new TaskListFragment();
+    public static TaskListMorningFragment newInstance() {
+        TaskListMorningFragment fragment = new TaskListMorningFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -44,7 +44,7 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListMorningAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
