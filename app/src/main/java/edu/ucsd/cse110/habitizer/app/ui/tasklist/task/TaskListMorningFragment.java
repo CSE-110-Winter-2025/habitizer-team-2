@@ -46,7 +46,7 @@ public class TaskListMorningFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now)
         this.adapter = new TaskListMorningAdapter(requireContext(), List.of(), activityModel);
 
-        activityModel.getOrderedTasks().observe(tasks -> {
+        activityModel.getMorningOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!

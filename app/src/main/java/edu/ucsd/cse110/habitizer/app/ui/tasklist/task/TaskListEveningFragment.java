@@ -14,20 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListEveningBinding;
 
 
 public class TaskListEveningFragment extends Fragment {
     private MainViewModel activityModel;
-    private FragmentTaskListBinding view;
-    private TaskListMorningAdapter adapter;
+    private FragmentTaskListEveningBinding view;
+    private TaskListAdapterEvening adapter;
 
     public TaskListEveningFragment() {
         // Required empty public constructor
     }
 
-    public static TaskListMorningFragment newInstance() {
-        TaskListMorningFragment fragment = new TaskListMorningFragment();
+    public static TaskListEveningFragment newInstance() {
+        TaskListEveningFragment fragment = new TaskListEveningFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -44,9 +44,9 @@ public class TaskListEveningFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListMorningAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListAdapterEvening(requireContext(), List.of(), activityModel);
 
-        activityModel.getOrderedTasks().observe(tasks -> {
+        activityModel.getEveningOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
@@ -57,7 +57,7 @@ public class TaskListEveningFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentTaskListBinding.inflate(inflater, container, false);
+        this.view = FragmentTaskListEveningBinding.inflate(inflater, container, false);
 
 
         // Set the adapter on the ListView
