@@ -7,16 +7,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
-import java.io.Console;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListMorningFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.HomePageRoutineFragment;
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
@@ -68,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         else{
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, TaskListFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, TaskListMorningFragment.newInstance())
                     .commit();
         }
         isShowingRoutine = !isShowingRoutine;

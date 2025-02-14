@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import edu.ucsd.cse110.habitizer.app.R;
 
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomepageRoutineBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListEveningFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListMorningFragment;
 
 
 public class HomePageRoutineFragment extends Fragment {
@@ -35,7 +38,23 @@ public class HomePageRoutineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_homepage_routine, container, false);
+        View view = inflater.inflate(R.layout.fragment_homepage_routine, container, false);
+
+        Button btnMorningTasks = view.findViewById(R.id.morning_routine_button);
+        Button btnEveningTasks = view.findViewById(R.id.evening_routine_button);
+
+        btnMorningTasks.setOnClickListener(v -> openFragment(new TaskListMorningFragment()));
+        btnEveningTasks.setOnClickListener(v -> openFragment(new TaskListEveningFragment()));
+
+        return view;
     }
+
+    private void openFragment(Fragment fragment) {
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, fragment)  // Make sure this ID matches your container
+                .addToBackStack(null)  // Allows back navigation
+                .commit();
+    }
+
+
 }
