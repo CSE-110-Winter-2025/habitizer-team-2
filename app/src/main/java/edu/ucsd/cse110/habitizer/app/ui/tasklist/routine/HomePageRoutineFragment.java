@@ -11,6 +11,7 @@ import android.widget.Button;
 import edu.ucsd.cse110.habitizer.app.R;
 
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomepageRoutineBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListEveningFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListMorningFragment;
 
@@ -43,16 +44,35 @@ public class HomePageRoutineFragment extends Fragment {
         Button btnMorningTasks = view.findViewById(R.id.morning_routine_button); //added for home buttons binding
         Button btnEveningTasks = view.findViewById(R.id.evening_routine_button);
 
+        // Stores edit morning and evening routine buttons to use
+        Button btnEditMornRtn = view.findViewById(R.id.edit_morning_rtn_btn);
+        Button btnEditEvenRtn = view.findViewById(R.id.edit_evening_rtn_btn);
+
         btnMorningTasks.setOnClickListener(v -> openFragment(new TaskListMorningFragment())); //routine button binding
         btnEveningTasks.setOnClickListener(v -> openFragment(new TaskListEveningFragment()));
 
-        return view;
+        // Listens to user pressing edit morning or evening routine buttons
+        // Sends in true or false depending on the button pressed to properly populate fragment with correct data
+        btnEditMornRtn.setOnClickListener(v -> openEditRoutineTasksFragment(true));
+        btnEditEvenRtn.setOnClickListener(v -> openEditRoutineTasksFragment(false));
+
+        return view.getRootView();
     }
 
     private void openFragment(Fragment fragment) {
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerView, fragment)  // Make sure this ID matches your container
                 .addToBackStack(null)  // Allows back navigation
+                .commit();
+    }
+
+    // Specific fragment intended for detecting if evening or morning routine is chosen to edit
+    // returns true if morning routine is chosen
+    private void openEditRoutineTasksFragment(boolean isMorning) {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, EditRoutineTasksFragment.newInstance(isMorning)) // boolean parameter for instance of morning or evening routine
+                .addToBackStack(null)
                 .commit();
     }
 
