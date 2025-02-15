@@ -1,14 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasklist.task.EditRoutineTasks">
+    tools:context=".ui.tasklist.task.EditRoutineTasksFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ListView
+        android:id="@+id/edit_tasks_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/create_task_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_menu_description"
+        tools:listitem="@layout/edit_list_item_task">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/create_task_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="Add Task to Routine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_tasks_list" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/edit_menu_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="2dp"
+        android:text="Add or Rename a Task in your routine"
+        android:textAlignment="center"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@id/edit_tasks_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_menu_title" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/edit_menu_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="20dp"
+        android:text="Edit Routine"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/edit_menu_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,12 +14,11 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListEveningBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-public class TaskListAdapterEvening extends ArrayAdapter<Task> {
+public class TaskListEveningAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
-    public TaskListAdapterEvening(Context context,
+    public TaskListEveningAdapter(Context context,
                                   List<Task> tasks, MainViewModel activityModel) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.

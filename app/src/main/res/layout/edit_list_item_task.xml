@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp">
+    android:layout_height="55sp">
 
     <TextView
-        android:id="@+id/list_task_name"
+        android:id="@+id/edit_list_task_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -14,7 +14,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
         android:text="Task Name"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_edit_button"

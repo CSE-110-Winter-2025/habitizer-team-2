@@ -3,35 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/list_task_name"
-        android:layout_width="0dp"
+        android:id="@+id/task_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="Task Name"
-        android:textSize="24sp"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/task_edit_button"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="128dp"
+        android:text="@string/text_name"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/task_edit_button"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_edit_square"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/task_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="3dp"
+        android:contentDescription="@string/taskImg"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?android:attr/textColorSecondary" />
+        app:srcCompat="@drawable/silvring" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
