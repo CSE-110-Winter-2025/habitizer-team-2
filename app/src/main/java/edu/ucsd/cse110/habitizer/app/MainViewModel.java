@@ -45,7 +45,6 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(TaskRepository morningTaskRepository, TaskRepository eveningTaskRepository) {
         this.morningTaskRepository = morningTaskRepository;
         this.eveningTaskRepository = eveningTaskRepository;
-
         // Create the observable subjects.
         this.morningOrderedTasks = new PlainMutableSubject<>();
         this.morningIsCheckedOff = new PlainMutableSubject<>();

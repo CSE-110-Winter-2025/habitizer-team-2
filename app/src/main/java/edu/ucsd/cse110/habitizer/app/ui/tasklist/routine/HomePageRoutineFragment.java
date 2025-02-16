@@ -12,12 +12,12 @@ import edu.ucsd.cse110.habitizer.app.R;
 
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomepageRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListEveningFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListMorningFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 
 
 public class HomePageRoutineFragment extends Fragment {
     private FragmentHomepageRoutineBinding view;
+
 
     public HomePageRoutineFragment() {
         // Required empty public constructor
@@ -48,8 +48,8 @@ public class HomePageRoutineFragment extends Fragment {
         Button btnEditMornRtn = view.findViewById(R.id.edit_morning_rtn_btn);
         Button btnEditEvenRtn = view.findViewById(R.id.edit_evening_rtn_btn);
 
-        btnMorningTasks.setOnClickListener(v -> openFragment(new TaskListMorningFragment())); //routine button binding
-        btnEveningTasks.setOnClickListener(v -> openFragment(new TaskListEveningFragment()));
+        btnMorningTasks.setOnClickListener(v -> openTaskListFragment(true)); //routine button binding
+        btnEveningTasks.setOnClickListener(v -> openTaskListFragment(false));
 
         // Listens to user pressing edit morning or evening routine buttons
         // Sends in true or false depending on the button pressed to properly populate fragment with correct data
@@ -59,9 +59,9 @@ public class HomePageRoutineFragment extends Fragment {
         return view.getRootView();
     }
 
-    private void openFragment(Fragment fragment) {
+    private void openTaskListFragment(boolean isMorning) {
         requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, fragment)  // Make sure this ID matches your container
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(isMorning))  // Make sure this ID matches your container
                 .addToBackStack(null)  // Allows back navigation
                 .commit();
     }

@@ -1,9 +1,12 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,20 +18,30 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
 
-
-public class TaskListMorningFragment extends Fragment {
+public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTaskListBinding view;
-    private TaskListMorningAdapter adapter;
+    private TaskListAdapter adapter;
 
-    public TaskListMorningFragment() {
+    public boolean isMorning;
+
+    public int elapsedTimeMinutes;
+    private Runnable updateRunnable;
+    private Handler handler;
+    private TextView elapsedTimeTextView;
+    private Stopwatch stopwatch;
+
+    public TaskListFragment() {
         // Required empty public constructor
     }
 
-    public static TaskListMorningFragment newInstance() {
-        TaskListMorningFragment fragment = new TaskListMorningFragment();
+    public static TaskListFragment newInstance(boolean isMorning) {
+        TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
+        args.putBoolean("IS_MORNING", isMorning);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,6 +50,10 @@ public class TaskListMorningFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(getArguments() != null){
+            isMorning = getArguments().getBoolean("IS_MORNING", true);
+            elapsedTimeMinutes = getArguments().getInt("ELAPSED_TIME_MINUTES", 0);
+        }
         // Initialize the Model
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -44,14 +61,17 @@ public class TaskListMorningFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListMorningAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, isMorning);
 
-        activityModel.getMorningOrderedTasks().observe(tasks -> {
+        var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
+        tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
             adapter.notifyDataSetChanged();
         });
+
+        handler = new Handler();
     }
 
     @Nullable
@@ -59,10 +79,30 @@ public class TaskListMorningFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
 
-
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
+        // Getting the elapsedTime text from layout
+        elapsedTimeTextView = view.elapsedTimeTextView;
+
+        // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
+        stopwatch = new Stopwatch(view.elapsedTimeTextView);
+
+        // Start the Stopwatch
+        stopwatch.start();
+
         return view.getRoot();
+    }
+
+    public boolean getIsMorning(){return this.isMorning;}
+
+    /**
+     * Called when the view hierarchy associated with the fragment is being removed.
+     * This method is used to perform any final cleanup before the fragment's view is destroyed.
+     *
+     */
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopwatch.stop();
     }
 }

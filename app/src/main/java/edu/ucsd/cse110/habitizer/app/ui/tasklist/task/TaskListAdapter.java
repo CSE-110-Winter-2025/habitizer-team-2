@@ -16,10 +16,12 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-public class TaskListMorningAdapter extends ArrayAdapter<Task> {
+public class TaskListAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
-    public TaskListMorningAdapter(Context context,
-                                  List<Task> tasks, MainViewModel activityModel) {
+    boolean isMorning;
+    public TaskListAdapter(Context context,
+                                  List<Task> tasks, MainViewModel activityModel,
+                           boolean isMorning) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -27,6 +29,7 @@ public class TaskListMorningAdapter extends ArrayAdapter<Task> {
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
         this.activityModel = activityModel;
+        this.isMorning = isMorning;
     }
 
     @NonNull
@@ -51,8 +54,14 @@ public class TaskListMorningAdapter extends ArrayAdapter<Task> {
         binding.taskName.setText(task.name());
 
         binding.taskName.setOnClickListener(b -> {
-            activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
-            notifyDataSetChanged();
+            if(isMorning){
+                activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
+                notifyDataSetChanged();
+            } else {
+                activityModel.checkOff(task.id(), activityModel.getEveningTaskRepository());
+                notifyDataSetChanged();
+            }
+
         });
 
         if(task.checkedOff()){

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_bar_menu_swap_views"
         android:title="Swap Views"
-        android:icon="@drawable/ic_swap"
+        android:icon="@drawable/backarrow"
         android:orderInCategory="1"
         app:iconTint="@color/white"
         app:showAsAction="always" />
