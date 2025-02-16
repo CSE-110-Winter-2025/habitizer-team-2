@@ -9,7 +9,7 @@ import android.widget.TextView;
  * It uses a Handler to schedule updates every minute.
  */
 public class Stopwatch {
-    private int elapsedTimeMinutes;
+    private int elapsedTimeSeconds;
     private final Handler handler;
     private final TextView elapsedTimeTextView;
     private final Runnable updateRunnable;
@@ -20,7 +20,7 @@ public class Stopwatch {
      * @param elapsedTimeTextView The TextView to update with the elapsed time.
      */
     public Stopwatch(TextView elapsedTimeTextView) {
-        this.elapsedTimeMinutes = 0;
+        this.elapsedTimeSeconds = 0;
         this.handler = new Handler();
         this.elapsedTimeTextView = elapsedTimeTextView;
 
@@ -28,17 +28,17 @@ public class Stopwatch {
         this.updateRunnable = new Runnable() {
             @Override
             public void run() {
-                // Log the elapsed time in minutes (for debugging)
-                Log.d("Stopwatch", String.valueOf(elapsedTimeMinutes) + " minutes.");
+                // Log the elapsed time in seconds (for debugging)
+                Log.d("Stopwatch", String.valueOf(elapsedTimeSeconds) + " seconds.");
 
                 // Update the elapsedTimeTextView with the current elapsed time in minutes
-                elapsedTimeTextView.setText(String.valueOf(elapsedTimeMinutes));
+                elapsedTimeTextView.setText(String.valueOf(elapsedTimeSeconds/60));
 
-                // Schedule the Runnable to run again after 60 seconds (60000 milliseconds)
-                handler.postDelayed(this, 60000); // Update every minute
+                // Schedule the Runnable to run again every second
+                handler.postDelayed(this, 1000); // Update every minute
 
                 // Increment the elapsed time by one minute
-                elapsedTimeMinutes++;
+                elapsedTimeSeconds++;
             }
         };
     }
@@ -64,7 +64,7 @@ public class Stopwatch {
      *
      * @return The elapsed time in minutes.
      */
-    public int getElapsedTimeMinutes() {
-        return elapsedTimeMinutes;
+    public int getElapsedTimeInMinutes() {
+        return elapsedTimeSeconds / 60;
     }
 }
