@@ -11,12 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListMorningFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.HomePageRoutineFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
-    private boolean isShowingRoutine = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,27 +48,17 @@ public class MainActivity extends AppCompatActivity {
 
         if (itemId == R.id.action_bar_menu_swap_views) {
             // TODO: Swap the views.
-            swapFragments();
-
+            swapToMainMenu();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void swapFragments(){
-        if(isShowingRoutine){
+    private void swapToMainMenu(){
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainerView, HomePageRoutineFragment.newInstance())
                     .commit();
-        }
-        else{
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, TaskListMorningFragment.newInstance())
-                    .commit();
-        }
-        isShowingRoutine = !isShowingRoutine;
     }
 
 }

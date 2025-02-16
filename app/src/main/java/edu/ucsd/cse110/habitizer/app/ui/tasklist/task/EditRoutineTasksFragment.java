@@ -67,11 +67,11 @@ public class EditRoutineTasksFragment extends Fragment {
 
         // Below is the updated code when default morning and evening lists are created instead of just one default
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
-        // var tasksData = isMorning ? activityModel.getMorningTasks() : activityModel.getEveningTasks();
+        var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
         adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel);
 
         // tasksData.observe(tasks -> {
-        activityModel.getOrderedTasks().observe(tasks -> {
+        tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapterList.clear();
             adapterList.addAll(new ArrayList<>(tasks));
