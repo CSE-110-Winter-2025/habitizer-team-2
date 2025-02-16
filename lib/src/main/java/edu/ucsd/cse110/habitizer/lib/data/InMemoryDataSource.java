@@ -135,6 +135,20 @@ public class InMemoryDataSource {
         allTasksSubject.setValue(getTasks());
     }
 
+    public void replaceName(int id, String name) {
+        var task = tasks.get(id);
+        if (task != null) {
+            var updatedTask = task.withName(name); // Create a new Task with the updated name
+            tasks.put(id, updatedTask); // Store the updated Task back in the map
+
+            // Notify observers (if using reactive programming)
+            if (taskSubjects.containsKey(id)) {
+                taskSubjects.get(id).setValue(updatedTask);
+            }
+            allTasksSubject.setValue(getTasks()); // Store the new Task instance in the map
+        }
+    }
+
     public void shiftSortOrders(int from, int to, int by) {
         var tasks = this.tasks.values().stream()
                 .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to)

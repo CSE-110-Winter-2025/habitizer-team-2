@@ -31,6 +31,14 @@ public class TaskTest {
     }
 
     @Test
+    public void testWithName() {
+        var task = new Task(1,0 , "wash hands", false);
+        var expected = new Task(1, 0, "Yes", false);
+        var actual = task.withName("Yes");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testWithSortOrder() {
         var task = new Task(1, 0, "wash hands", false);
         var expected = new Task(1, 42, "wash hands", false);
