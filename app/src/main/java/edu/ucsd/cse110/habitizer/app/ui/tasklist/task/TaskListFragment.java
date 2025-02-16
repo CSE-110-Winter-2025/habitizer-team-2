@@ -19,6 +19,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -64,6 +65,16 @@ public class TaskListFragment extends Fragment {
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, isMorning);
 
         var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
+
+        List<Task> oldTasks = tasksData.getValue();
+        for (int i = 0; i < oldTasks.size(); i++){
+            if (isMorning){
+                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getMorningTaskRepository());
+            } else {
+                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getEveningTaskRepository());
+            }
+        }
+
         tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
@@ -91,6 +102,9 @@ public class TaskListFragment extends Fragment {
         // Start the Stopwatch
         stopwatch.start();
 
+        // Give stopwatch access to adapter
+        adapter.setStopwatch(stopwatch);
+
         return view.getRoot();
     }
 
@@ -105,4 +119,6 @@ public class TaskListFragment extends Fragment {
         super.onDestroyView();
         stopwatch.stop();
     }
+
+
 }

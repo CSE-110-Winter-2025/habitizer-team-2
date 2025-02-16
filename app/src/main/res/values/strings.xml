@@ -8,4 +8,5 @@
     <string name="_0">0</string>
     <string name="m">m</string>
     <string name="of">of</string>
+    <string name="uncompletedTaskString">-</string>
 </resources>

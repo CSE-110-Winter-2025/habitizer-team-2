@@ -67,4 +67,12 @@ public class Stopwatch {
     public int getElapsedTimeInMinutes() {
         return elapsedTimeSeconds / 60;
     }
+
+    /**
+     * Returns the elapsed time in seconds.
+     * @return the elapsed time in seconds.
+     */
+    public int getElapsedTimeSeconds() {
+        return this.elapsedTimeSeconds;
+    }
 }
