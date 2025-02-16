@@ -18,7 +18,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -31,6 +31,7 @@ public class TaskListFragment extends Fragment {
     private Runnable updateRunnable;
     private Handler handler;
     private TextView elapsedTimeTextView;
+    private Stopwatch stopwatch;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -84,27 +85,11 @@ public class TaskListFragment extends Fragment {
         // Getting the elapsedTime text from layout
         elapsedTimeTextView = view.elapsedTimeTextView;
 
+        // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
+        stopwatch = new Stopwatch(view.elapsedTimeTextView);
 
-        // Runnable to update the elapsed time every minute
-        updateRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // Log the elapsed time in minutes (for debugging)
-                Log.d("Stopwatch", String.valueOf(elapsedTimeMinutes) + " minutes.");
-
-                // Update the elapsedTimeTextView with the current elapsed time in minutes
-                elapsedTimeTextView.setText(String.valueOf(elapsedTimeMinutes));
-
-                // Schedule the Runnable to run again after 60 seconds (60000 milliseconds)
-                handler.postDelayed(this, 60000); // Update every minute
-
-                // Increment the elapsed time by one minute
-                elapsedTimeMinutes++;
-            }
-        };
-
-        // Start the Runnable to begin updating the elapsed time every minute
-        handler.post(updateRunnable);
+        // Start the Stopwatch
+        stopwatch.start();
 
         return view.getRoot();
     }
@@ -115,12 +100,9 @@ public class TaskListFragment extends Fragment {
      * Called when the view hierarchy associated with the fragment is being removed.
      * This method is used to perform any final cleanup before the fragment's view is destroyed.
      *
-     * In this implementation, the method removes any pending callbacks for the updateRunnable
-     * to prevent memory leaks and ensure that the Runnable does not continue to execute after
-     * the view has been destroyed.
      */
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeCallbacks(updateRunnable);
+        stopwatch.stop();
     }
 }
