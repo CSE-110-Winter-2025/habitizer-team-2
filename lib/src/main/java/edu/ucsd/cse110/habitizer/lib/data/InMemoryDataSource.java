@@ -25,7 +25,7 @@ public class InMemoryDataSource {
     public InMemoryDataSource() {
     }
 
-    public final static List<Task> DEFAULT_TASKS = List.of(
+    public final static List<Task> DEFAULT_TASKS_MORNING = List.of(
 
             new Task(0,0 , "Shower", false),
             new Task(1,1,"Brush Teeth", false),
@@ -37,9 +37,27 @@ public class InMemoryDataSource {
 
     );
 
-    public static InMemoryDataSource fromDefault() {
+    public final static List<Task> DEFAULT_TASKS_EVENING = List.of(
+
+            new Task(0,0 , "Prepare Dinner", false),
+            new Task(1,1,"Eat Dinner", false),
+            new Task(2,2,"Do Laundry", false),
+            new Task(3,3,"Watch TV", false),
+            new Task(4,4,"Walk Dog", false),
+            new Task(5,5,"Shower", false),
+            new Task(6,6,"Get in Bed", false)
+
+    );
+
+    public static InMemoryDataSource fromDefaultMorning() {
         var data = new InMemoryDataSource();
-        data.putTasks(DEFAULT_TASKS);
+        data.putTasks(DEFAULT_TASKS_MORNING);
+        return data;
+    }
+
+    public static InMemoryDataSource fromDefaultEvening() {
+        var data = new InMemoryDataSource();
+        data.putTasks(DEFAULT_TASKS_EVENING);
         return data;
     }
 
@@ -114,6 +132,20 @@ public class InMemoryDataSource {
             taskSubjects.get(id).setValue(null);
         }
         allTasksSubject.setValue(getTasks());
+    }
+
+    public void replaceName(int id, String name) {
+        var task = tasks.get(id);
+        if (task != null) {
+            var updatedTask = task.withName(name); // Create a new Task with the updated name
+            tasks.put(id, updatedTask); // Store the updated Task back in the map
+
+            // Notify observers (if using reactive programming)
+            if (taskSubjects.containsKey(id)) {
+                taskSubjects.get(id).setValue(updatedTask);
+            }
+            allTasksSubject.setValue(getTasks()); // Store the new Task instance in the map
+        }
     }
 
     public void shiftSortOrders(int from, int to, int by) {

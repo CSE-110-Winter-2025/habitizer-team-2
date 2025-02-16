@@ -13,7 +13,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskEveningBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListEveningAdapter extends ArrayAdapter<Task> {
@@ -37,21 +37,21 @@ public class TaskListEveningAdapter extends ArrayAdapter<Task> {
         assert task != null;
 
         // Check if a view is being reused...
-        ListItemTaskBinding binding;
+        ListItemTaskEveningBinding binding;
         if (convertView != null) {
             // if so, bind to it
-            binding = ListItemTaskBinding.bind(convertView);
+            binding = ListItemTaskEveningBinding.bind(convertView);
         } else {
             // otherwise inflate a new view from our layout XML.
             var layoutInflater = LayoutInflater.from(getContext());
-            binding = ListItemTaskBinding.inflate(layoutInflater, parent, false);
+            binding = ListItemTaskEveningBinding.inflate(layoutInflater, parent, false);
         }
 
         // Populate the view with the task's data.
         binding.taskName.setText(task.name());
 
         binding.taskName.setOnClickListener(b -> {
-            activityModel.checkOff(task.id());
+            activityModel.checkOff(task.id(), activityModel.getEveningTaskRepository());
             notifyDataSetChanged();
         });
 

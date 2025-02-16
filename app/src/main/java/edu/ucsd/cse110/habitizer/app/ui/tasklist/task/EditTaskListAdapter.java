@@ -9,8 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
@@ -20,11 +23,13 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class EditTaskListAdapter extends ArrayAdapter<Task> {
     private final MainViewModel activityModel;
+    Consumer<Integer> onEditClick;
 
     // Parameters are tasks, if it is morning routine selected, and activity model
-    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel) {
+    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel, Consumer<Integer> onEditClick) {
         super(context, 0, tasks);
         this.activityModel = activityModel;
+        this.onEditClick = onEditClick;
     }
 
     @NonNull
@@ -49,6 +54,12 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
 
         // Populate the view with task data
         binding.editListTaskName.setText(task.name());
+
+        binding.taskEditButton.setOnClickListener(v -> {
+            var id = task.id();
+            assert id != null;
+            onEditClick.accept(id);
+        });
 
         return convertView;
     }

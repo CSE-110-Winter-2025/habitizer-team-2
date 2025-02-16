@@ -10,12 +10,20 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditRoutineTasksBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.CreateTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 // TO DO: Make two lists for morning and evening -> update methods to return those lists -> update edit list
 
@@ -67,11 +75,27 @@ public class EditRoutineTasksFragment extends Fragment {
 
         // Below is the updated code when default morning and evening lists are created instead of just one default
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
-        // var tasksData = isMorning ? activityModel.getMorningTasks() : activityModel.getEveningTasks();
-        adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel);
+        var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
 
-        // tasksData.observe(tasks -> {
-        activityModel.getOrderedTasks().observe(tasks -> {
+//        tasksData.observe(tasks -> {
+//            if (tasks == null) return;
+//            if (adapterList == null) {
+//                adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(tasks), activityModel, id -> {
+//                    var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, isMorning);
+//                    dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
+//                });
+//            } else {
+//                adapterList.clear();
+//                adapterList.addAll(new ArrayList<>(tasks));
+//                adapterList.notifyDataSetChanged();
+//            }
+//        });
+        this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, id -> {
+            var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, isMorning);
+            dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
+        });
+
+        tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapterList.clear();
             adapterList.addAll(new ArrayList<>(tasks));
@@ -83,9 +107,20 @@ public class EditRoutineTasksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = FragmentEditRoutineTasksBinding.inflate(inflater, container, false);
+        this.view = FragmentEditRoutineTasksBinding.inflate(inflater, container, false);
+
+
         // edit tasks list has adapter list
         view.editTasksList.setAdapter(adapterList);
+
+        view.createTaskButton.setOnClickListener(v -> {
+            var dialogFragment = CreateTaskDialogFragment.newInstance(isMorning);
+            dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialog");
+        });
+
+
         return view.getRoot();
     }
+
+
 }

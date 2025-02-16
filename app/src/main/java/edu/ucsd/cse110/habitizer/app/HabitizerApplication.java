@@ -6,18 +6,22 @@ import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
 public class HabitizerApplication extends Application {
-    private InMemoryDataSource dataSource;
-    private TaskRepository taskRepository;
+    private InMemoryDataSource morningDataSource;
+
+    private InMemoryDataSource eveningDataSource;
+    private TaskRepository morningTaskRepository;
+    private TaskRepository eveningTaskRepository;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        this.dataSource = InMemoryDataSource.fromDefault();
-        this.taskRepository = new TaskRepository(dataSource);
+        this.morningDataSource = InMemoryDataSource.fromDefaultMorning();
+        this.eveningDataSource = InMemoryDataSource.fromDefaultEvening();
+        this.morningTaskRepository = new TaskRepository(morningDataSource);
+        this.eveningTaskRepository = new TaskRepository(eveningDataSource);
     }
 
-    public TaskRepository getTaskRepository() {
-        return taskRepository;
-    }
+    public TaskRepository getMorningTaskRepository() {return morningTaskRepository;}
+    public TaskRepository getEveningTaskRepository() {return eveningTaskRepository;}
 }

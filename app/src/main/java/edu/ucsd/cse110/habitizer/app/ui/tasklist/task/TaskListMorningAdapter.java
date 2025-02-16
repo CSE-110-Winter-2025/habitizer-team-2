@@ -51,7 +51,7 @@ public class TaskListMorningAdapter extends ArrayAdapter<Task> {
         binding.taskName.setText(task.name());
 
         binding.taskName.setOnClickListener(b -> {
-            activityModel.checkOff(task.id());
+            activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
             notifyDataSetChanged();
         });
 

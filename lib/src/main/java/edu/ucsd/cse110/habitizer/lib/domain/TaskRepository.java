@@ -41,7 +41,7 @@ public class TaskRepository {
 
     public void append(Task task){
         dataSource.putTask(
-                task.withSortOrder((dataSource.getMaxSortOrder() + 1))
+                task.withSortOrder(dataSource.getMaxSortOrder() + 1)
         );
     }
 
@@ -52,4 +52,8 @@ public class TaskRepository {
         );
     }
 
+
+    public void rename(int id, String name) {
+        dataSource.replaceName(id, name);
+    }
 }
