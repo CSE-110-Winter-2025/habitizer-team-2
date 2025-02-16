@@ -81,19 +81,29 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
-        // Display the elapsed time
+        // Getting the elapsedTime text from layout
         elapsedTimeTextView = view.elapsedTimeTextView;
 
+
+        // Runnable to update the elapsed time every minute
         updateRunnable = new Runnable() {
             @Override
             public void run() {
+                // Log the elapsed time in minutes (for debugging)
                 Log.d("Stopwatch", String.valueOf(elapsedTimeMinutes) + " minutes.");
+
+                // Update the elapsedTimeTextView with the current elapsed time in minutes
                 elapsedTimeTextView.setText(String.valueOf(elapsedTimeMinutes));
+
+                // Schedule the Runnable to run again after 60 seconds (60000 milliseconds)
                 handler.postDelayed(this, 60000); // Update every minute
+
+                // Increment the elapsed time by one minute
                 elapsedTimeMinutes++;
             }
         };
 
+        // Start the Runnable to begin updating the elapsed time every minute
         handler.post(updateRunnable);
 
         return view.getRoot();
@@ -101,6 +111,14 @@ public class TaskListFragment extends Fragment {
 
     public boolean getIsMorning(){return this.isMorning;}
 
+    /**
+     * Called when the view hierarchy associated with the fragment is being removed.
+     * This method is used to perform any final cleanup before the fragment's view is destroyed.
+     *
+     * In this implementation, the method removes any pending callbacks for the updateRunnable
+     * to prevent memory leaks and ensure that the Runnable does not continue to execute after
+     * the view has been destroyed.
+     */
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacks(updateRunnable);
