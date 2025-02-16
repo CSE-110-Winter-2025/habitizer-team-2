@@ -14,6 +14,8 @@ public class Stopwatch {
     private final TextView elapsedTimeTextView;
     private final Runnable updateRunnable;
 
+    public Boolean isRunning;
+
     /**
      * Constructs a new Stopwatch instance.
      *
@@ -23,7 +25,7 @@ public class Stopwatch {
         this.elapsedTimeSeconds = 0;
         this.handler = new Handler();
         this.elapsedTimeTextView = elapsedTimeTextView;
-
+        this.isRunning = false;
         // Runnable to update the elapsed time every minute
         this.updateRunnable = new Runnable() {
             @Override
@@ -49,6 +51,7 @@ public class Stopwatch {
      */
     public void start() {
         handler.post(updateRunnable);
+        isRunning = true;
     }
 
     /**
@@ -57,6 +60,11 @@ public class Stopwatch {
      */
     public void stop() {
         handler.removeCallbacks(updateRunnable);
+        isRunning = false;
+    }
+
+    public void fastforward(int seconds) {
+        elapsedTimeSeconds+=seconds;
     }
 
     /**
