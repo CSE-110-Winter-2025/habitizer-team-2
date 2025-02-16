@@ -18,6 +18,7 @@ import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 public class HomePageRoutineFragment extends Fragment {
     private FragmentHomepageRoutineBinding view;
 
+
     public HomePageRoutineFragment() {
         // Required empty public constructor
     }

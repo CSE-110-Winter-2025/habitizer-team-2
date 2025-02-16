@@ -1,9 +1,12 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +18,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -23,6 +26,12 @@ public class TaskListFragment extends Fragment {
     private TaskListAdapter adapter;
 
     public boolean isMorning;
+
+    public int elapsedTimeMinutes;
+    private Runnable updateRunnable;
+    private Handler handler;
+    private TextView elapsedTimeTextView;
+    private Stopwatch stopwatch;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -32,6 +41,7 @@ public class TaskListFragment extends Fragment {
         TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
         args.putBoolean("IS_MORNING", isMorning);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,6 +52,7 @@ public class TaskListFragment extends Fragment {
 
         if(getArguments() != null){
             isMorning = getArguments().getBoolean("IS_MORNING", true);
+            elapsedTimeMinutes = getArguments().getInt("ELAPSED_TIME_MINUTES", 0);
         }
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -59,6 +70,8 @@ public class TaskListFragment extends Fragment {
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
             adapter.notifyDataSetChanged();
         });
+
+        handler = new Handler();
     }
 
     @Nullable
@@ -69,8 +82,27 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
+        // Getting the elapsedTime text from layout
+        elapsedTimeTextView = view.elapsedTimeTextView;
+
+        // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
+        stopwatch = new Stopwatch(view.elapsedTimeTextView);
+
+        // Start the Stopwatch
+        stopwatch.start();
+
         return view.getRoot();
     }
 
     public boolean getIsMorning(){return this.isMorning;}
+
+    /**
+     * Called when the view hierarchy associated with the fragment is being removed.
+     * This method is used to perform any final cleanup before the fragment's view is destroyed.
+     *
+     */
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopwatch.stop();
+    }
 }
