@@ -65,6 +65,7 @@ public class Stopwatch {
 
     public void fastforward(int seconds) {
         elapsedTimeSeconds+=seconds;
+        elapsedTimeTextView.setText(String.valueOf(elapsedTimeSeconds/60));
     }
 
     /**

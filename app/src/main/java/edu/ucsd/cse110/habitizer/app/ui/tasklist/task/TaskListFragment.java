@@ -165,6 +165,9 @@ public class TaskListFragment extends Fragment {
             listItem.setEnabled(false);
         }
         view.endButton.setEnabled(false);
+        view.ffButton.setEnabled(false);
+        view.playButton.setEnabled(false);
+        view.stopButton.setEnabled(false);
     }
 
 
