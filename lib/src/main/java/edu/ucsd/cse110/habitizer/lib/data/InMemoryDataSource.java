@@ -67,17 +67,17 @@ public class InMemoryDataSource {
         return data;
     }
 
-    public static InMemoryDataSource fromDefaultGoalMorning() {
-        var data = new InMemoryDataSource();
-        data.putGoalTime(DEFAULT_GOAL_TIME);
-        return data;
-    }
-
-    public static InMemoryDataSource fromDefaultGoalEvening() {
-        var data = new InMemoryDataSource();
-        data.putGoalTime(DEFAULT_GOAL_TIME);
-        return data;
-    }
+//    public static InMemoryDataSource fromDefaultGoalMorning() {
+//        var data = new InMemoryDataSource();
+//        data.putGoalTime(DEFAULT_GOAL_TIME);
+//        return data;
+//    }
+//
+//    public static InMemoryDataSource fromDefaultGoalEvening() {
+//        var data = new InMemoryDataSource();
+//        data.putGoalTime(DEFAULT_GOAL_TE);
+//        return data;
+//    }
 
 
     public List<Task> getTasks() {
@@ -110,13 +110,13 @@ public class InMemoryDataSource {
     }
 
     // UPDATED
-    public int getGoalTime() { return goalTime; }
-
-    public void putGoalTime(int time) {
-        this.goalTime = time;
-
-        allTasksSubject.setValue(getTasks());
-    }
+//    public int getGoalTime() { return goalTime; }
+//
+//    public void putGoalTime(int time) {
+//        this.goalTime = time;
+//
+//        allTasksSubject.setValue(getTasks());
+//    }
 
     public void putTask(Task task) {
         var fixedTask = preInsert(task);
