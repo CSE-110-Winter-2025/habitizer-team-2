@@ -31,7 +31,7 @@ public class InMemoryDataSource {
 
     public final static List<Task> DEFAULT_TASKS_MORNING = List.of(
 
-            new Task(0,0 , "Shower", false),
+            new Task(0,0 , "Shower", false ),
             new Task(1,1,"Brush Teeth", false),
             new Task(2,2,"Dress", false),
             new Task(3,3,"Make Coffee", false),
