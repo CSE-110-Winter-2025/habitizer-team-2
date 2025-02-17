@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -99,6 +101,13 @@ public class TaskListFragment extends Fragment {
         // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
         stopwatch = new Stopwatch(view.elapsedTimeTextView);
 
+        // End Routine Button;
+        Button endButton = view.getRoot().findViewById((R.id.end_button));
+        endButton.setOnClickListener(v -> {
+            view.elapsedTimeTextView.setText(String.valueOf(stopwatch.getElapsedTimeInMinutes()+1));
+            stopwatch.stop();
+            disableInteractions();
+        });
         // Start the Stopwatch
         stopwatch.start();
 
@@ -137,6 +146,17 @@ public class TaskListFragment extends Fragment {
         super.onDestroyView();
         stopwatch.stop();
     }
+
+
+    private void disableInteractions() {
+        view.taskList.setEnabled(false);
+        for (int i = 0; i < view.taskList.getChildCount(); i++) {
+            View listItem = view.taskList.getChildAt(i);
+            listItem.setEnabled(false);
+        }
+        view.endButton.setEnabled(false);
+    }
+
 
 
 }
