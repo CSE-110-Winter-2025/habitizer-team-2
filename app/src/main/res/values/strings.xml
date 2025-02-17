@@ -8,4 +8,7 @@
     <string name="_0">0</string>
     <string name="m">m</string>
     <string name="of">of</string>
+    <string name="uncompletedTaskString">-</string>
+    <string name="ff_button">TODO</string>
+    <string name="stop_button">TODO</string>
 </resources>

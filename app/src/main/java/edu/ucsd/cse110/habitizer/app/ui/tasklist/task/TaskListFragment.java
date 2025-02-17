@@ -21,6 +21,7 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -66,6 +67,16 @@ public class TaskListFragment extends Fragment {
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, isMorning);
 
         var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
+
+        List<Task> oldTasks = tasksData.getValue();
+        for (int i = 0; i < oldTasks.size(); i++){
+            if (isMorning){
+                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getMorningTaskRepository());
+            } else {
+                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getEveningTaskRepository());
+            }
+        }
+
         tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
@@ -100,6 +111,27 @@ public class TaskListFragment extends Fragment {
         // Start the Stopwatch
         stopwatch.start();
 
+
+        // Give stopwatch access to adapter
+        adapter.setStopwatch(stopwatch);
+
+        view.stopButton.setOnClickListener( v -> {
+                if(stopwatch.isRunning){
+                    stopwatch.stop();
+                }
+        });
+
+        view.playButton.setOnClickListener( v -> {
+            if (!stopwatch.isRunning) {
+                stopwatch.start();
+            }
+
+        });
+
+        view.ffButton.setOnClickListener(v -> {
+            stopwatch.fastforward(30);
+        });
+
         return view.getRoot();
     }
 
@@ -115,6 +147,7 @@ public class TaskListFragment extends Fragment {
         stopwatch.stop();
     }
 
+
     private void disableInteractions() {
         view.taskList.setEnabled(false);
         for (int i = 0; i < view.taskList.getChildCount(); i++) {
@@ -123,4 +156,7 @@ public class TaskListFragment extends Fragment {
         }
         view.endButton.setEnabled(false);
     }
+
+
+
 }

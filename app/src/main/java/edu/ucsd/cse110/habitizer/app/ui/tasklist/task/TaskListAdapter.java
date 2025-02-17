@@ -19,6 +19,8 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public class TaskListAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
     boolean isMorning;
+    Stopwatch stopwatch;
+    int taskStartTime = 0;
     public TaskListAdapter(Context context,
                                   List<Task> tasks, MainViewModel activityModel,
                            boolean isMorning) {
@@ -32,11 +34,17 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         this.isMorning = isMorning;
     }
 
+    public void setStopwatch (Stopwatch stopwatch) {
+        this.stopwatch = stopwatch;
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the task for this position.
         var task = getItem(position);
+
+
         assert task != null;
 
         // Check if a view is being reused...
@@ -53,14 +61,20 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // Populate the view with the task's data.
         binding.taskName.setText(task.name());
 
-        binding.taskName.setOnClickListener(b -> {
+
+        binding.taskBox.setOnClickListener(b -> {
+            int completedTime = stopwatch.getElapsedTimeSeconds();
+            int timeElapsed = (completedTime - taskStartTime) / 60 + 1;
+            taskStartTime = completedTime;
+
+            String timeCompleted = "[" + timeElapsed + " m]";
             if(isMorning){
                 activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
-                notifyDataSetChanged();
             } else {
                 activityModel.checkOff(task.id(), activityModel.getEveningTaskRepository());
-                notifyDataSetChanged();
             }
+            binding.timeComplete.setText(timeCompleted);
+            notifyDataSetChanged();
 
         });
 
@@ -92,4 +106,5 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         return id;
     }
+
 }

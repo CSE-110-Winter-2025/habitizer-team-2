@@ -5,6 +5,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -131,8 +132,18 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(checkedOffTask);
     }
 
+    public void removeCheckOff(int id, TaskRepository taskRepository){
+        var task = taskRepository.find(id);
+        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
+        taskRepository.save(checkedOffTask);
+    }
+
     public void remove(int id, TaskRepository taskRepository) {
         taskRepository.remove(id);
+    }
+
+    public void rename(int id, String name, TaskRepository taskRepository) {
+        taskRepository.rename(id, name);
     }
 
     public void append(Task task, TaskRepository taskRepository) {
