@@ -142,6 +142,10 @@ public class MainViewModel extends ViewModel {
         taskRepository.remove(id);
     }
 
+    public void rename(int id, String name, TaskRepository taskRepository) {
+        taskRepository.rename(id, name);
+    }
+
     public void append(Task task, TaskRepository taskRepository) {
         taskRepository.append(task);
     }
