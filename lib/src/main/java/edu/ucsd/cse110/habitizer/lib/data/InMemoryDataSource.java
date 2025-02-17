@@ -17,6 +17,8 @@ public class InMemoryDataSource {
 
 
     private int goalTime;
+
+
     private final Map<Integer, Task> tasks
             = new HashMap<>();
     private final Map<Integer, PlainMutableSubject<Task>> taskSubjects
@@ -74,17 +76,6 @@ public class InMemoryDataSource {
         return data;
     }
 
-//    public static InMemoryDataSource fromDefaultGoalMorning() {
-//        var data = new InMemoryDataSource();
-//        data.putGoalTime(DEFAULT_GOAL_TIME);
-//        return data;
-//    }
-//
-//    public static InMemoryDataSource fromDefaultGoalEvening() {
-//        var data = new InMemoryDataSource();
-//        data.putGoalTime(DEFAULT_GOAL_TE);
-//        return data;
-//    }
 
 
     public List<Task> getTasks() {
@@ -116,9 +107,12 @@ public class InMemoryDataSource {
         return maxSortOrder;
     }
 
+
     public int getGoalTime() {
         return goalTime;
     }
+
+
 
     public void putTask(Task task) {
         var fixedTask = preInsert(task);
