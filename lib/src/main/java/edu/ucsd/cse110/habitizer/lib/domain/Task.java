@@ -14,12 +14,14 @@ public class Task implements Serializable{
     private final @NonNull Boolean checkedOff;
 
 
+
     public Task(@Nullable Integer id, int sortOrder, @NonNull String name, @NonNull Boolean checkedOff){
         this.id = id;
         this.sortOrder = sortOrder;
         this.name = name;
         this.checkedOff = checkedOff;
     }
+
 
     public @Nullable Integer id() { return id; }
 
