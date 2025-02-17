@@ -31,7 +31,7 @@ public class Stopwatch {
             @Override
             public void run() {
                 // Log the elapsed time in seconds (for debugging)
-                Log.d("Stopwatch", String.valueOf(elapsedTimeSeconds) + " seconds.");
+//                Log.d("Stopwatch", String.valueOf(elapsedTimeSeconds) + " seconds.");
 
                 // Update the elapsedTimeTextView with the current elapsed time in minutes
                 elapsedTimeTextView.setText(String.valueOf(elapsedTimeSeconds/60));

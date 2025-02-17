@@ -52,6 +52,14 @@ public class TaskRepository {
         );
     }
 
+    public int getGoalTime(){
+        return dataSource.getGoalTime();
+    }
+
+    public void setGoalTime(int goalTime){
+        dataSource.setGoalTime(goalTime);
+    }
+
 
     public void rename(int id, String name) {
         dataSource.replaceName(id, name);

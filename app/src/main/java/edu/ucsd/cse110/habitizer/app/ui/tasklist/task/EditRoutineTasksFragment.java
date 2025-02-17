@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.DialogFragment;
 
@@ -98,6 +101,36 @@ public class EditRoutineTasksFragment extends Fragment {
         this.view = FragmentEditRoutineTasksBinding.inflate(inflater, container, false);
 
 
+        view.saveGoalButton.setOnClickListener(v -> {
+            String userInput = view.goalTimeInput.getText().toString();
+            try {
+                int intUserInput = Integer.parseInt(userInput);
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Success!")
+                        .setMessage("Goal time saved")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+                if (isMorning) {
+                    activityModel.getMorningTaskRepository().setGoalTime(intUserInput);
+                } else {
+                    activityModel.getEveningTaskRepository().setGoalTime(intUserInput);
+                }
+            } catch (NumberFormatException e) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Fail!")
+                        .setMessage("Invalid number format!")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+                e.printStackTrace(); // Logs the error in Logcat
+            }
+
+            view.goalTimeInput.setText("");
+        });
+
+
+
+
+
         // edit tasks list has adapter list
         view.editTasksList.setAdapter(adapterList);
 
@@ -109,6 +142,7 @@ public class EditRoutineTasksFragment extends Fragment {
 
         return view.getRoot();
     }
+
 
 
 }
