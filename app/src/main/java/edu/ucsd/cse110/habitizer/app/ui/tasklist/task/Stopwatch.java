@@ -39,7 +39,7 @@ public class Stopwatch {
                 // Schedule the Runnable to run again every second
                 handler.postDelayed(this, 1000); // Update every minute
 
-                // Increment the elapsed time by one minute
+                // Increment the elapsed time by one second
                 elapsedTimeSeconds++;
             }
         };
