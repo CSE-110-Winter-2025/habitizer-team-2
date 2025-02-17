@@ -53,7 +53,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // Populate the view with the task's data.
         binding.taskName.setText(task.name());
 
-        binding.taskName.setOnClickListener(b -> {
+        binding.taskBox.setOnClickListener(b -> {
             if(isMorning){
                 activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
                 notifyDataSetChanged();
