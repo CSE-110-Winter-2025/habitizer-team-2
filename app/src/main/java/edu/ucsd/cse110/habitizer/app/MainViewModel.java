@@ -23,11 +23,15 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<List<Task>> morningOrderedTasks;
     private final PlainMutableSubject<Boolean> morningIsCheckedOff;
 
+    private final PlainMutableSubject<Integer> morningGoalTime;
+
     private final PlainMutableSubject<Double> morningElapsedTime;
     private final PlainMutableSubject<String> morningDisplayedText;
 
     private final PlainMutableSubject<List<Task>> eveningOrderedTasks;
     private final PlainMutableSubject<Boolean> eveningIsCheckedOff;
+
+    private final PlainMutableSubject<Integer> eveningGoalTime;
 
     private final PlainMutableSubject<Double> eveningElapsedTime;
     private final PlainMutableSubject<String> eveningDisplayedText;
@@ -48,11 +52,13 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.morningOrderedTasks = new PlainMutableSubject<>();
         this.morningIsCheckedOff = new PlainMutableSubject<>();
+        this.morningGoalTime = new PlainMutableSubject<>();
         this.morningElapsedTime  = new PlainMutableSubject<>();
         this.morningDisplayedText = new PlainMutableSubject<>();
 
         this.eveningOrderedTasks = new PlainMutableSubject<>();
         this.eveningIsCheckedOff = new PlainMutableSubject<>();
+        this.eveningGoalTime = new PlainMutableSubject<>();
         this.eveningElapsedTime  = new PlainMutableSubject<>();
         this.eveningDisplayedText = new PlainMutableSubject<>();
 
@@ -123,6 +129,14 @@ public class MainViewModel extends ViewModel {
 
     public PlainMutableSubject<Boolean> getEveningIsCheckedOff() {
         return eveningIsCheckedOff;
+    }
+
+    public PlainMutableSubject<Integer> getMorningGoalTime() {
+        return morningGoalTime;
+    }
+
+    public PlainMutableSubject<Integer> getEveningGoalTime() {
+        return eveningGoalTime;
     }
 
     public void checkOff(int id, TaskRepository taskRepository){
