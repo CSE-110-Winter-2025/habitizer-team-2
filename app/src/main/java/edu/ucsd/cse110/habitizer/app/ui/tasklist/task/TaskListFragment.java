@@ -102,8 +102,26 @@ public class TaskListFragment extends Fragment {
         // Start the Stopwatch
         stopwatch.start();
 
+
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
+
+        view.stopButton.setOnClickListener( v -> {
+                if(stopwatch.isRunning){
+                    stopwatch.stop();
+                }
+        });
+
+        view.playButton.setOnClickListener( v -> {
+            if (!stopwatch.isRunning) {
+                stopwatch.start();
+            }
+
+        });
+
+        view.ffButton.setOnClickListener(v -> {
+            stopwatch.fastforward(30);
+        });
 
         return view.getRoot();
     }
