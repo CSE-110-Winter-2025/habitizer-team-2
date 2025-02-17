@@ -95,6 +95,16 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
+        if (isMorning) {
+            String goalTimeString = Integer.toString(activityModel.getMorningTaskRepository().getGoalTime());
+            view.goalTextView.setText(goalTimeString);
+        } else{
+            String goalTimeString = Integer.toString(activityModel.getEveningTaskRepository().getGoalTime());
+            view.goalTextView.setText(goalTimeString);
+        }
+
+
+
         // Getting the elapsedTime text from layout
         elapsedTimeTextView = view.elapsedTimeTextView;
 
