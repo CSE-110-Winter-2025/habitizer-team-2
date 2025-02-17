@@ -77,19 +77,7 @@ public class EditRoutineTasksFragment extends Fragment {
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
         var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
 
-//        tasksData.observe(tasks -> {
-//            if (tasks == null) return;
-//            if (adapterList == null) {
-//                adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(tasks), activityModel, id -> {
-//                    var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, isMorning);
-//                    dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
-//                });
-//            } else {
-//                adapterList.clear();
-//                adapterList.addAll(new ArrayList<>(tasks));
-//                adapterList.notifyDataSetChanged();
-//            }
-//        });
+//
         this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, id -> {
             var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, isMorning);
             dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
