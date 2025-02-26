@@ -5,21 +5,20 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
-    private final TaskRepository eveningTaskRepository;
+    private final Routine eveningRoutine;
 
-    private final TaskRepository morningTaskRepository;
+    private final Routine morningRoutine;
     // UI state
     private final PlainMutableSubject<List<Task>> morningOrderedTasks;
     private final PlainMutableSubject<Boolean> morningIsCheckedOff;
@@ -47,9 +46,9 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getMorningTaskRepository(), app.getEveningTaskRepository());
                     });
 
-    public MainViewModel(TaskRepository morningTaskRepository, TaskRepository eveningTaskRepository) {
-        this.morningTaskRepository = morningTaskRepository;
-        this.eveningTaskRepository = eveningTaskRepository;
+    public MainViewModel(Routine morningRoutine, Routine eveningRoutine) {
+        this.morningRoutine = morningRoutine;
+        this.eveningRoutine = eveningRoutine;
         // Create the observable subjects.
         this.morningOrderedTasks = new PlainMutableSubject<>();
         this.morningIsCheckedOff = new PlainMutableSubject<>();
@@ -64,7 +63,7 @@ public class MainViewModel extends ViewModel {
         this.eveningDisplayedText = new PlainMutableSubject<>();
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
-        morningTaskRepository.findAll().observe(tasks -> {
+        morningRoutine.findAll().observe(tasks -> {
             if (tasks == null) return; // not ready yet, ignore
 
             var newOrderedTasks = tasks.stream()
@@ -73,7 +72,7 @@ public class MainViewModel extends ViewModel {
             morningOrderedTasks.setValue(newOrderedTasks);
         });
 
-        morningTaskRepository.findAll().observe(tasks -> {
+        morningRoutine.findAll().observe(tasks -> {
             if(tasks == null) return;
 
             var orderedTasks = getMorningOrderedTasks();
@@ -85,7 +84,7 @@ public class MainViewModel extends ViewModel {
         });
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
-        eveningTaskRepository.findAll().observe(tasks -> {
+        eveningRoutine.findAll().observe(tasks -> {
             if (tasks == null) return; // not ready yet, ignore
 
             var newOrderedTasks = tasks.stream()
@@ -94,7 +93,7 @@ public class MainViewModel extends ViewModel {
             eveningOrderedTasks.setValue(newOrderedTasks);
         });
 
-        eveningTaskRepository.findAll().observe(tasks -> {
+        eveningRoutine.findAll().observe(tasks -> {
             if(tasks == null) return;
 
             var orderedTasks = getEveningOrderedTasks();
@@ -107,7 +106,7 @@ public class MainViewModel extends ViewModel {
 
     }
 
-    public TaskRepository getMorningTaskRepository(){return morningTaskRepository;}
+    public Routine getMorningTaskRepository(){return morningRoutine;}
 
     public PlainMutableSubject<String> getMorningDisplayedText() {return morningDisplayedText;}
 
@@ -119,7 +118,7 @@ public class MainViewModel extends ViewModel {
         return morningIsCheckedOff;
     }
 
-    public TaskRepository getEveningTaskRepository(){return eveningTaskRepository;}
+    public Routine getEveningTaskRepository(){return eveningRoutine;}
 
 
     public PlainMutableSubject<String> getEveningDisplayedText() {return eveningDisplayedText;}
@@ -140,32 +139,32 @@ public class MainViewModel extends ViewModel {
         return eveningGoalTime;
     }
 
-    public void checkOff(int id, TaskRepository taskRepository){
-        var task = taskRepository.find(id);
+    public void checkOff(int id, Routine routine){
+        var task = routine.find(id);
         var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true);
-        taskRepository.save(checkedOffTask);
+        routine.save(checkedOffTask);
     }
 
-    public void removeCheckOff(int id, TaskRepository taskRepository){
-        var task = taskRepository.find(id);
+    public void removeCheckOff(int id, Routine routine){
+        var task = routine.find(id);
         var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
-        taskRepository.save(checkedOffTask);
+        routine.save(checkedOffTask);
     }
 
-    public void remove(int id, TaskRepository taskRepository) {
-        taskRepository.remove(id);
+    public void remove(int id, Routine routine) {
+        routine.remove(id);
     }
 
-    public void rename(int id, String name, TaskRepository taskRepository) {
-        taskRepository.rename(id, name);
+    public void rename(int id, String name, Routine routine) {
+        routine.rename(id, name);
     }
 
-    public void append(Task task, TaskRepository taskRepository) {
-        taskRepository.append(task);
+    public void append(Task task, Routine routine) {
+        routine.append(task);
     }
 
-    public void prepend(Task task, TaskRepository taskRepository){
-        taskRepository.prepend(task);
+    public void prepend(Task task, Routine routine){
+        routine.prepend(task);
     }
 
 }

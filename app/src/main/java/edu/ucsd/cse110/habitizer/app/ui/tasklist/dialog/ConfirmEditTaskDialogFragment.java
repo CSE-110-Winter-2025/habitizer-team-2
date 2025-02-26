@@ -18,16 +18,6 @@ import android.view.ViewGroup;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentConfirmEditTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentCreateTaskDialogBinding;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentCreateTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
 /**
  * A simple {@link Fragment} subclass.

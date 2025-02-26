@@ -3,12 +3,12 @@ package edu.ucsd.cse110.habitizer.lib.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMediatorSubject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
-public class InMemoryDataSource {
+public class InMemoryTaskDataSource {
 
     private int nextId = 0;
 
@@ -18,7 +18,6 @@ public class InMemoryDataSource {
 
     private int goalTime;
 
-
     private final Map<Integer, Task> tasks
             = new HashMap<>();
     private final Map<Integer, PlainMutableSubject<Task>> taskSubjects
@@ -26,7 +25,7 @@ public class InMemoryDataSource {
     private final PlainMutableSubject<List<Task>> allTasksSubject
             = new PlainMutableSubject<>();
 
-    public InMemoryDataSource() {
+    public InMemoryTaskDataSource() {
     }
 
     // default time for both morning and evening routine goal time
@@ -61,18 +60,25 @@ public class InMemoryDataSource {
         this.goalTime = goalTime;
     }
 
-    public static InMemoryDataSource fromDefaultMorning() {
-        var data = new InMemoryDataSource();
+    public static InMemoryTaskDataSource fromDefaultMorning() {
+        var data = new InMemoryTaskDataSource();
         data.putTasks(DEFAULT_TASKS_MORNING);
         data.setGoalTime(DEFAULT_GOAL_TIME);
         return data;
     }
 
 
-    public static InMemoryDataSource fromDefaultEvening() {
-        var data = new InMemoryDataSource();
+    public static InMemoryTaskDataSource fromDefaultEvening() {
+        var data = new InMemoryTaskDataSource();
         data.putTasks(DEFAULT_TASKS_EVENING);
         data.setGoalTime(DEFAULT_GOAL_TIME);
+        return data;
+      }
+
+    public static InMemoryTaskDataSource fromDefaultNew() {
+        var data = new InMemoryTaskDataSource();
+        data.putTasks(List.of()); //no tasks
+        data.setGoalTime(0); //0 goal time
         return data;
     }
 
@@ -239,5 +245,4 @@ public class InMemoryDataSource {
         assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
-
 }
