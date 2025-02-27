@@ -2,8 +2,10 @@ package edu.ucsd.cse110.habitizer.app;
 
 import android.app.Application;
 
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryRoutineDataSource;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 
 public class HabitizerApplication extends Application {
     private InMemoryTaskDataSource morningDataSource;
@@ -11,6 +13,10 @@ public class HabitizerApplication extends Application {
     private InMemoryTaskDataSource eveningDataSource;
     private Routine morningRoutine;
     private Routine eveningRoutine;
+
+    private InMemoryRoutineDataSource routineDataSource;
+
+    private RoutineRepository routineRepository;
 
     @Override
     public void onCreate() {
@@ -20,8 +26,13 @@ public class HabitizerApplication extends Application {
         this.eveningDataSource = InMemoryTaskDataSource.fromDefaultEvening();
         this.morningRoutine = new Routine(0, 0, "Morning Routine", morningDataSource);
         this.eveningRoutine = new Routine(0, 0, "Evening Routine", eveningDataSource);
+
+        this.routineDataSource = InMemoryRoutineDataSource.fromDefault();
+        this.routineRepository = new RoutineRepository(routineDataSource);
+        routineRepository.append(new Routine(2,2,"shit", InMemoryTaskDataSource.fromDefaultNew()));
     }
 
+    public RoutineRepository getRoutineRepository() {return this.routineRepository;}
     public Routine getMorningTaskRepository() {return morningRoutine;}
     public Routine getEveningTaskRepository() {return eveningRoutine;}
 }

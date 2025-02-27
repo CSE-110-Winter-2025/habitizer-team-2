@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
+package edu.ucsd.cse110.habitizer.app.ui.tasklist.routine;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,81 +13,58 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
-public class TaskListAdapter extends ArrayAdapter<Task> {
+public class RoutineListAdapter extends ArrayAdapter<Routine> {
     MainViewModel activityModel;
-    boolean isMorning;
-
-    TaskListFragment fragment;
-
-    int routineID;
-    Stopwatch stopwatch;
-    int taskStartTime = 0;
-    public TaskListAdapter(Context context,
-                                  List<Task> tasks, TaskListFragment fragment,
-                           int routineID) {
+    RoutineListFragment fragment;
+    public RoutineListAdapter(Context context,
+                              List<Routine> routines, RoutineListFragment fragment) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
-        super(context, 0, new ArrayList<>(tasks));
+        super(context, 0, new ArrayList<>(routines));
         this.fragment = fragment;
         this.activityModel = fragment.getActivityModel();
-        this.routineID = routineID;
-    }
-
-    public void setStopwatch (Stopwatch stopwatch) {
-        this.stopwatch = stopwatch;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the task for this position.
-        var task = getItem(position);
+        var routine = getItem(position);
 
 
-        assert task != null;
+        assert routine != null;
 
         // Check if a view is being reused...
-        ListItemTaskBinding binding;
+        ListItemRoutineBinding binding;
         if (convertView != null) {
             // if so, bind to it
-            binding = ListItemTaskBinding.bind(convertView);
+            binding = ListItemRoutineBinding.bind(convertView);
         } else {
             // otherwise inflate a new view from our layout XML.
             var layoutInflater = LayoutInflater.from(getContext());
-            binding = ListItemTaskBinding.inflate(layoutInflater, parent, false);
+            binding = ListItemRoutineBinding.inflate(layoutInflater, parent, false);
         }
 
         // Populate the view with the task's data.
-        binding.taskName.setText(task.name());
-
-
-        binding.taskBox.setOnClickListener(b -> {
-            int completedTime = stopwatch.getElapsedTimeSeconds();
-            int timeElapsed = (completedTime - taskStartTime) / 60 + 1;
-            taskStartTime = completedTime;
-
-            String timeCompleted = "[" + timeElapsed + " m]";
-
-            activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
-
-            binding.timeComplete.setText(timeCompleted);
-            notifyDataSetChanged();
-
-        });
-
-        if(task.checkedOff()){
-            binding.taskImg.setImageResource(R.drawable.silvringchecked);
-        } else {
-            binding.taskImg.setImageResource(R.drawable.silvring);
-        }
+        binding.routineName.setText(routine.name());
+        binding.routineBox.setOnClickListener(v->{openTaskListFragment(routine.id());});
 
         return binding.getRoot();
+    }
+
+    private void openTaskListFragment(int routineID) {
+        fragment.requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(routineID))  // Make sure this ID matches your container
+                .addToBackStack(null)  // Allows back navigation
+                .commit();
     }
 
     // The below methods aren't strictly necessary, usually.

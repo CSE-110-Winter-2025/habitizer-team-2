@@ -5,11 +5,13 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
@@ -19,7 +21,13 @@ public class MainViewModel extends ViewModel {
     private final Routine eveningRoutine;
 
     private final Routine morningRoutine;
+
+    private final RoutineRepository routineRepository;
     // UI state
+
+    private final PlainMutableSubject<List<Routine>> orderedRoutines;
+
+    private final List<PlainMutableSubject<List<Task>>> orderedTasksList;
     private final PlainMutableSubject<List<Task>> morningOrderedTasks;
     private final PlainMutableSubject<Boolean> morningIsCheckedOff;
 
@@ -43,13 +51,16 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getMorningTaskRepository(), app.getEveningTaskRepository());
+                        return new MainViewModel(app.getMorningTaskRepository(), app.getEveningTaskRepository(), app.getRoutineRepository());
                     });
 
-    public MainViewModel(Routine morningRoutine, Routine eveningRoutine) {
+    public MainViewModel(Routine morningRoutine, Routine eveningRoutine, RoutineRepository routineRepository) {
         this.morningRoutine = morningRoutine;
         this.eveningRoutine = eveningRoutine;
+        this.routineRepository = routineRepository;
         // Create the observable subjects.
+        this.orderedRoutines = new PlainMutableSubject<>();
+        this.orderedTasksList = new ArrayList<>();
         this.morningOrderedTasks = new PlainMutableSubject<>();
         this.morningIsCheckedOff = new PlainMutableSubject<>();
         this.morningGoalTime = new PlainMutableSubject<>();
@@ -63,6 +74,32 @@ public class MainViewModel extends ViewModel {
         this.eveningDisplayedText = new PlainMutableSubject<>();
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
+
+        routineRepository.findAll().observe(routines -> {
+            if (routines == null) return; // not ready yet, ignore
+
+            var newOrderedRoutines = routines.stream()
+                    .sorted(Comparator.comparingInt(Routine::sortOrder))
+                    .collect(Collectors.toList());
+            orderedRoutines.setValue(newOrderedRoutines);
+        });
+
+        Objects.requireNonNull(routineRepository.findAll().getValue()).forEach(routine -> {
+            if (routine == null) return;
+
+            PlainMutableSubject<List<Task>> orderedTasks = new PlainMutableSubject<>();
+
+            routine.findAll().observe(tasks->{
+                if (tasks == null) return; // not ready yet, ignore
+
+                var newOrderedTasks = tasks.stream()
+                        .sorted(Comparator.comparingInt(Task::sortOrder))
+                        .collect(Collectors.toList());
+                orderedTasks.setValue(newOrderedTasks);
+            });
+            orderedTasksList.add(routine.id(), orderedTasks);
+        });
+
         morningRoutine.findAll().observe(tasks -> {
             if (tasks == null) return; // not ready yet, ignore
 
@@ -106,7 +143,12 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public PlainMutableSubject<List<Routine>> getOrderedRoutines() {return orderedRoutines;}
+
+    public PlainMutableSubject<List<Task>> getOrderedTasks(int routineID) {return orderedTasksList.get(routineID);}
     public Routine getMorningTaskRepository(){return morningRoutine;}
+
+    public Routine getRoutine(int routineID){return routineRepository.findAll().getValue().get(routineID);}
 
     public PlainMutableSubject<String> getMorningDisplayedText() {return morningDisplayedText;}
 
@@ -151,20 +193,36 @@ public class MainViewModel extends ViewModel {
         routine.save(checkedOffTask);
     }
 
-    public void remove(int id, Routine routine) {
+    public void removeTask(int id, Routine routine) {
         routine.remove(id);
     }
 
-    public void rename(int id, String name, Routine routine) {
+    public void renameTask(int id, String name, Routine routine) {
         routine.rename(id, name);
     }
 
-    public void append(Task task, Routine routine) {
+    public void appendTask(Task task, Routine routine) {
         routine.append(task);
     }
 
-    public void prepend(Task task, Routine routine){
+    public void prependTask(Task task, Routine routine){
         routine.prepend(task);
+    }
+
+    public void removeRoutine(int id, RoutineRepository routineRepository) {
+        routineRepository.remove(id);
+    }
+
+    public void renameRoutine(int id, String name, RoutineRepository routineRepository) {
+        routineRepository.rename(id, name);
+    }
+
+    public void appendRoutine(Routine routine, RoutineRepository routineRepository) {
+        routineRepository.append(routine);
+    }
+
+    public void prependRoutine(Routine routine, RoutineRepository routineRepository){
+        routineRepository.prepend(routine);
     }
 
 }

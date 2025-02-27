@@ -61,7 +61,7 @@ public class HomePageRoutineFragment extends Fragment {
 
     private void openTaskListFragment(boolean isMorning) {
         requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(isMorning))  // Make sure this ID matches your container
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(0))  // Make sure this ID matches your container
                 .addToBackStack(null)  // Allows back navigation
                 .commit();
     }

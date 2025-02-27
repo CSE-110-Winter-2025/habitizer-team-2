@@ -76,7 +76,7 @@ public class ConfirmEditTaskDialogFragment extends DialogFragment {
         // depending on isMorning, the appropriate task repository is chosen
         var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
 
-        activityModel.rename(taskID, newName, designatedRepo);
+        activityModel.renameTask(taskID, newName, designatedRepo);
 
         dialog.dismiss();
     }

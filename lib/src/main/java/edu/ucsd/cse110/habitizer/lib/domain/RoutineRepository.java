@@ -7,7 +7,7 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 public class RoutineRepository {
 
     InMemoryRoutineDataSource routineDataSource;
-    RoutineRepository(InMemoryRoutineDataSource routineDataSource){
+    public RoutineRepository(InMemoryRoutineDataSource routineDataSource){
         this.routineDataSource = routineDataSource;
     }
 
@@ -27,12 +27,6 @@ public class RoutineRepository {
 
     public void save(List<Routine> routines) {
         routineDataSource.putRoutines(routines);
-    }
-
-    public void saveAtSortOrder(Routine routine, int sortOrder){
-        routineDataSource.putRoutine(
-                routine.withSortOrder(sortOrder)
-        );
     }
 
     public void remove(int id) {
