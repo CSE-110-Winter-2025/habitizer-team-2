@@ -2,26 +2,26 @@ package edu.ucsd.cse110.habitizer.app;
 
 import android.app.Application;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class HabitizerApplication extends Application {
-    private InMemoryDataSource morningDataSource;
+    private InMemoryTaskDataSource morningDataSource;
 
-    private InMemoryDataSource eveningDataSource;
-    private TaskRepository morningTaskRepository;
-    private TaskRepository eveningTaskRepository;
+    private InMemoryTaskDataSource eveningDataSource;
+    private Routine morningRoutine;
+    private Routine eveningRoutine;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        this.morningDataSource = InMemoryDataSource.fromDefaultMorning();
-        this.eveningDataSource = InMemoryDataSource.fromDefaultEvening();
-        this.morningTaskRepository = new TaskRepository(morningDataSource);
-        this.eveningTaskRepository = new TaskRepository(eveningDataSource);
+        this.morningDataSource = InMemoryTaskDataSource.fromDefaultMorning();
+        this.eveningDataSource = InMemoryTaskDataSource.fromDefaultEvening();
+        this.morningRoutine = new Routine(0, 0, "Morning Routine", morningDataSource);
+        this.eveningRoutine = new Routine(0, 0, "Evening Routine", eveningDataSource);
     }
 
-    public TaskRepository getMorningTaskRepository() {return morningTaskRepository;}
-    public TaskRepository getEveningTaskRepository() {return eveningTaskRepository;}
+    public Routine getMorningTaskRepository() {return morningRoutine;}
+    public Routine getEveningTaskRepository() {return eveningRoutine;}
 }
