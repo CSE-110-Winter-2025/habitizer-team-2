@@ -44,7 +44,7 @@ public class RoutineListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new RoutineListAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new RoutineListAdapter(requireContext(), List.of(), this);
 
         var routinesData = activityModel.getOrderedRoutines();
 
@@ -57,6 +57,8 @@ public class RoutineListFragment extends Fragment {
         });
 
     }
+
+    public MainViewModel getActivityModel() {return this.activityModel;}
 
     @Nullable
     @Override

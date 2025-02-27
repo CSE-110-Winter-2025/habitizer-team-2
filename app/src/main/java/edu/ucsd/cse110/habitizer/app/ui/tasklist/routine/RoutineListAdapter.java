@@ -15,19 +15,22 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class RoutineListAdapter extends ArrayAdapter<Routine> {
     MainViewModel activityModel;
+    RoutineListFragment fragment;
     public RoutineListAdapter(Context context,
-                              List<Routine> routines, MainViewModel activityModel) {
+                              List<Routine> routines, RoutineListFragment fragment) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(routines));
-        this.activityModel = activityModel;
+        this.fragment = fragment;
+        this.activityModel = fragment.getActivityModel();
     }
 
     @NonNull
@@ -52,8 +55,16 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         // Populate the view with the task's data.
         binding.routineName.setText(routine.name());
+        binding.routineBox.setOnClickListener(v->{openTaskListFragment(routine.id());});
 
         return binding.getRoot();
+    }
+
+    private void openTaskListFragment(int routineID) {
+        fragment.requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(routineID))  // Make sure this ID matches your container
+                .addToBackStack(null)  // Allows back navigation
+                .commit();
     }
 
     // The below methods aren't strictly necessary, usually.

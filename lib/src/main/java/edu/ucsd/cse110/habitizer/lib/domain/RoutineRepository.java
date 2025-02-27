@@ -29,12 +29,6 @@ public class RoutineRepository {
         routineDataSource.putRoutines(routines);
     }
 
-    public void saveAtSortOrder(Routine routine, int sortOrder){
-        routineDataSource.putRoutine(
-                routine.withSortOrder(sortOrder)
-        );
-    }
-
     public void remove(int id) {
         routineDataSource.removeRoutine(id);
     }

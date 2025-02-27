@@ -29,6 +29,7 @@ public class HabitizerApplication extends Application {
 
         this.routineDataSource = InMemoryRoutineDataSource.fromDefault();
         this.routineRepository = new RoutineRepository(routineDataSource);
+        routineRepository.append(new Routine(2,2,"shit", InMemoryTaskDataSource.fromDefaultNew()));
     }
 
     public RoutineRepository getRoutineRepository() {return this.routineRepository;}

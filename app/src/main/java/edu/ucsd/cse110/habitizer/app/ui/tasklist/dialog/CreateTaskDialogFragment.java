@@ -71,9 +71,9 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
         // appends tasks to given list
         if (view.appendRadioBtn.isChecked()){
-            activityModel.append(task, designatedRepo);
+            activityModel.appendTask(task, designatedRepo);
         } else if(view.prependRadioBtn.isChecked()){
-            activityModel.prepend(task, designatedRepo);
+            activityModel.prependTask(task, designatedRepo);
         } else{
             throw new IllegalStateException("no radio button is checked.");
         }

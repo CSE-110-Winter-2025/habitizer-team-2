@@ -19,19 +19,24 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public class TaskListAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
     boolean isMorning;
+
+    TaskListFragment fragment;
+
+    int routineID;
     Stopwatch stopwatch;
     int taskStartTime = 0;
     public TaskListAdapter(Context context,
-                                  List<Task> tasks, MainViewModel activityModel,
-                           boolean isMorning) {
+                                  List<Task> tasks, TaskListFragment fragment,
+                           int routineID) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
-        this.activityModel = activityModel;
-        this.isMorning = isMorning;
+        this.fragment = fragment;
+        this.activityModel = fragment.getActivityModel();
+        this.routineID = routineID;
     }
 
     public void setStopwatch (Stopwatch stopwatch) {
@@ -68,11 +73,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             taskStartTime = completedTime;
 
             String timeCompleted = "[" + timeElapsed + " m]";
-            if(isMorning){
-                activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
-            } else {
-                activityModel.checkOff(task.id(), activityModel.getEveningTaskRepository());
-            }
+
+            activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
+
             binding.timeComplete.setText(timeCompleted);
             notifyDataSetChanged();
 
