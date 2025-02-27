@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
@@ -19,7 +20,11 @@ public class MainViewModel extends ViewModel {
     private final Routine eveningRoutine;
 
     private final Routine morningRoutine;
+
+    private final RoutineRepository routineRepository;
     // UI state
+
+    private final PlainMutableSubject<List<Routine>> orderedRoutines;
     private final PlainMutableSubject<List<Task>> morningOrderedTasks;
     private final PlainMutableSubject<Boolean> morningIsCheckedOff;
 
@@ -43,13 +48,15 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getMorningTaskRepository(), app.getEveningTaskRepository());
+                        return new MainViewModel(app.getMorningTaskRepository(), app.getEveningTaskRepository(), app.getRoutineRepository());
                     });
 
-    public MainViewModel(Routine morningRoutine, Routine eveningRoutine) {
+    public MainViewModel(Routine morningRoutine, Routine eveningRoutine, RoutineRepository routineRepository) {
         this.morningRoutine = morningRoutine;
         this.eveningRoutine = eveningRoutine;
+        this.routineRepository = routineRepository;
         // Create the observable subjects.
+        this.orderedRoutines = new PlainMutableSubject<>();
         this.morningOrderedTasks = new PlainMutableSubject<>();
         this.morningIsCheckedOff = new PlainMutableSubject<>();
         this.morningGoalTime = new PlainMutableSubject<>();
@@ -63,6 +70,16 @@ public class MainViewModel extends ViewModel {
         this.eveningDisplayedText = new PlainMutableSubject<>();
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
+
+        routineRepository.findAll().observe(routines -> {
+            if (routines == null) return; // not ready yet, ignore
+
+            var newOrderedRoutines = routines.stream()
+                    .sorted(Comparator.comparingInt(Routine::sortOrder))
+                    .collect(Collectors.toList());
+            orderedRoutines.setValue(newOrderedRoutines);
+        });
+
         morningRoutine.findAll().observe(tasks -> {
             if (tasks == null) return; // not ready yet, ignore
 
@@ -106,6 +123,7 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public PlainMutableSubject<List<Routine>> getOrderedRoutines() {return orderedRoutines;}
     public Routine getMorningTaskRepository(){return morningRoutine;}
 
     public PlainMutableSubject<String> getMorningDisplayedText() {return morningDisplayedText;}

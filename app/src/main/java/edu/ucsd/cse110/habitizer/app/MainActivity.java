@@ -3,16 +3,13 @@ package edu.ucsd.cse110.habitizer.app;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.HomePageRoutineFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.RoutineListFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
@@ -29,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) { // Prevent reloading on rotation
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, HomePageRoutineFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, RoutineListFragment.newInstance())
                     .commit();
         }
     }
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private void swapToMainMenu(){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, HomePageRoutineFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, RoutineListFragment.newInstance())
                     .commit();
     }
 

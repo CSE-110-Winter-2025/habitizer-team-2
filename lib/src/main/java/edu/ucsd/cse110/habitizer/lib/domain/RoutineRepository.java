@@ -7,7 +7,7 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 public class RoutineRepository {
 
     InMemoryRoutineDataSource routineDataSource;
-    RoutineRepository(InMemoryRoutineDataSource routineDataSource){
+    public RoutineRepository(InMemoryRoutineDataSource routineDataSource){
         this.routineDataSource = routineDataSource;
     }
 
