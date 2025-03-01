@@ -69,10 +69,11 @@ public class TaskListFragment extends Fragment {
 
         var tasksData = activityModel.getOrderedTasks(routineID);
 
+        // activityModel.getRoutine(routineID)
         List<Task> oldTasks = tasksData.getValue();
         for (int i = 0; i < oldTasks.size(); i++){
             activityModel.removeCheckOff(oldTasks.get(i).id(),
-                    activityModel.getRoutine(routineID));
+                    routineID);
         }
 
         tasksData.observe(tasks -> {
@@ -93,6 +94,7 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
+        // activityModel.getRoutine(routineID)
         String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).getGoalTime());
         view.goalTextView.setText(goalTimeString);
 
@@ -138,7 +140,7 @@ public class TaskListFragment extends Fragment {
         return view.getRoot();
     }
 
-    public boolean getIsMorning(){return this.isMorning;}
+//    public boolean getIsMorning(){return this.isMorning;}
 
     public MainViewModel getActivityModel(){return this.activityModel;}
 

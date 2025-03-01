@@ -18,7 +18,6 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
-    boolean isMorning;
 
     TaskListFragment fragment;
 
@@ -74,7 +73,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
             String timeCompleted = "[" + timeElapsed + " m]";
 
-            activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
+            // activityModel.getRoutine(routineID)
+            activityModel.checkOff(task.id(), routineID);
 
             binding.timeComplete.setText(timeCompleted);
             notifyDataSetChanged();

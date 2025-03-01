@@ -10,19 +10,22 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
+import edu.ucsd.cse110.habitizer.app.databinding.EditListItemTaskBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.ListItemEditRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
-public class RoutineListAdapter extends ArrayAdapter<Routine> {
+public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
     MainViewModel activityModel;
-    RoutineListFragment fragment;
-    public RoutineListAdapter(Context context,
-                              List<Routine> routines, RoutineListFragment fragment) {
+    HomePageRoutineFragment fragment;
+
+    public HomePageRoutineListAdapter(Context context,
+                                      List<Routine> routines, HomePageRoutineFragment fragment, MainViewModel activityModel) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -31,6 +34,7 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
         super(context, 0, new ArrayList<>(routines));
         this.fragment = fragment;
         this.activityModel = fragment.getActivityModel();
+
     }
 
     @NonNull
@@ -54,8 +58,8 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
         }
 
         // Populate the view with the task's data.
-        binding.routineName.setText(routine.name());
-        binding.routineBox.setOnClickListener(v->{openTaskListFragment(routine.id());});
+        binding.routineNameBtn.setText(routine.name());
+        binding.routineNameBtn.setOnClickListener(v->{openTaskListFragment(routine.id());});
 
         return binding.getRoot();
     }

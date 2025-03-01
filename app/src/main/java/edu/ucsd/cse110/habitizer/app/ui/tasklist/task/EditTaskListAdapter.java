@@ -24,12 +24,14 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public class EditTaskListAdapter extends ArrayAdapter<Task> {
     private final MainViewModel activityModel;
     Consumer<Integer> onEditClick;
+    Consumer<Integer> onDeleteClick;
 
     // Parameters are tasks, if it is morning routine selected, and activity model
-    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel, Consumer<Integer> onEditClick) {
+    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel, Consumer<Integer> onEditClick, Consumer<Integer> onDeleteClick) {
         super(context, 0, tasks);
         this.activityModel = activityModel;
         this.onEditClick = onEditClick;
+        this.onDeleteClick = onDeleteClick;
     }
 
     @NonNull
@@ -59,6 +61,12 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
             var id = task.id();
             assert id != null;
             onEditClick.accept(id);
+        });
+
+        binding.deleteTaskBtn.setOnClickListener(v -> {
+            var id = task.id();
+            assert id != null;
+            onDeleteClick.accept(id);
         });
 
         return convertView;

@@ -9,7 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.RoutineListFragment;
+//import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.EditRoutineListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.HomePageRoutineFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) { // Prevent reloading on rotation
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, RoutineListFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, HomePageRoutineFragment.newInstance())
                     .commit();
         }
     }
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private void swapToMainMenu(){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContainerView, RoutineListFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, HomePageRoutineFragment.newInstance())
                     .commit();
     }
 
