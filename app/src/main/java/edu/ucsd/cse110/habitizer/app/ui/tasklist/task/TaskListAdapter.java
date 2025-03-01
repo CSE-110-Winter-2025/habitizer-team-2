@@ -84,6 +84,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     endRoutineCallback.run();
                 }
             }
+            binding.taskBox.setEnabled(false);
         });
 
         if(task.checkedOff()){
