@@ -154,6 +154,47 @@ public class MainViewModel extends ViewModel {
         routine.prepend(task);
     }
 
+    public void moveTask(int taskID, int routineID, boolean moveUp) {
+        var routine = routines.get(routineID);
+        if (routine == null) return;
+
+        var task = routine.find(taskID);
+        if (task.getValue() == null) return;
+
+        List<Task> tasks = new ArrayList<>(Objects.requireNonNull(getOrderedTasks(routineID).getValue()));
+
+        int index = -1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).id() == taskID) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) return; // Task not found
+
+        int newIndex = moveUp ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= tasks.size()) return; // Prevent out-of-bounds
+
+        // Swap the tasks in the list
+        Task currentTask = tasks.get(index);
+        Task otherTask = tasks.get(newIndex);
+
+        // Remove tasks from routine
+        routine.remove(currentTask.id());
+        routine.remove(otherTask.id());
+
+        // Append/Prepend them back in the new order
+        if (moveUp) {
+            routine.prepend(currentTask);
+            routine.prepend(otherTask);
+        } else {
+            routine.append(otherTask);
+            routine.append(currentTask);
+        }
+    }
+
+
     // routine methods
     public void removeRoutine(int id, RoutineRepository routineRepository) {
         routineRepository.remove(id);
