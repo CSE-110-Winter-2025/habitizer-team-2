@@ -2,13 +2,16 @@ package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView; //added for task drag and drop feature
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
@@ -24,6 +27,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     int routineID;
     Stopwatch stopwatch;
     int taskStartTime = 0;
+
     public TaskListAdapter(Context context,
                                   List<Task> tasks, TaskListFragment fragment,
                            int routineID) {
@@ -109,5 +113,4 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         return id;
     }
-
 }
