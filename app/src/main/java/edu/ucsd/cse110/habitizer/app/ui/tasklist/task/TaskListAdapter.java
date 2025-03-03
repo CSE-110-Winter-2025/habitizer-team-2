@@ -24,18 +24,20 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     int routineID;
     Stopwatch stopwatch;
     int taskStartTime = 0;
+
+    private Runnable endRoutineCallback;
     public TaskListAdapter(Context context,
-                                  List<Task> tasks, TaskListFragment fragment,
-                           int routineID) {
+                                  List<Task> tasks, MainViewModel activityModel,
+                           int routineID, Runnable endRoutineCallback) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
-        this.fragment = fragment;
-        this.activityModel = fragment.getActivityModel();
+        this.activityModel = activityModel;
         this.routineID = routineID;
+        this.endRoutineCallback = endRoutineCallback;
     }
 
     public void setStopwatch (Stopwatch stopwatch) {
@@ -79,6 +81,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             binding.timeComplete.setText(timeCompleted);
             notifyDataSetChanged();
 
+            if (allTasksCompleted()) {
+                if (endRoutineCallback != null) {
+                    endRoutineCallback.run();
+                }
+            }
+            binding.taskBox.setEnabled(false);
         });
 
         if(task.checkedOff()){
@@ -110,4 +118,13 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         return id;
     }
 
+    private boolean allTasksCompleted() {
+        for (int i = 0; i < getCount(); i++) {
+            Task task = getItem(i);
+            if (task != null && !task.checkedOff()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

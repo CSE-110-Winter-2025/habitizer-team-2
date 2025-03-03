@@ -63,16 +63,10 @@ public class HomePageRoutineFragment extends Fragment {
 
         var routinesData = activityModel.getOrderedRoutines();
 
-//        this.adapter = new HomePageRoutineListAdapter(requireContext(), new ArrayList<>(), this, activityModel);
-//        this.adapter = new HomePageRoutineListAdapter(requireContext(), new ArrayList<>(), this, activityModel, routineNames -> {
-//            var dialogFragment = ConfirmEditRoutinesDialogFragment.newInstance(routineNames);
-//            dialogFragment.show(getParentFragmentManager(), "ConfirmEditRoutinesDialogFragment");
-//        });
-
         this.adapter = new HomePageRoutineListAdapter(requireContext(), new ArrayList<>(), this, activityModel);
 
         // Observe routines and update adapter
-        activityModel.getOrderedRoutines().observe(routines -> {
+        routinesData.observe(routines -> {
             if (routines == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(routines));
@@ -86,52 +80,15 @@ public class HomePageRoutineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_homepage_routine, container, false);
         ListView routineListView = view.findViewById(R.id.routine_list);
         routineListView.setAdapter(adapter);
-//        Button customButton = view1.findViewById(R.id.routine_name_btn); added for home buttons binding
 
-        // Stores edit morning and evening routine buttons to use
-//        Button btnEditRoutines = view.findViewById(R.id.edit_routines_button);
-//
-//        btnEditRoutines.setOnClickListener(v -> {
-//            var dialogFragment = ConfirmEditRoutinesDialogFragment.newInstance();
-//            dialogFragment.show(getParentFragmentManager(), "ConfirmEditRoutinesDialog");
-//        });
-
-        Button editRoutineButton = view.findViewById(R.id.edit_routines_button);
-        editRoutineButton.setOnClickListener(v -> showEditRoutineDialog());
-
-//        btnMorningTasks.setOnClickListener(v -> openTaskListFragment()); //routine button binding
-//        btnEveningTasks.setOnClickListener(v -> openTaskListFragment(false));
-
-        // Listens to user pressing edit morning or evening routine buttons
-        // Sends in true or false depending on the button pressed to properly populate fragment with correct data
-//        btnEditMornRtn.setOnClickListener(v -> openEditRoutineTasksFragment(true));
-//        btnEditEvenRtn.setOnClickListener(v -> openEditRoutineTasksFragment(false));
 
         return view.getRootView();
     }
-
-    private void showEditRoutineDialog() {
-        // Get all routine names
-        ArrayList<String> routineNames = new ArrayList<>();
-        ArrayList<Integer> routineIDs = new ArrayList<>();
-
-        for (int i = 0; i < adapter.getCount(); i++) {
-            Routine routine = adapter.getItem(i);
-            if (routine != null) {
-                routineNames.add(routine.name());
-                routineIDs.add(routine.id());
-            }
-        }
-
-        Log.d("HomePageRoutineFragment", "Passing routines to dialog: " + routineNames);
-
-        var dialogFragment = ConfirmEditRoutinesDialogFragment.newInstance(routineNames, routineIDs);
-        dialogFragment.show(getParentFragmentManager(), "ConfirmEditRoutinesDialogFragment");
-    }
-
 
 
     public MainViewModel getActivityModel() {
         return this.activityModel;
     }
+
+
 }

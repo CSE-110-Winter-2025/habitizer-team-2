@@ -28,8 +28,6 @@ public class TaskListFragment extends Fragment {
     private FragmentTaskListBinding view;
     private TaskListAdapter adapter;
 
-    public boolean isMorning;
-
     public int routineID;
     public int elapsedTimeMinutes;
     private Runnable updateRunnable;
@@ -64,8 +62,18 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        Runnable endRoutineCallback = () -> {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Button endButton = getView().findViewById(R.id.end_button);
+                    if (endButton != null) {
+                        endButton.performClick();
+                    }
+                });
+            }
+        };
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), this, routineID);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, endRoutineCallback);
 
         var tasksData = activityModel.getOrderedTasks(routineID);
 
