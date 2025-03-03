@@ -51,7 +51,7 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/task_edit_button"
+                android:id="@+id/routine_edit_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -59,8 +59,8 @@
                 android:src="@drawable/ic_edit_square"
                 app:tint="?android:attr/textColorSecondary" />
 
-            <ImageView
-                android:id="@+id/delete_task_btn"
+            <ImageButton
+                android:id="@+id/delete_routine_btn"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -79,14 +79,14 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/top_layout"
-        app:layout_constraintBottom_toTopOf="@id/edit_routines_button"
+        app:layout_constraintBottom_toTopOf="@id/create_routine_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/list_item_routine" />
 
     <Button
-        android:id="@+id/edit_routines_button"
+        android:id="@+id/create_routine_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
