@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentConfirmEditTaskDialogBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 
 public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
     private FragmentConfirmEditTaskDialogBinding view;
@@ -63,9 +66,14 @@ public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which){
-        var designatedRepo = activityModel.getRoutine(routineID);
-        activityModel.removeTask(taskID, designatedRepo);
-        dialog.dismiss();
+        try {
+            var designatedRepo = activityModel.getRoutine(routineID);
+            activityModel.removeTask(taskID, designatedRepo);
+        } catch (Exception e) {
+            Log.e("DeleteTask", "Error deleting task: " + e.getMessage(), e);
+        } finally {
+            dialog.dismiss();
+        }
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which){
@@ -78,7 +86,4 @@ public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_confirm_delete_task_dialog, container, false);
     }
-
-
-
 }

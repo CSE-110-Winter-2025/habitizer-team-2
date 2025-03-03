@@ -93,10 +93,10 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
 
         binding.routineNameBtn.setText(routine.name());
         binding.routineNameBtn.setOnClickListener(v->{
-
             if (!deleteMode && !editMode){
                 openTaskListFragment(routine.id());
             }else if(deleteMode){
+
 
             }else if(editMode){
                 openEditRoutineTasksFragment(routine.id());
