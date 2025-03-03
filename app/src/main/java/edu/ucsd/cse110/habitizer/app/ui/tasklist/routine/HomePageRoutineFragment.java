@@ -86,26 +86,9 @@ public class HomePageRoutineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_homepage_routine, container, false);
         ListView routineListView = view.findViewById(R.id.routine_list);
         routineListView.setAdapter(adapter);
-//        Button customButton = view1.findViewById(R.id.routine_name_btn); added for home buttons binding
-
-        // Stores edit morning and evening routine buttons to use
-//        Button btnEditRoutines = view.findViewById(R.id.edit_routines_button);
-//
-//        btnEditRoutines.setOnClickListener(v -> {
-//            var dialogFragment = ConfirmEditRoutinesDialogFragment.newInstance();
-//            dialogFragment.show(getParentFragmentManager(), "ConfirmEditRoutinesDialog");
-//        });
 
         Button editRoutineButton = view.findViewById(R.id.edit_routines_button);
         editRoutineButton.setOnClickListener(v -> showEditRoutineDialog());
-
-//        btnMorningTasks.setOnClickListener(v -> openTaskListFragment()); //routine button binding
-//        btnEveningTasks.setOnClickListener(v -> openTaskListFragment(false));
-
-        // Listens to user pressing edit morning or evening routine buttons
-        // Sends in true or false depending on the button pressed to properly populate fragment with correct data
-//        btnEditMornRtn.setOnClickListener(v -> openEditRoutineTasksFragment(true));
-//        btnEditEvenRtn.setOnClickListener(v -> openEditRoutineTasksFragment(false));
 
         return view.getRootView();
     }
