@@ -3,15 +3,13 @@ package edu.ucsd.cse110.habitizer.app;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
+//import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.EditRoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.routine.HomePageRoutineFragment;
 
 public class MainActivity extends AppCompatActivity {

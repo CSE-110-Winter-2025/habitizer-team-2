@@ -9,30 +9,26 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentCreateTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
 public class CreateTaskDialogFragment extends DialogFragment {
 
     private FragmentCreateTaskDialogBinding view;
     private MainViewModel activityModel;
-    private boolean isMorning;
+    private int routineID;
 
     CreateTaskDialogFragment(){
         // empty constructor
     }
 
-    public static CreateTaskDialogFragment newInstance(boolean isMorning) {
+    public static CreateTaskDialogFragment newInstance(int routineID) {
         CreateTaskDialogFragment fragment = new CreateTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putBoolean("IS_MORNING", isMorning);
+        args.putInt("ROUTINE_ID", routineID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,7 +39,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
 
         // defines isMorning
         if (getArguments() != null) {
-            isMorning = getArguments().getBoolean("IS_MORNING", true);
+            routineID = getArguments().getInt("ROUTINE_ID", 0);
         }
 
         var modelOwner = requireActivity();
@@ -70,14 +66,15 @@ public class CreateTaskDialogFragment extends DialogFragment {
         var name = view.addTaskNameText.getText().toString();
 
         // depending on isMorning, the appropriate task repository is chosen
-        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
+        var designatedRepo = activityModel.getRoutine(routineID);
+//        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
         var task = new Task(null, -1, name, false);
 
         // appends tasks to given list
         if (view.appendRadioBtn.isChecked()){
-            activityModel.append(task, designatedRepo);
+            activityModel.appendTask(task, designatedRepo);
         } else if(view.prependRadioBtn.isChecked()){
-            activityModel.prepend(task, designatedRepo);
+            activityModel.prependTask(task, designatedRepo);
         } else{
             throw new IllegalStateException("no radio button is checked.");
         }

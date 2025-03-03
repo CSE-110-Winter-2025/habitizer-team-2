@@ -17,17 +17,8 @@ import android.view.ViewGroup;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
+import edu.ucsd.cse110.habitizer.app.databinding.EditListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentConfirmEditTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentCreateTaskDialogBinding;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentCreateTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,15 +32,16 @@ public class ConfirmEditTaskDialogFragment extends DialogFragment {
     private static final String ARG_TASK_ID = "task_id";
     private boolean isMorning;
     private int taskID;
+    private int routineID;
 
     public ConfirmEditTaskDialogFragment() {
         // Required empty public constructor
     }
 
-    public static ConfirmEditTaskDialogFragment newInstance(int taskID, boolean isMorning) {
+    public static ConfirmEditTaskDialogFragment newInstance(int taskID, int routineID) {
         ConfirmEditTaskDialogFragment fragment = new ConfirmEditTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putBoolean("IS_MORNING", isMorning);
+        args.putInt("ROUTINE_ID", routineID);
         args.putInt(ARG_TASK_ID, taskID);
         fragment.setArguments(args);
         return fragment;
@@ -59,7 +51,7 @@ public class ConfirmEditTaskDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.taskID = requireArguments().getInt(ARG_TASK_ID);
-        this.isMorning = requireArguments().getBoolean("IS_MORNING");
+        this.routineID = requireArguments().getInt("ROUTINE_ID");
 
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -84,9 +76,10 @@ public class ConfirmEditTaskDialogFragment extends DialogFragment {
         var newName = view.renameTaskText.getText().toString();
 
         // depending on isMorning, the appropriate task repository is chosen
-        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
+        var designatedRepo = activityModel.getRoutine(routineID);
+//        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
 
-        activityModel.rename(taskID, newName, designatedRepo);
+        activityModel.renameTask(taskID, newName, designatedRepo);
 
         dialog.dismiss();
     }
