@@ -18,14 +18,17 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
     MainViewModel activityModel;
-    boolean isMorning;
+
+    TaskListFragment fragment;
+
+    int routineID;
     Stopwatch stopwatch;
     int taskStartTime = 0;
 
     private Runnable endRoutineCallback;
     public TaskListAdapter(Context context,
                                   List<Task> tasks, MainViewModel activityModel,
-                           boolean isMorning, Runnable endRoutineCallback) {
+                           int routineID, Runnable endRoutineCallback) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -33,7 +36,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
         this.activityModel = activityModel;
-        this.isMorning = isMorning;
+        this.routineID = routineID;
         this.endRoutineCallback = endRoutineCallback;
     }
 
@@ -71,11 +74,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             taskStartTime = completedTime;
 
             String timeCompleted = "[" + timeElapsed + " m]";
-            if(isMorning){
-                activityModel.checkOff(task.id(), activityModel.getMorningTaskRepository());
-            } else {
-                activityModel.checkOff(task.id(), activityModel.getEveningTaskRepository());
-            }
+
+            // activityModel.getRoutine(routineID)
+            activityModel.checkOff(task.id(), routineID);
+
             binding.timeComplete.setText(timeCompleted);
             notifyDataSetChanged();
 

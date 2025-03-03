@@ -28,8 +28,7 @@ public class TaskListFragment extends Fragment {
     private FragmentTaskListBinding view;
     private TaskListAdapter adapter;
 
-    public boolean isMorning;
-
+    public int routineID;
     public int elapsedTimeMinutes;
     private Runnable updateRunnable;
     private Handler handler;
@@ -40,10 +39,10 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment newInstance(boolean isMorning) {
+    public static TaskListFragment newInstance(int routineID) {
         TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
-        args.putBoolean("IS_MORNING", isMorning);
+        args.putInt("ROUTINE_ID", routineID);
 
         fragment.setArguments(args);
         return fragment;
@@ -54,7 +53,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(getArguments() != null){
-            isMorning = getArguments().getBoolean("IS_MORNING", true);
+            routineID = getArguments().getInt("ROUTINE_ID", 0);
             elapsedTimeMinutes = getArguments().getInt("ELAPSED_TIME_MINUTES", 0);
         }
         // Initialize the Model
@@ -74,17 +73,15 @@ public class TaskListFragment extends Fragment {
             }
         };
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, isMorning, endRoutineCallback);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, endRoutineCallback);
 
-        var tasksData = isMorning ? activityModel.getMorningOrderedTasks() : activityModel.getEveningOrderedTasks();
+        var tasksData = activityModel.getOrderedTasks(routineID);
 
+        // activityModel.getRoutine(routineID)
         List<Task> oldTasks = tasksData.getValue();
         for (int i = 0; i < oldTasks.size(); i++){
-            if (isMorning){
-                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getMorningTaskRepository());
-            } else {
-                activityModel.removeCheckOff(oldTasks.get(i).id(), activityModel.getEveningTaskRepository());
-            }
+            activityModel.removeCheckOff(oldTasks.get(i).id(),
+                    routineID);
         }
 
         tasksData.observe(tasks -> {
@@ -105,13 +102,9 @@ public class TaskListFragment extends Fragment {
         // Set the adapter on the ListView
         view.taskList.setAdapter(adapter);
 
-        if (isMorning) {
-            String goalTimeString = Integer.toString(activityModel.getMorningTaskRepository().getGoalTime());
-            view.goalTextView.setText(goalTimeString);
-        } else{
-            String goalTimeString = Integer.toString(activityModel.getEveningTaskRepository().getGoalTime());
-            view.goalTextView.setText(goalTimeString);
-        }
+        // activityModel.getRoutine(routineID)
+        String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).getGoalTime());
+        view.goalTextView.setText(goalTimeString);
 
 
 
@@ -155,7 +148,9 @@ public class TaskListFragment extends Fragment {
         return view.getRoot();
     }
 
-    public boolean getIsMorning(){return this.isMorning;}
+//    public boolean getIsMorning(){return this.isMorning;}
+
+    public MainViewModel getActivityModel(){return this.activityModel;}
 
     /**
      * Called when the view hierarchy associated with the fragment is being removed.
