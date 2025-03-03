@@ -2,16 +2,13 @@ package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView; //added for task drag and drop feature
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
@@ -28,18 +25,19 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     Stopwatch stopwatch;
     int taskStartTime = 0;
 
+    private Runnable endRoutineCallback;
     public TaskListAdapter(Context context,
-                                  List<Task> tasks, TaskListFragment fragment,
-                           int routineID) {
+                                  List<Task> tasks, MainViewModel activityModel,
+                           int routineID, Runnable endRoutineCallback) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
-        this.fragment = fragment;
-        this.activityModel = fragment.getActivityModel();
+        this.activityModel = activityModel;
         this.routineID = routineID;
+        this.endRoutineCallback = endRoutineCallback;
     }
 
     public void setStopwatch (Stopwatch stopwatch) {
@@ -83,6 +81,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             binding.timeComplete.setText(timeCompleted);
             notifyDataSetChanged();
 
+            if (allTasksCompleted()) {
+                if (endRoutineCallback != null) {
+                    endRoutineCallback.run();
+                }
+            }
+            binding.taskBox.setEnabled(false);
         });
 
         if(task.checkedOff()){
@@ -112,5 +116,15 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         assert id != null;
 
         return id;
+    }
+
+    private boolean allTasksCompleted() {
+        for (int i = 0; i < getCount(); i++) {
+            Task task = getItem(i);
+            if (task != null && !task.checkedOff()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
