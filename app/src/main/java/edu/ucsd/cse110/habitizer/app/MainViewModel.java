@@ -115,6 +115,7 @@ public class MainViewModel extends ViewModel {
     // retrieves a routine's repository based on the ID
     public Routine getRoutine(int routineID){return routineRepository.findAll().getValue().get(routineID);}
 
+
     public void checkOff(int taskID, int routineID){
         var routine = routines.get(routineID);
         if (routine == null) return;
@@ -154,11 +155,28 @@ public class MainViewModel extends ViewModel {
         routine.prepend(task);
     }
 
-    // routine methods
+    /**
+     * Removes a routine from the specified repository by its ID.
+     * This method allows removing a routine from a repository other than the default one.
+     * The routine and all its associated tasks will be permanently deleted.
+     * UI components observing the specified repository will be automatically updated.
+     *
+     * @param id The unique identifier of the routine to be removed
+     * @param routineRepository The specific repository from which to remove the routine
+     */
     public void removeRoutine(int id, RoutineRepository routineRepository) {
         routineRepository.remove(id);
     }
 
+    /**
+     * Removes a routine from the repository by its ID.
+     * This method permanently deletes the routine and all its associated tasks.
+     * This removes a routine from the default routine repository.
+     * @param id The unique identifier of the routine to be removed
+     */
+    public void removeRoutine(int id){
+        routineRepository.remove(id);
+    }
     public void renameRoutine(int id, String name, RoutineRepository routineRepository) {
         routineRepository.rename(id, name);
     }

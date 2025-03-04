@@ -1,5 +1,4 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,17 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentConfirmEditTaskDialogBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 
 public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
     private FragmentConfirmEditTaskDialogBinding view;
@@ -68,6 +63,7 @@ public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which){
         try {
             var designatedRepo = activityModel.getRoutine(routineID);
+            Log.d("designated Repo", activityModel.getRoutine(routineID).id().toString());
             activityModel.removeTask(taskID, designatedRepo);
         } catch (Exception e) {
             Log.e("DeleteTask", "Error deleting task: " + e.getMessage(), e);

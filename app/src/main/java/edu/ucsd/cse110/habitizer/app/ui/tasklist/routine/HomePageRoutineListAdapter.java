@@ -2,6 +2,7 @@ package edu.ucsd.cse110.habitizer.app.ui.tasklist.routine;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.EditListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemEditRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmDeleteRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -84,9 +87,7 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
         }else if (editMode){
             binding.routineNameBtn.setBackgroundTintList(
                     ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.edit_orange)));
-        }
-
-        else{
+        }else{
             binding.routineNameBtn.setBackgroundTintList(
                     ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.habitizer_blue)));
         }
@@ -94,11 +95,14 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
         binding.routineNameBtn.setText(routine.name());
         binding.routineNameBtn.setOnClickListener(v->{
             if (!deleteMode && !editMode){
+                Log.d("Routine selected", routine.id().toString());
                 openTaskListFragment(routine.id());
             }else if(deleteMode){
-
-
-            }else if(editMode){
+                Log.d("Routine id for deleteMode", routine.id().toString());
+                var dialogFragment = ConfirmDeleteRoutineDialogFragment.newInstance(routine.id());
+                dialogFragment.show(fragment.getParentFragmentManager(), "ConfirmDeleteRoutineDialogFragment");
+            }else{
+                Log.d("Editing Routine", routine.id().toString());
                 openEditRoutineTasksFragment(routine.id());
             }
         });

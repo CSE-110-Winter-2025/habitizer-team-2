@@ -14,24 +14,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
-
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomepageRoutineBinding;
-
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmDeleteTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditRoutinesDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.CreateTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditTaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 
 public class HomePageRoutineFragment extends Fragment {
@@ -134,12 +120,8 @@ public class HomePageRoutineFragment extends Fragment {
             createRoutineButton.setOnClickListener(v -> {
                 if(deleteMode){
                     deleteMode(menuDescription, createRoutineButton);
-                }
-
-                if(editMode){
+                } else if(editMode){
                     editMode(menuDescription, createRoutineButton);
-                }else{
-
                 }
             });
 
