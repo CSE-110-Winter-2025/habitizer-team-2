@@ -84,8 +84,7 @@ public class RoutineRepositoryTest {
 
     }
 
-    //save is kind've a poor name here because it is more used for overwriting current RoutineRepo data
-    //It "saves" changes you make to stuff already in the repo.
+
     @Test
     public void testSave(){
 
@@ -145,7 +144,44 @@ public class RoutineRepositoryTest {
 
     }
 
-    //fucking pain work around. Cannot compare two data sources as they refer to different places in memory
+    @Test
+    public void testRemoveBug(){
+
+        InMemoryRoutineDataSource routineDataSource;
+        routineDataSource = InMemoryRoutineDataSource.fromDefault();
+
+        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+
+        defaultRoutineRepository.remove(0);
+
+        List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
+        List<Routine> expRoutines = List.of(
+                new Routine(1,0,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+        );
+
+        assertRoutineListEqual(expRoutines, actRoutines);
+
+        defaultRoutineRepository.append(new Routine(2,1,"new",InMemoryTaskDataSource.fromDefaultNew()));
+
+        actRoutines = defaultRoutineRepository.findAll().getValue();
+        expRoutines = List.of(
+                new Routine(1,0,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening()),
+                new Routine(2,1,"new",InMemoryTaskDataSource.fromDefaultNew())
+        );
+
+
+        assertRoutineListEqual(expRoutines, actRoutines);
+
+        defaultRoutineRepository.findAll().getValue().get(0).rename(0, "breakfast");
+
+        actRoutines = defaultRoutineRepository.findAll().getValue();
+        expRoutines.get(0).rename(0,"breakfast");
+        assertRoutineListEqual(expRoutines, actRoutines);
+
+
+    }
+
+    // Cannot compare two data sources as they refer to different places in memory
     //have to instead extract the task lists for each routine and check for equality of those.
     void assertRoutineListEqual(List<Routine> exp, List<Routine> act){
 

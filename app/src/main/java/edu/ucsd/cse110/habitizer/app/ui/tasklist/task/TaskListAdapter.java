@@ -71,11 +71,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
             String timeCompleted = "[" + timeElapsed + " m]";
 
-            // activityModel.getRoutine(routineID)
-            activityModel.checkOff(task.id(), routineID);
+            activityModel.getRoutine(routineID);
+            activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
 
             binding.timeComplete.setText(timeCompleted);
-            notifyDataSetChanged();
 
             if (allTasksCompleted()) {
                 if (endRoutineCallback != null) {

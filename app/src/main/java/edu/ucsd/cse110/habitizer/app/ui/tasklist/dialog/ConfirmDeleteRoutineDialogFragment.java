@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,7 +58,7 @@ public class ConfirmDeleteRoutineDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int which){
         try{
-            activityModel.removeRoutine(routineID);
+            activityModel.removeRoutine(routineID, activityModel.getRoutineRepository());
         } catch(Exception e){
             Log.e("DeleteRoutine", "Error d");
         }finally {

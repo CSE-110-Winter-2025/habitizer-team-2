@@ -77,12 +77,15 @@ public class TaskListFragment extends Fragment {
 
         var tasksData = activityModel.getOrderedTasks(routineID);
 
-        // activityModel.getRoutine(routineID)
+         activityModel.getRoutine(routineID);
         List<Task> oldTasks = tasksData.getValue();
-        for (int i = 0; i < oldTasks.size(); i++){
-            activityModel.removeCheckOff(oldTasks.get(i).id(),
-                    routineID);
+        if(oldTasks != null){
+            for (int i = 0; i < oldTasks.size(); i++){
+                activityModel.removeCheckOff(oldTasks.get(i).id(),
+                        activityModel.getRoutine(routineID));
+            }
         }
+
 
         tasksData.observe(tasks -> {
             if (tasks == null) return;
@@ -90,8 +93,6 @@ public class TaskListFragment extends Fragment {
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
             adapter.notifyDataSetChanged();
         });
-
-        handler = new Handler();
     }
 
     @Nullable
