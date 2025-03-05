@@ -115,7 +115,6 @@ public class MainViewModel extends ViewModel {
     // retrieves a routine's repository based on the ID
     public Routine getRoutine(int routineID){return routineRepository.findAll().getValue().get(routineID);}
 
-
     public void checkOff(int taskID, int routineID){
         var routine = routines.get(routineID);
         if (routine == null) return;
