@@ -197,11 +197,12 @@ public class InMemoryTaskDataSource {
             var updatedTask1 = task1.withSortOrder(t2_sortOrder);
             var updatedTask2 = task2.withSortOrder(t1_sortOrder);
 
+            //delete old tasks?
+            removeTask(id1);
+            removeTask(id2);
+
             putTask(updatedTask1);
             putTask(updatedTask2);
-
-
-
         }
 
 

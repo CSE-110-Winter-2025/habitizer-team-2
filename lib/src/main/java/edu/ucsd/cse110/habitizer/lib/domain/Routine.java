@@ -95,7 +95,7 @@ public class Routine implements Serializable {
     }
 
     public void swapTasks(Integer id1, Integer id2){
-        dataSource.swapSortOrders(id1, id2); //added to communicate to data source
+        dataSource.swapSortOrders(id1, id2); //added to communicate to task data source
     }
 
     public int getGoalTime(){
