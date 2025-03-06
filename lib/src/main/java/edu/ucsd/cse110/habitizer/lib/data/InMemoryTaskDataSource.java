@@ -189,13 +189,23 @@ public class InMemoryTaskDataSource {
     public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
-        var t1_sortOrder = task1.sortOrder(); //getting sort order of task
-        var t2_sortOrder = task2.sortOrder();
 
-        task1.withSortOrder(t2_sortOrder);
-        task2.withSortOrder(t1_sortOrder);
+        if(task1 != null && task2 != null){
+            var t1_sortOrder = task1.sortOrder(); //getting sort order of task
+            var t2_sortOrder = task2.sortOrder();
+
+            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
+            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
+
+            putTask(updatedTask1);
+            putTask(updatedTask2);
+
+
+
+        }
+
+
     }
-
 
 
     /**
