@@ -98,6 +98,10 @@ public class Routine implements Serializable {
         dataSource.swapSortOrders(id1, id2); //added to communicate to task data source
     }
 
+    public int getNumTasks(){
+        return dataSource.getNumTasks(); //using to check number of tasks in routine for moveDownTask method in MVM
+    }
+
     public int getGoalTime(){
         return dataSource.getGoalTime();
     }

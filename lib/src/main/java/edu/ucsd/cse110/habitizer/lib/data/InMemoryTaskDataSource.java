@@ -185,7 +185,7 @@ public class InMemoryTaskDataSource {
         putTasks(tasks);
     }
 
-    //set sort orders here (flipping indices in Routine which would be 'swap' method)
+    //set sort orders here (flipping orders of tasks in Routine would be 'swap' method)
     public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
@@ -204,8 +204,10 @@ public class InMemoryTaskDataSource {
             putTask(updatedTask1);
             putTask(updatedTask2);
         }
+    }
 
-
+    public int getNumTasks(){
+        return tasks.size(); //get number of tasks in list
     }
 
 

@@ -71,20 +71,20 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
             onDeleteClick.accept(id);
         });
 
-//        //binding to up and down arrows for modified task positions
-//        binding.btnMoveUp.setOnClickListener(v -> {
-//            if (position > 0) { // Prevent moving first task up (KEEP THIS)
-//                activityModel.moveTask(task.id(), routineID, true);
-//                notifyDataSetChanged();
-//            }
-//        });
-//
-//        binding.btnMoveDown.setOnClickListener(v -> {
-//            if (position < getCount() - 1) { // Prevent moving last task down (KEEP THIS)
-//                activityModel.moveTask(task.id(), routineID, false);
-//                notifyDataSetChanged();
-//            }
-//        });
+        //binding to up and down arrows for modified task positions
+        binding.btnMoveUp.setOnClickListener(v -> {
+                var taskID = task.id();
+                assert taskID != null;
+                activityModel.moveUpTask(routineID, taskID);
+                notifyDataSetChanged();
+        });
+
+        binding.btnMoveDown.setOnClickListener(v -> {
+                var taskID = task.id();
+                assert taskID != null;
+                activityModel.moveDownTask(routineID, taskID);
+                notifyDataSetChanged();
+        });
 
         return convertView;
     }
