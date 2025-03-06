@@ -177,14 +177,26 @@ public class InMemoryTaskDataSource {
         }
     }
 
-    public void shiftSortOrders(int from, int to, int by) {
+    public void shiftSortOrders(int from, int to, int by) { //by is how much you want to switch
         var tasks = this.tasks.values().stream()
-                .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to)
-                .map(task -> task.withSortOrder(task.sortOrder() + by))
-                .collect(Collectors.toList());
-
+                .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to) //-> means for each
+                .map(task -> task.withSortOrder(task.sortOrder() + by)) //shifting happens here
+                .collect(Collectors.toList()); //put into list (making new list)
         putTasks(tasks);
     }
+
+    //set sort orders here (flipping indices in Routine which would be 'swap' method)
+    public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
+        var task1 = tasks.get(id1); //getting id
+        var task2 = tasks.get(id2);
+        var t1_sortOrder = task1.sortOrder(); //getting sort order of task
+        var t2_sortOrder = task2.sortOrder();
+
+        task1.withSortOrder(t2_sortOrder);
+        task2.withSortOrder(t1_sortOrder);
+    }
+
+
 
     /**
      * Private utility method to maintain state of the fake DB: ensures that new
@@ -245,4 +257,6 @@ public class InMemoryTaskDataSource {
         assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
+
+    //private void
 }
