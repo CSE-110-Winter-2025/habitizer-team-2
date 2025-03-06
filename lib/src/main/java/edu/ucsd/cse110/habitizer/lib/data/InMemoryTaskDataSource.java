@@ -154,11 +154,11 @@ public class InMemoryTaskDataSource {
         var task = tasks.get(id);
         var sortOrder = task.sortOrder();
 
-        tasks.remove(id);
+        tasks.remove(id); //remove task from list
         shiftSortOrders(sortOrder, maxSortOrder, -1);
 
         if (taskSubjects.containsKey(id)) {
-            taskSubjects.get(id).setValue(null);
+            taskSubjects.get(id).setValue(null); //ask about this line
         }
         allTasksSubject.setValue(getTasks());
     }
@@ -194,15 +194,18 @@ public class InMemoryTaskDataSource {
             var t1_sortOrder = task1.sortOrder(); //getting sort order of task
             var t2_sortOrder = task2.sortOrder();
 
-            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
-            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
+            task1.withSortOrder(t2_sortOrder);
+            task2.withSortOrder(t1_sortOrder);
 
-            //delete old tasks?
-            removeTask(id1);
-            removeTask(id2);
+//            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
+//            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
 
-            putTask(updatedTask1);
-            putTask(updatedTask2);
+//            //delete old tasks?
+//            removeTask(id1);
+//            removeTask(id2);
+//
+//            putTask(updatedTask1);
+//            putTask(updatedTask2);
         }
     }
 
