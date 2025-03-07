@@ -66,12 +66,12 @@ public class MainViewModel extends ViewModel {
             for (Routine routine : routineList) {
 
                 //pull routine's tasks from database
-//                var tasksForRoutine = routineRepository.findTasksByRoutine(routine.id());
+                var tasksForRoutine = routineRepository.findTasksByRoutine(routine.id());
 
                 //Set the routine's task list to be equal to said routines
-//                InMemoryTaskDataSource routineTaskData = new InMemoryTaskDataSource();
-//                routineTaskData.putTasks(tasksForRoutine.getValue());
-//                routine.setDataSource(routineTaskData);
+                InMemoryTaskDataSource routineTaskData = new InMemoryTaskDataSource();
+                routineTaskData.putTasks(tasksForRoutine.getValue());
+                routine.setDataSource(routineTaskData);
                 int routineID = routine.id();
                 routines.put(routineID, routine);
 
