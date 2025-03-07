@@ -10,12 +10,9 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.databinding.EditListItemTaskBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.ListItemEditRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;

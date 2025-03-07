@@ -5,14 +5,13 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -20,7 +19,7 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 
 public class MainViewModel extends ViewModel {
 
-    private final RoutineRepository routineRepository;
+    private final RoomRoutineRepository routineRepository;
     private final Map<Integer, Routine> routines;
 
     // UI state
@@ -45,7 +44,7 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getRoutineRepository());
                     });
 
-    public MainViewModel(RoutineRepository routineRepository) {
+    public MainViewModel(RoomRoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
         this.routines = new HashMap<>();
         this.orderedRoutines = new PlainMutableSubject<>();
@@ -73,7 +72,7 @@ public class MainViewModel extends ViewModel {
                 orderedTasksByRoutine.put(routineID, orderedTasks);
 
                 // observe changes in tasks
-                routine.findAll().observe(tasks -> {
+                routine.findAllTasks().observe(tasks -> {
                     if (tasks == null) return;
                     orderedTasks.setValue(tasks.stream()
                             .sorted(Comparator.comparingInt(Task::sortOrder))

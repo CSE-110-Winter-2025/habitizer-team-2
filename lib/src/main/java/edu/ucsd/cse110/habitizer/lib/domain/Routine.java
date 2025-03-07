@@ -10,14 +10,14 @@ import java.util.Objects;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 
-public class Routine implements Serializable {
+public class SimpleRoutine implements Serializable {
 
     private final @Nullable Integer id;
     private final int sortOrder;
     private final @NonNull String name;
     private final InMemoryTaskDataSource dataSource;
 
-    public Routine(@Nullable Integer id, int sortOrder, @NonNull String name, @NonNull InMemoryTaskDataSource dataSource) {
+    public SimpleRoutine(@Nullable Integer id, int sortOrder, @NonNull String name, @NonNull InMemoryTaskDataSource dataSource) {
         this.id = id;
         this.name = name;
         this.dataSource = dataSource;
@@ -32,17 +32,17 @@ public class Routine implements Serializable {
 
     public InMemoryTaskDataSource dataSource(){return this.dataSource;}
 
-    public Routine withId(int id){return new Routine(id, this.sortOrder, this.name, this.dataSource);}
+    public SimpleRoutine withId(int id){return new SimpleRoutine(id, this.sortOrder, this.name, this.dataSource);}
 
-    public Routine withName(String name){ return new Routine(this.id, this.sortOrder, name, this.dataSource);}
+    public SimpleRoutine withName(String name){ return new SimpleRoutine(this.id, this.sortOrder, name, this.dataSource);}
 
-    public Routine withSortOrder(int sortOrder){return new Routine(this.id, sortOrder, this.name, this.dataSource);}
+    public SimpleRoutine withSortOrder(int sortOrder){return new SimpleRoutine(this.id, sortOrder, this.name, this.dataSource);}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Routine routine = (Routine) o;
+        SimpleRoutine routine = (SimpleRoutine) o;
         return sortOrder == routine.sortOrder && Objects.equals(id, routine.id) && Objects.equals(name, routine.name) && Objects.equals(dataSource, routine.dataSource);
     }
 
