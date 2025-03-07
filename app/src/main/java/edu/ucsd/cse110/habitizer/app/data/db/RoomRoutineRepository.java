@@ -56,6 +56,15 @@ public class RoomRoutineRepository implements RoutineRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
 
+    public Subject<List<Task>> findTasksByRoutine(int routineId) {
+        var entitiesLiveData = taskDao.findAllByRoutineAsLiveData(routineId);
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
 
 
     @Override

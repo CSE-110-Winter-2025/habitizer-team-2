@@ -33,7 +33,7 @@ public class HabitizerApplication extends Application {
 
         this.routineRepository = new RoomRoutineRepository(database.routineDao(), database.taskDao());
 
-        //Populate the database with some initial data on the first run.
+//        Populate the database with some initial data on the first run.
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
@@ -50,8 +50,8 @@ public class HabitizerApplication extends Application {
 //        var morningDataSource = InMemoryTaskDataSource.fromDefaultMorning();
 //        var eveningDataSource = InMemoryTaskDataSource.fromDefaultEvening();
 //
-//        var morningRoutine = new Routine(0, 0, "Morning Routine", morningDataSource);
-//        var eveningRoutine = new Routine(1, 1, "Evening Routine", eveningDataSource);
+//        var morningRoutine = new Routine(0, 0, "Morning Routine", 45, morningDataSource);
+//        var eveningRoutine = new Routine(1, 1, "Evening Routine", 45 ,eveningDataSource);
 //
 //        var routineDataSource = InMemoryRoutineDataSource.fromDefault();
 //        this.routineRepository = new SimpleRoutineRepository(routineDataSource);
@@ -59,7 +59,7 @@ public class HabitizerApplication extends Application {
 //        routineRepository.append(morningRoutine);
 //        routineRepository.append(eveningRoutine);
 //
-//        routineRepository.append(new Routine(2, 2, "Custom Routine", InMemoryTaskDataSource.fromDefaultNew()));
+//        routineRepository.append(new Routine(2, 2, "Custom Routine", 45, InMemoryTaskDataSource.fromDefaultNew()));
     }
 
     public RoomRoutineRepository getRoutineRepository() {

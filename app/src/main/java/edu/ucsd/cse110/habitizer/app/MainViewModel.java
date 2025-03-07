@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -63,6 +64,14 @@ public class MainViewModel extends ViewModel {
             orderedTasksByRoutine.clear();
 
             for (Routine routine : routineList) {
+
+                //pull routine's tasks from database
+//                var tasksForRoutine = routineRepository.findTasksByRoutine(routine.id());
+
+                //Set the routine's task list to be equal to said routines
+//                InMemoryTaskDataSource routineTaskData = new InMemoryTaskDataSource();
+//                routineTaskData.putTasks(tasksForRoutine.getValue());
+//                routine.setDataSource(routineTaskData);
                 int routineID = routine.id();
                 routines.put(routineID, routine);
 
@@ -72,7 +81,7 @@ public class MainViewModel extends ViewModel {
                 orderedTasksByRoutine.put(routineID, orderedTasks);
 
                 // observe changes in tasks
-                routine.findAllTasks().observe(tasks -> {
+                routine.findAll().observe(tasks -> {
                     if (tasks == null) return;
                     orderedTasks.setValue(tasks.stream()
                             .sorted(Comparator.comparingInt(Task::sortOrder))
@@ -121,7 +130,7 @@ public class MainViewModel extends ViewModel {
         var task = routine.find(taskID);
         if (task.getValue() == null) return;
 
-        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true);
+        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true, routineID);
         routine.save(checkedOffTask);
     }
 
@@ -132,24 +141,28 @@ public class MainViewModel extends ViewModel {
         var task = routine.find(taskID);
         if (task.getValue() == null) return;
 
-        var uncheckedTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
+        var uncheckedTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false, routineID);
         routine.save(uncheckedTask);
     }
 
 
     public void removeTask(int id, Routine routine) {
+        routineRepository.removeTask(id);
         routine.remove(id);
     }
 
     public void renameTask(int id, String name, Routine routine) {
+        routineRepository.renameTask(id, name);
         routine.rename(id, name);
     }
 
     public void appendTask(Task task, Routine routine) {
+        routineRepository.appendTask(task);
         routine.append(task);
     }
 
     public void prependTask(Task task, Routine routine){
+        routineRepository.prependTask(task);
         routine.prepend(task);
     }
 

@@ -24,11 +24,17 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY sort_order")
     List<TaskEntity> findAll();
 
+    @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
+    List<TaskEntity> findAllByRoutine(int routineId);
+
     @Query("SELECT * FROM tasks WHERE id = :id")
     LiveData<TaskEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM tasks ORDER BY sort_order")
     LiveData<List<TaskEntity>> findAllAsLiveData();
+
+    @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
+    LiveData<List<TaskEntity>> findAllByRoutineAsLiveData(int routineId);
 
     @Query("SELECT COUNT(*) FROM tasks")
     int count();

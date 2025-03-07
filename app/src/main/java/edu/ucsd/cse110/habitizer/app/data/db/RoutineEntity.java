@@ -36,6 +36,6 @@ public class RoutineEntity {
     }
 
     public @NonNull Routine toRoutine(){
-        return new Routine(id, sortOrder, name, goalTime);
+        return new Routine(id, sortOrder, name, goalTime, null);
     }
 }
