@@ -159,7 +159,6 @@ public class MainViewModel extends ViewModel {
         if(id1Task == 0){
             return;
         }
-
         getRoutine(routineID).swapTasks(id1Task, id1Task - 1); // swaps with task above it
 
     }
@@ -168,7 +167,6 @@ public class MainViewModel extends ViewModel {
         if(id1Task == getRoutine(routineID).getNumTasks() - 1){ //checking if task is at bottom of list
             return;
         }
-
         getRoutine(routineID).swapTasks(id1Task, id1Task + 1);
     }
 

@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,20 +187,29 @@ public class InMemoryTaskDataSource {
     }
 
     //set sort orders here (flipping orders of tasks in Routine would be 'swap' method)
-    public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
+    public void swapTasks(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
 
         if(task1 != null && task2 != null){
             var t1_sortOrder = task1.sortOrder(); //getting sort order of task
-            var t2_sortOrder = task2.sortOrder();
+            var t2_sortOrder = task2.sortOrder();//.sortOrder does not include moving things in the list
 
-            task1.withSortOrder(t2_sortOrder);
-            task2.withSortOrder(t1_sortOrder);
+            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
+            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
+
+            putTask(updatedTask1);
+            putTask(updatedTask2);
+
+
+            var sortedTasks = this.tasks.values().stream()
+                    .sorted(Comparator.comparingInt(Task::sortOrder)) //-> means for each
+                    .collect(Collectors.toList()); //put into list (making new list)
+            putTasks(sortedTasks);
 
 //            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
 //            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
-
+//
 //            //delete old tasks?
 //            removeTask(id1);
 //            removeTask(id2);

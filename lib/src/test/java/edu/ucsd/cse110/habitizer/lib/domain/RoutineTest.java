@@ -213,19 +213,24 @@ public class RoutineTest {
         InMemoryTaskDataSource dataSource;
         Routine routine;
         dataSource = InMemoryTaskDataSource.fromDefaultEvening();
+        routine = new Routine(0, 0, "Evening", dataSource);
+        System.out.println("Before swap:");
+        routine.findAll().getValue().forEach(System.out::println);
 
+        routine.swapTasks(0, 1);
 
+        List<Task> actTasks = routine.findAll().getValue();
         List<Task> expTasks = List.of(
-
-                new Task(0,0 , "Shower", false),
-                new Task(1,1,"Brush Teeth", false),
+                new Task(1,0,"Brush Teeth", false),
+                new Task(0,1 , "Shower", false),
                 new Task(2,2,"Dress", false),
                 new Task(3,3,"Make Coffee", false),
                 new Task(4,4,"Make Lunch", false),
                 new Task(5,5,"Dinner Prep", false),
                 new Task(6,6,"Pack Bag", false)
-
         );
+
+        assertEquals(actTasks, expTasks);
     }
 
 }
