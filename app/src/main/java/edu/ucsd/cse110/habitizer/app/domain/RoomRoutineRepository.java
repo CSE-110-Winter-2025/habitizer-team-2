@@ -107,6 +107,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         routineDao.rename(id, name);
     }
 
+
     public Subject<Task> findTask(int id) {
         var entityLiveData = taskDao.findAsLiveData(id);
         var taskLiveData = Transformations.map(entityLiveData, ConvertUtils::taskFromData);
@@ -158,5 +159,9 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     public void renameTask(int id, String name) {
         taskDao.rename(id, name);
+    }
+
+    public void setGoalTime(int routineId, int goalTime){
+        routineDao.setGoalTime(routineId, goalTime);
     }
 }

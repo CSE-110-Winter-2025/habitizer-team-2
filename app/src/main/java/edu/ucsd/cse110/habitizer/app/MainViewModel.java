@@ -111,7 +111,9 @@ public class MainViewModel extends ViewModel {
     }
 
     // retrieves a routine's repository based on the ID
-    public Routine getRoutine(int routineID){return routineRepository.findAll().getValue().get(routineID);}
+    public Routine getRoutine(int routineID){
+        return routineRepository.findAll().getValue().get(routineID);
+    }
 
     public void checkOff(int taskID, int routineID){
         var routine = routines.get(routineID);
@@ -133,27 +135,42 @@ public class MainViewModel extends ViewModel {
         routineRepository.saveTask(task.withCheckedOff(false));
     }
 
+    public void setGoalTimeByRoutine(int routineId, int goalTime){
+        routineRepository.setGoalTime(routineId, goalTime);
+    }
+
 // TODO : Everything below this!
 
     public void removeTask(int id, Routine routine) {
-        routine.tasks().remove;
+        List<Task> updatedTasks = routine.tasks().stream()
+                .filter(task -> task.id() == null || task.id() != id) // Remove task with matching ID
+                .toList(); // Creates a new immutable list
+
+        Routine updatedRoutine = routine.withTasks(updatedTasks);
+
         routineRepository.removeTask(id);
-        routine.remove(id);
+        routineRepository.save(updatedRoutine);
     }
 
     public void renameTask(int id, String name, Routine routine) {
+//        List<Task> updatedTasks = routine.tasks().stream()
+//                .map(task -> (task.id() != null && task.id() == id) ? task.withName(name) : task) // Rename the matching task
+//                .toList(); // Creates a new immutable list
+//
+//        Routine updatedRoutine = routine.withTasks(updatedTasks);
+//
+//        routine = updatedRoutine;
+
         routineRepository.renameTask(id, name);
-        routine.rename(id, name);
+
     }
 
     public void appendTask(Task task, Routine routine) {
         routineRepository.appendTask(task);
-        routine.append(task);
     }
 
     public void prependTask(Task task, Routine routine){
         routineRepository.prependTask(task);
-        routine.prepend(task);
     }
 
     // routine methods

@@ -114,7 +114,7 @@ public class EditRoutineTasksFragment extends Fragment {
                         .setMessage("Goal time saved")
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .show();
-                activityModel.getRoutine(routineID).setGoalTime(intUserInput);
+                activityModel.setGoalTimeByRoutine(routineID, intUserInput);
             } catch (NumberFormatException e) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Fail!")

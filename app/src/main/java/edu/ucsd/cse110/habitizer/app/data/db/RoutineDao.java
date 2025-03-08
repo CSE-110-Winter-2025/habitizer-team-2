@@ -76,4 +76,7 @@ public interface RoutineDao {
     @Query("UPDATE routines SET name = :name " +
             "WHERE id = :id" )
     void rename(int id, String name);
+
+    @Query("UPDATE routines SET goal_time = :goalTime WHERE id = :id")
+    void setGoalTime(int id, int goalTime);
 }

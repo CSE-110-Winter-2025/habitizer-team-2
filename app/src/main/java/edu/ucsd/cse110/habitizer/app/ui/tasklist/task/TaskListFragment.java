@@ -103,7 +103,7 @@ public class TaskListFragment extends Fragment {
         view.taskList.setAdapter(adapter);
 
         // activityModel.getRoutine(routineID)
-        String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).getGoalTime());
+        String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).goalTime());
         view.goalTextView.setText(goalTimeString);
 
 

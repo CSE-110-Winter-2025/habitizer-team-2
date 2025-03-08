@@ -28,7 +28,7 @@ public class HabitizerApplication extends Application {
                 .allowMainThreadQueries()
                 .build();
 
-        this.routineRepository = new RoomRoutineRepository(database.routineDao(), database.taskDao());
+        this.routineRepository = new RoomRoutineRepository(database);
 
 //        Populate the database with some initial data on the first run.
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
@@ -36,8 +36,8 @@ public class HabitizerApplication extends Application {
 
         if (isFirstRun && database.routineDao().count() == 0 && database.taskDao().count() == 0){
             routineRepository.save(InMemoryRoutineDataSource.DEFAULT_ROUTINES);
-            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_MORNING);
-            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_EVENING);
+//            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_MORNING);
+//            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_EVENING);
 
             sharedPreferences.edit()
                     .putBoolean("isFirstRun", false)

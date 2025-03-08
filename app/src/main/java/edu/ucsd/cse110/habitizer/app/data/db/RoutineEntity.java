@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -24,6 +25,7 @@ public class RoutineEntity {
     @ColumnInfo(name="goal_time")
     public int goalTime;
 
+    @Ignore
     RoutineEntity(@Nullable Integer id, @NonNull String name, int sortOrder, int goalTime){
         this.id = id;
         this.name = name;
