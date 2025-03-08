@@ -200,7 +200,7 @@ public class InMemoryTaskDataSource {
 
             //notify observers
             putTask(updatedTask1);
-            Objects.requireNonNull(id1);
+            Objects.requireNonNull(id1); //contract
             taskSubjects.get(id1).setValue(tasks.get(id1));
 
             putTask(updatedTask2);
