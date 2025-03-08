@@ -48,7 +48,7 @@ public class TaskEntity {
     }
 
     public @NonNull Task toTask(){
-        return new Task(id, sortOrder, name, checkedOff, routineId);
+        return new Task(id, sortOrder, name, checkedOff);
     }
 
 }

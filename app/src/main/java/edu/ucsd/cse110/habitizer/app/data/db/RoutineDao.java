@@ -21,14 +21,23 @@ public interface RoutineDao {
     @Query("SELECT * FROM routines WHERE id = :id")
     RoutineEntity find(int id);
 
+    @Transaction
+    @Query("SELECT * FROM routines WHERE id = :id")
+    RoutineWithTasksQueryResult findWithTasks(int id);
+
     @Query("SELECT * FROM routines ORDER BY sort_order")
     List<RoutineEntity> findAll();
 
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);
 
+    @Transaction
+    @Query("SELECT * FROM routines WHERE id = :id")
+    LiveData<RoutineWithTasksQueryResult> findWithTasksAsLiveData(int id);
+
+    @Transaction
     @Query("SELECT * FROM routines ORDER BY sort_order")
-    LiveData<List<RoutineEntity>> findAllAsLiveData();
+    LiveData<List<RoutineWithTasksQueryResult>> findAllWithTasksAsLiveData();
 
     @Query("SELECT COUNT(*) FROM routines")
     int count();

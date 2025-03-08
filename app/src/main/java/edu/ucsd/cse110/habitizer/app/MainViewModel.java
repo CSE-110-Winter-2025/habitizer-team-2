@@ -9,9 +9,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
+import edu.ucsd.cse110.habitizer.app.domain.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -65,23 +66,12 @@ public class MainViewModel extends ViewModel {
 
             for (Routine routine : routineList) {
 
-                //pull routine's tasks from database
-                var tasksForRoutine = routineRepository.findTasksByRoutine(routine.id());
-
-                //Set the routine's task list to be equal to said routines
-                InMemoryTaskDataSource routineTaskData = new InMemoryTaskDataSource();
-                routineTaskData.putTasks(tasksForRoutine.getValue());
-                routine.setDataSource(routineTaskData);
-                int routineID = routine.id();
-                routines.put(routineID, routine);
-
-
                 // track ordered tasks per routine
                 PlainMutableSubject<List<Task>> orderedTasks = new PlainMutableSubject<>();
-                orderedTasksByRoutine.put(routineID, orderedTasks);
+                orderedTasksByRoutine.put(routine.id(), orderedTasks);
 
                 // observe changes in tasks
-                routine.findAll().observe(tasks -> {
+                routineRepository.findTasksByRoutine(routine.id()).observe(tasks -> {
                     if (tasks == null) return;
                     orderedTasks.setValue(tasks.stream()
                             .sorted(Comparator.comparingInt(Task::sortOrder))
@@ -89,15 +79,15 @@ public class MainViewModel extends ViewModel {
                 });
 
                 // initialize routine specific states
-                isCheckedOffByRoutine.put(routineID, new PlainMutableSubject<>());
-                goalTimeByRoutine.put(routineID, new PlainMutableSubject<>());
-                elapsedTimeByRoutine.put(routineID, new PlainMutableSubject<>());
-                displayedTextByRoutine.put(routineID, new PlainMutableSubject<>());
+                isCheckedOffByRoutine.put(routine.id(), new PlainMutableSubject<>());
+                goalTimeByRoutine.put(routine.id(), new PlainMutableSubject<>());
+                elapsedTimeByRoutine.put(routine.id(), new PlainMutableSubject<>());
+                displayedTextByRoutine.put(routine.id(), new PlainMutableSubject<>());
 
-                routine.findAll().observe(tasks -> {
+                routineRepository.findTasksByRoutine(routine.id()).observe(tasks -> {
                     if (tasks == null) return;
                     boolean allChecked = tasks.stream().allMatch(Task::checkedOff);
-                    isCheckedOffByRoutine.get(routineID).setValue(allChecked);
+                    isCheckedOffByRoutine.get(routine.id()).setValue(allChecked);
                 });
 
             }
@@ -125,28 +115,28 @@ public class MainViewModel extends ViewModel {
 
     public void checkOff(int taskID, int routineID){
         var routine = routines.get(routineID);
-        if (routine == null) return;
+        Objects.requireNonNull(routine);
 
-        var task = routine.find(taskID);
-        if (task.getValue() == null) return;
+        var task = routineRepository.findTask(taskID).getValue();
+        Objects.requireNonNull(task);
 
-        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true, routineID);
-        routine.save(checkedOffTask);
+        routineRepository.saveTask(task.withCheckedOff(true));
     }
 
     public void removeCheckOff(int taskID, int routineID){
         var routine = routines.get(routineID);
-        if (routine == null) return;
+        Objects.requireNonNull(routine);
 
-        var task = routine.find(taskID);
-        if (task.getValue() == null) return;
+        var task = routineRepository.findTask(taskID).getValue();
+        Objects.requireNonNull(task);
 
-        var uncheckedTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false, routineID);
-        routine.save(uncheckedTask);
+        routineRepository.saveTask(task.withCheckedOff(false));
     }
 
+// TODO : Everything below this!
 
     public void removeTask(int id, Routine routine) {
+        routine.tasks().remove;
         routineRepository.removeTask(id);
         routine.remove(id);
     }

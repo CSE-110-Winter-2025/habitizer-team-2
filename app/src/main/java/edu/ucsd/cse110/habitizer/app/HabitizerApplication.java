@@ -5,12 +5,9 @@ import android.app.Application;
 import androidx.room.Room;
 
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
-import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
+import edu.ucsd.cse110.habitizer.app.domain.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryRoutineDataSource;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.SimpleRoutineRepository;
 
 public class HabitizerApplication extends Application {
     private InMemoryRoutineDataSource routineDataSource;
