@@ -198,14 +198,19 @@ public class InMemoryTaskDataSource {
             var updatedTask1 = task1.withSortOrder(t2_sortOrder);
             var updatedTask2 = task2.withSortOrder(t1_sortOrder);
 
+            //notify observers
             putTask(updatedTask1);
+            Objects.requireNonNull(id1);
+            taskSubjects.get(id1).setValue(tasks.get(id1));
+
             putTask(updatedTask2);
+            Objects.requireNonNull(id2);
+            taskSubjects.get(id2).setValue(tasks.get(id2));
 
-
-            var sortedTasks = this.tasks.values().stream()
-                    .sorted(Comparator.comparingInt(Task::sortOrder)) //-> means for each
-                    .collect(Collectors.toList()); //put into list (making new list)
-            putTasks(sortedTasks);
+//            var sortedTasks = this.tasks.values().stream()
+//                    .sorted(Comparator.comparingInt(Task::sortOrder)) //-> means for each
+//                    .collect(Collectors.toList()); //put into list (making new list)
+//            putTasks(sortedTasks);
 
 //            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
 //            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
@@ -217,6 +222,7 @@ public class InMemoryTaskDataSource {
 //            putTask(updatedTask1);
 //            putTask(updatedTask2);
         }
+
     }
 
     public int getNumTasks(){
