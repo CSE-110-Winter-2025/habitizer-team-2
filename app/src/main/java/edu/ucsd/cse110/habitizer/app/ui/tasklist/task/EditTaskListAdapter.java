@@ -87,7 +87,7 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
 
                 activityModel.swap(routineID,
                         (int)getItemId(position),
-                        (int)getItemId(position - 1));
+                        (int)getItemId(position + 1));
                 notifyDataSetChanged();
         });
 

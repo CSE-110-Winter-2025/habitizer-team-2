@@ -148,7 +148,7 @@ public class InMemoryTaskDataSource {
     public void putTasks(List<Task> tasks) {
         var fixedTasks = tasks.stream()
                 .map(this::preInsert)
-                .collect(Collectors.toList());
+                .toList();
 
         fixedTasks.forEach(task -> this.tasks.put(task.id(), task));
         postInsert();
@@ -202,11 +202,8 @@ public class InMemoryTaskDataSource {
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
 
-        var t1_sortOrder = task1.sortOrder(); //getting sort order of task
-        var t2_sortOrder = task2.sortOrder();//.sortOrder does not include moving things in the list
-
-        var updatedTask1 = task1.withSortOrder(t2_sortOrder);
-        var updatedTask2 = task2.withSortOrder(t1_sortOrder);
+        var updatedTask1 = task1.withSortOrder(task2.sortOrder());
+        var updatedTask2 = task2.withSortOrder(task1.sortOrder());
 
         //notify observers
         tasks.put(id1, updatedTask1);
