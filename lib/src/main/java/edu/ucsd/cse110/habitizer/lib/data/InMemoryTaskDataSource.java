@@ -191,37 +191,24 @@ public class InMemoryTaskDataSource {
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
 
-        if(task1 != null && task2 != null){
-            var t1_sortOrder = task1.sortOrder(); //getting sort order of task
-            var t2_sortOrder = task2.sortOrder();//.sortOrder does not include moving things in the list
+        var t1_sortOrder = task1.sortOrder(); //getting sort order of task
+        var t2_sortOrder = task2.sortOrder();//.sortOrder does not include moving things in the list
 
-            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
-            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
+        var updatedTask1 = task1.withSortOrder(t2_sortOrder);
+        var updatedTask2 = task2.withSortOrder(t1_sortOrder);
 
-            //notify observers
-            putTask(updatedTask1);
-            Objects.requireNonNull(id1); //contract
-            taskSubjects.get(id1).setValue(tasks.get(id1));
+        //notify observers
+        tasks.put(id1, updatedTask1);
+        Objects.requireNonNull(id1); //contract
+        taskSubjects.get(id1).setValue(tasks.get(id1));
+        assertSortOrderConstraints();
 
-            putTask(updatedTask2);
-            Objects.requireNonNull(id2);
-            taskSubjects.get(id2).setValue(tasks.get(id2));
+        tasks.put(id2, updatedTask2);
+        Objects.requireNonNull(id2);
+        taskSubjects.get(id2).setValue(tasks.get(id2));
+        assertSortOrderConstraints();
 
-//            var sortedTasks = this.tasks.values().stream()
-//                    .sorted(Comparator.comparingInt(Task::sortOrder)) //-> means for each
-//                    .collect(Collectors.toList()); //put into list (making new list)
-//            putTasks(sortedTasks);
 
-//            var updatedTask1 = task1.withSortOrder(t2_sortOrder);
-//            var updatedTask2 = task2.withSortOrder(t1_sortOrder);
-//
-//            //delete old tasks?
-//            removeTask(id1);
-//            removeTask(id2);
-//
-//            putTask(updatedTask1);
-//            putTask(updatedTask2);
-        }
 
     }
 
