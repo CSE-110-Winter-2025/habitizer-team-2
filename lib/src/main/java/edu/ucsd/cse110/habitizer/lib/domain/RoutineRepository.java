@@ -2,54 +2,22 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryRoutineDataSource;
-import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
-public class RoutineRepository {
+import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 
-    InMemoryRoutineDataSource routineDataSource;
-    public RoutineRepository(InMemoryRoutineDataSource routineDataSource){
-        this.routineDataSource = routineDataSource;
-    }
+public interface RoutineRepository {
+    Subject<Routine> find(int id);
 
+    Subject<List<Routine>> findAll();
 
-    public PlainMutableSubject<Routine> find(int id) {
-        return routineDataSource.getRoutineSubject(id);
-    }
+    void save(Routine routine);
 
-    public PlainMutableSubject<List<Routine>> findAll() {
-        return routineDataSource.getAllRoutinesSubject();
-    }
+    void save(List<Routine> routines);
 
+    void remove(int id);
 
-    public void save(Routine routine) {
-        routineDataSource.putRoutine(routine);
-    }
+    void append(Routine routine);
 
-    public void save(List<Routine> routines) {
-        routineDataSource.putRoutines(routines);
-    }
+    void prepend(Routine routine);
 
-    public void remove(int id) {
-        routineDataSource.removeRoutine(id);
-    }
-
-    public void append(Routine routine){
-        routineDataSource.putRoutine(
-                routine.withSortOrder(routineDataSource.getMaxSortOrder() + 1)
-        );
-    }
-
-    public void prepend(Routine routine) {
-        routineDataSource.shiftSortOrders(0, routineDataSource.getMaxSortOrder(), 1);
-        routineDataSource.putRoutine(
-                routine.withSortOrder(routineDataSource.getMinSortOrder()-1)
-        );
-    }
-
-    public void rename(int id, String name) {
-        routineDataSource.replaceName(id, name);
-    }
-
-
-
+    void rename(int id, String name);
 }

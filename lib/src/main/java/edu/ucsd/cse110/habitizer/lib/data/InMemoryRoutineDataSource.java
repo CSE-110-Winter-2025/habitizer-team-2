@@ -3,7 +3,6 @@ package edu.ucsd.cse110.habitizer.lib.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -29,8 +28,8 @@ public class InMemoryRoutineDataSource {
 
 
     public final static List<Routine> DEFAULT_ROUTINES = List.of(
-            new Routine(0, 0, "Morning Routine", InMemoryTaskDataSource.fromDefaultMorning()),
-            new Routine(1, 1, "Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+            new Routine(0, 0, "Morning Routine", 45, InMemoryTaskDataSource.DEFAULT_TASKS_MORNING),
+            new Routine(1, 1, "Evening Routine", 45, InMemoryTaskDataSource.DEFAULT_TASKS_EVENING)
     );
 
     public static InMemoryRoutineDataSource fromDefault() {

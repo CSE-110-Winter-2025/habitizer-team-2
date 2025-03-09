@@ -17,12 +17,12 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(0,0 , "Morning Routine", InMemoryTaskDataSource.fromDefaultMorning()),
-                new Routine(1,1,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+                new Routine(0,0 , "Morning Routine", 45, InMemoryTaskDataSource.DEFAULT_TASKS_MORNING),
+                new Routine(1,1,"Evening Routine", 45, InMemoryTaskDataSource.DEFAULT_TASKS_EVENING)
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);
@@ -35,20 +35,20 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
 
         InMemoryTaskDataSource newRoutineDataSource;
         newRoutineDataSource = InMemoryTaskDataSource.fromDefaultNew();
 
-        Routine newRoutine = new Routine(2,0,"New Routine", newRoutineDataSource);
+        Routine newRoutine = new Routine(2,0,"New Routine", 45, newRoutineDataSource);
 
         defaultRoutineRepository.prepend(newRoutine);
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(0,1 , "Morning Routine", InMemoryTaskDataSource.fromDefaultMorning()),
-                new Routine(1,2,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening()),
-                new Routine(2,0,"New Routine", InMemoryTaskDataSource.fromDefaultNew())
+                new Routine(0,1 , "Morning Routine", 45, InMemoryTaskDataSource.fromDefaultMorning()),
+                new Routine(1,2,"Evening Routine", 45, InMemoryTaskDataSource.fromDefaultEvening()),
+                new Routine(2,0,"New Routine", 45, InMemoryTaskDataSource.fromDefaultNew())
 
         );
 
@@ -63,20 +63,20 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
 
         InMemoryTaskDataSource newRoutineDataSource;
         newRoutineDataSource = InMemoryTaskDataSource.fromDefaultNew();
 
-        Routine newRoutine = new Routine(2,0,"New Routine", newRoutineDataSource);
+        Routine newRoutine = new Routine(2,0,"New Routine", 45, newRoutineDataSource);
 
         defaultRoutineRepository.append(newRoutine);
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(0,0 , "Morning Routine", InMemoryTaskDataSource.fromDefaultMorning()),
-                new Routine(1,1,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening()),
-                new Routine(2,2,"New Routine", InMemoryTaskDataSource.fromDefaultNew())
+                new Routine(0,0 , "Morning Routine", 45, InMemoryTaskDataSource.fromDefaultMorning()),
+                new Routine(1,1,"Evening Routine", 45, InMemoryTaskDataSource.fromDefaultEvening()),
+                new Routine(2,2,"New Routine", 45, InMemoryTaskDataSource.fromDefaultNew())
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);
@@ -92,15 +92,15 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
         Routine horseshoe = defaultRoutineRepository.find(0).getValue().withName("Horseshoe");
 
         defaultRoutineRepository.save(horseshoe);
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(0,0 , "Horseshoe", InMemoryTaskDataSource.fromDefaultMorning()),
-                new Routine(1,1,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+                new Routine(0,0 , "Horseshoe", 45, InMemoryTaskDataSource.fromDefaultMorning()),
+                new Routine(1,1,"Evening Routine", 45,InMemoryTaskDataSource.fromDefaultEvening())
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);
@@ -112,14 +112,14 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
         defaultRoutineRepository.rename(0, "Horseshoe");
 
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(0,0 , "Horseshoe", InMemoryTaskDataSource.fromDefaultMorning()),
-                new Routine(1,1,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+                new Routine(0,0 , "Horseshoe", 45, InMemoryTaskDataSource.fromDefaultMorning()),
+                new Routine(1,1,"Evening Routine", 45, InMemoryTaskDataSource.fromDefaultEvening())
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);
@@ -132,13 +132,13 @@ public class RoutineRepositoryTest {
         InMemoryRoutineDataSource routineDataSource;
         routineDataSource = InMemoryRoutineDataSource.fromDefault();
 
-        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+        RoutineRepository defaultRoutineRepository = new SimpleRoutineRepository(routineDataSource);
 
         defaultRoutineRepository.remove(0);
 
         List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
         List<Routine> expRoutines = List.of(
-                new Routine(1,0,"Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+                new Routine(1,0,"Evening Routine", 45, InMemoryTaskDataSource.fromDefaultEvening())
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);

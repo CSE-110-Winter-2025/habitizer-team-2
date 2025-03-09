@@ -3,7 +3,6 @@ package edu.ucsd.cse110.habitizer.lib.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -34,7 +33,7 @@ public class InMemoryTaskDataSource {
 
     public final static List<Task> DEFAULT_TASKS_MORNING = List.of(
 
-            new Task(0,0 , "Shower", false ),
+            new Task(0,0 , "Shower", false),
             new Task(1,1,"Brush Teeth", false),
             new Task(2,2,"Dress", false),
             new Task(3,3,"Make Coffee", false),
