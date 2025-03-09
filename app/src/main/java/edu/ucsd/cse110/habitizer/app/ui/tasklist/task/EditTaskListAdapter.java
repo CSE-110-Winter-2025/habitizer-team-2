@@ -73,16 +73,21 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
 
         //binding to up and down arrows for modified task positions
         binding.btnMoveUp.setOnClickListener(v -> {
-                var taskID = task.id();
-                assert taskID != null;
-                activityModel.moveUpTask(routineID, taskID);
+                if(position == 0) return;
+
+                activityModel.swap(routineID,
+                        (int)getItemId(position),
+                        (int)getItemId(position - 1));
+
                 notifyDataSetChanged();
         });
 
         binding.btnMoveDown.setOnClickListener(v -> {
-                var taskID = task.id();
-                assert taskID != null;
-                activityModel.moveDownTask(routineID, taskID);
+                if(position == getCount() - 1) return;
+
+                activityModel.swap(routineID,
+                        (int)getItemId(position),
+                        (int)getItemId(position - 1));
                 notifyDataSetChanged();
         });
 

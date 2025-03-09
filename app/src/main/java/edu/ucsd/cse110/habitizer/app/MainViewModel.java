@@ -155,21 +155,9 @@ public class MainViewModel extends ViewModel {
         routine.prepend(task);
     }
 
-    public void moveUpTask(int routineID, Integer id1Task){
-        if(id1Task == 0){
-            return;
-        }
-        getRoutine(routineID).swapTasks(id1Task, id1Task - 1); // swaps with task above it
-
+    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
+        getRoutine(routineID).swapTasks(taskID1, taskID2);
     }
-
-    public void moveDownTask(int routineID, Integer id1Task){
-        if(id1Task == getRoutine(routineID).getNumTasks() - 1){ //checking if task is at bottom of list
-            return;
-        }
-        getRoutine(routineID).swapTasks(id1Task, id1Task + 1);
-    }
-
 
     // routine methods
     public void removeRoutine(int id, RoutineRepository routineRepository) {

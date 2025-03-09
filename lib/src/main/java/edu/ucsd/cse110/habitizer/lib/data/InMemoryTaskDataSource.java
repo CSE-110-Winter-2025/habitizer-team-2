@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import androidx.annotation.Nullable;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +58,15 @@ public class InMemoryTaskDataSource {
             new Task(6,6,"Get in Bed", false)
 
     );
+
+    private void notifyTaskChanged(@Nullable Integer taskID){
+        Objects.requireNonNull(taskID);
+        taskSubjects.get(taskID).setValue(tasks.get(taskID));
+    }
+
+    private void notifyAllTasksChanged(){
+        allTasksSubject.setValue(getTasks());
+    }
 
     public void setGoalTime(int goalTime){
         this.goalTime = goalTime;
@@ -187,7 +198,7 @@ public class InMemoryTaskDataSource {
     }
 
     //set sort orders here (flipping orders of tasks in Routine would be 'swap' method)
-    public void swapTasks(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
+    public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
         var task1 = tasks.get(id1); //getting id
         var task2 = tasks.get(id2);
 
@@ -199,17 +210,12 @@ public class InMemoryTaskDataSource {
 
         //notify observers
         tasks.put(id1, updatedTask1);
-        Objects.requireNonNull(id1); //contract
-        taskSubjects.get(id1).setValue(tasks.get(id1));
-        assertSortOrderConstraints();
-
         tasks.put(id2, updatedTask2);
-        Objects.requireNonNull(id2);
-        taskSubjects.get(id2).setValue(tasks.get(id2));
         assertSortOrderConstraints();
 
-
-
+        notifyTaskChanged(id1);
+        notifyTaskChanged(id2);
+        notifyAllTasksChanged();
     }
 
     public int getNumTasks(){
