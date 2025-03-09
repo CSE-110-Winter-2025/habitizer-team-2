@@ -4,10 +4,10 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryRoutineDataSource;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
-public class RoutineRepository {
+public class SimpleRoutineRepository {
 
     InMemoryRoutineDataSource routineDataSource;
-    public RoutineRepository(InMemoryRoutineDataSource routineDataSource){
+    public SimpleRoutineRepository(InMemoryRoutineDataSource routineDataSource){
         this.routineDataSource = routineDataSource;
     }
 
