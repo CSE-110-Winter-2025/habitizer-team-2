@@ -129,21 +129,18 @@ public class TaskListFragment extends Fragment {
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
 
-        view.stopButton.setOnClickListener( v -> {
-                if(stopwatch.isRunning){
+        view.timeButton.setOnClickListener( v -> {
+                if(stopwatch.isRunning) {
                     stopwatch.stop();
+                    view.timeButton.setImageResource(R.drawable.playbutton);
+                }else{
+                    stopwatch.start();
+                    view.timeButton.setImageResource(R.drawable.stopbutton);
                 }
         });
 
-        view.playButton.setOnClickListener( v -> {
-            if (!stopwatch.isRunning) {
-                stopwatch.start();
-            }
-
-        });
-
         view.ffButton.setOnClickListener(v -> {
-            stopwatch.fastforward(30);
+            stopwatch.fastforward(15);
         });
 
         return view.getRoot();
@@ -172,8 +169,7 @@ public class TaskListFragment extends Fragment {
         }
         view.endButton.setEnabled(false);
         view.ffButton.setEnabled(false);
-        view.playButton.setEnabled(false);
-        view.stopButton.setEnabled(false);
+        view.timeButton.setEnabled(false);
     }
 
 
