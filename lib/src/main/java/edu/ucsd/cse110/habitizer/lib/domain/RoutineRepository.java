@@ -53,7 +53,4 @@ public class RoutineRepository {
     public void rename(int id, String name) {
         routineDataSource.replaceName(id, name);
     }
-
-
-
 }

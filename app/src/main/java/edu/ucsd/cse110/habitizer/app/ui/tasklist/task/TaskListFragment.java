@@ -171,7 +171,4 @@ public class TaskListFragment extends Fragment {
         view.ffButton.setEnabled(false);
         view.timeButton.setEnabled(false);
     }
-
-
-
 }

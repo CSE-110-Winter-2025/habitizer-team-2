@@ -82,7 +82,7 @@ public class EditRoutineTasksFragment extends Fragment {
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
         var tasksData = activityModel.getOrderedTasks(routineID);
 
-        this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, id -> {
+        this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, routineID, id -> {
             var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, routineID);
             dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
         }, id -> {

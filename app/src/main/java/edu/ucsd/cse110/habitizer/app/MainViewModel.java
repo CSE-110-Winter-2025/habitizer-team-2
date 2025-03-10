@@ -138,17 +138,16 @@ public class MainViewModel extends ViewModel {
         routine.append(task);
     }
 
+
     public void prependTask(Task task, Routine routine){
         routine.prepend(task);
     }
+ 
+    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
+        getRoutine(routineID).swapTasks(taskID1, taskID2);
+    }
 
-    /**
-     * Removes a routine from the repository by its ID.
-     * This method permanently deletes the routine and all its associated tasks.
-     * @param id The unique identifier of the routine to be removed
-     * @param routineRepository The specific repository from which to remove the routine
-     * @require routineRepository != null && id >= 0
-     */
+    // routine methods
     public void removeRoutine(int id, RoutineRepository routineRepository) {
         routineRepository.remove(id);
     }
