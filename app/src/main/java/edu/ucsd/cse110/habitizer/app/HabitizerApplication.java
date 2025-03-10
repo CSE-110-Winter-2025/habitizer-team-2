@@ -14,13 +14,10 @@ public class HabitizerApplication extends Application {
 
     @Override
     public void onCreate() {
-        super.onCreate();
+        super.onCreate()
 
         var routineDataSource = InMemoryRoutineDataSource.fromDefault();
         this.routineRepository = new RoutineRepository(routineDataSource);
-        this.routineRepository.append(new Routine(2,2,"hockey", InMemoryTaskDataSource.fromDefaultNew()));
-        this.routineRepository.append(new Routine(3,3,"baby", InMemoryTaskDataSource.fromDefaultNew()));
-        this.routineRepository.findAll().getValue().get(2).prepend(new Task(0,0,"asdf",false));
     }
 
     public RoutineRepository getRoutineRepository() {
