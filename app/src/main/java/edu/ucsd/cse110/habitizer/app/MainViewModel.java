@@ -21,12 +21,14 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 public class MainViewModel extends ViewModel {
 
     private final RoutineRepository routineRepository;
-    private final Map<Integer, Routine> routines;
+//    private final Map<Integer, Routine> routines;
 
     // UI state
 
     // routine implementation
     private final PlainMutableSubject<List<Routine>> orderedRoutines;
+
+    Map<Integer, Routine> routineMap;
 
     private final Map<Integer, PlainMutableSubject<List<Task>>> orderedTasksByRoutine;
     private final Map<Integer, PlainMutableSubject<Boolean>> isCheckedOffByRoutine;
@@ -47,7 +49,7 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
-        this.routines = new HashMap<>();
+        this.routineMap = new HashMap<>();
         this.orderedRoutines = new PlainMutableSubject<>();
         this.orderedTasksByRoutine = new HashMap<>();
         this.isCheckedOffByRoutine = new HashMap<>();
@@ -57,49 +59,39 @@ public class MainViewModel extends ViewModel {
 
         // When the list of tasks changes (or is first loaded), reset the ordering.
 
-        routineRepository.findAll().observe(routineList -> {
-            if (routineList == null) return; // not ready yet, ignore
+        routineRepository.findAll().observe(routines -> {
+            if (routines == null) return; // not ready yet, ignore
 
-            routines.clear();
-            orderedTasksByRoutine.clear();
-
-            for (Routine routine : routineList) {
-                int routineID = routine.id();
-                routines.put(routineID, routine);
-
-
-                // track ordered tasks per routine
-                PlainMutableSubject<List<Task>> orderedTasks = new PlainMutableSubject<>();
-                orderedTasksByRoutine.put(routineID, orderedTasks);
-
-                // observe changes in tasks
-                routine.findAll().observe(tasks -> {
-                    if (tasks == null) return;
-                    orderedTasks.setValue(tasks.stream()
-                            .sorted(Comparator.comparingInt(Task::sortOrder))
-                            .collect(Collectors.toList()));
-                });
-
-                // initialize routine specific states
-                isCheckedOffByRoutine.put(routineID, new PlainMutableSubject<>());
-                goalTimeByRoutine.put(routineID, new PlainMutableSubject<>());
-                elapsedTimeByRoutine.put(routineID, new PlainMutableSubject<>());
-                displayedTextByRoutine.put(routineID, new PlainMutableSubject<>());
-
-                routine.findAll().observe(tasks -> {
-                    if (tasks == null) return;
-                    boolean allChecked = tasks.stream().allMatch(Task::checkedOff);
-                    isCheckedOffByRoutine.get(routineID).setValue(allChecked);
-                });
-
-            }
-
-            orderedRoutines.setValue(routineList.stream()
+            var newOrderedRoutines = routines.stream()
                     .sorted(Comparator.comparingInt(Routine::sortOrder))
-                    .collect(Collectors.toList()));
-
-
+                    .collect(Collectors.toList());
+            orderedRoutines.setValue(newOrderedRoutines);
+            routines.forEach( routine -> {if(routine==null) return;
+            routineMap.put(routine.id(),routine);});
         });
+
+        routineRepository.findAll().getValue().forEach(routine -> {
+            if (routine == null) return;
+
+            PlainMutableSubject<List<Task>> orderedTasks = getOrderedTasks(routine.id());
+            routine.findAll().observe(tasks->{
+                if (tasks == null) return; // not ready yet, ignore
+
+                PlainMutableSubject<Boolean> isCheckedOff = getIsCheckedOff(routine.id());
+
+                var newOrderedTasks = tasks.stream()
+                        .sorted(Comparator.comparingInt(Task::sortOrder))
+                        .collect(Collectors.toList());
+                orderedTasks.setValue(newOrderedTasks);
+
+                orderedTasks.getValue().forEach( task -> {
+                    if(task == null){return;}
+                    isCheckedOff.setValue(task.checkedOff());
+                });
+            });
+            orderedTasksByRoutine.put(routine.id(), orderedTasks);
+        });
+
 
     }
 
@@ -107,34 +99,30 @@ public class MainViewModel extends ViewModel {
         return orderedRoutines;
     }
 
-
     public PlainMutableSubject<List<Task>> getOrderedTasks(int routineID) {
-        return orderedTasksByRoutine.getOrDefault(routineID, new PlainMutableSubject<>());
+        if(orderedTasksByRoutine.get(routineID) == null){return new PlainMutableSubject<>();}
+        return orderedTasksByRoutine.get(routineID);
     }
 
     // retrieves a routine's repository based on the ID
-    public Routine getRoutine(int routineID){return routineRepository.findAll().getValue().get(routineID);}
+    public Routine getRoutine(int routineID){return routineMap.get(routineID);}
 
-    public void checkOff(int taskID, int routineID){
-        var routine = routines.get(routineID);
-        if (routine == null) return;
+    public RoutineRepository getRoutineRepository(){return this.routineRepository;}
 
-        var task = routine.find(taskID);
-        if (task.getValue() == null) return;
-
+    public PlainMutableSubject<Boolean> getIsCheckedOff(int routineID){
+        if(isCheckedOffByRoutine.get(routineID) == null){return new PlainMutableSubject<>();}
+            return isCheckedOffByRoutine.get(routineID);
+    }
+    public void checkOff(int id, Routine routine){
+        var task = routine.find(id);
         var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true);
         routine.save(checkedOffTask);
     }
 
-    public void removeCheckOff(int taskID, int routineID){
-        var routine = routines.get(routineID);
-        if (routine == null) return;
-
-        var task = routine.find(taskID);
-        if (task.getValue() == null) return;
-
-        var uncheckedTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
-        routine.save(uncheckedTask);
+    public void removeCheckOff(int id, Routine routine){
+        var task = routine.find(id);
+        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
+        routine.save(checkedOffTask);
     }
 
 
@@ -154,7 +142,13 @@ public class MainViewModel extends ViewModel {
         routine.prepend(task);
     }
 
-    // routine methods
+    /**
+     * Removes a routine from the repository by its ID.
+     * This method permanently deletes the routine and all its associated tasks.
+     * @param id The unique identifier of the routine to be removed
+     * @param routineRepository The specific repository from which to remove the routine
+     * @require routineRepository != null && id >= 0
+     */
     public void removeRoutine(int id, RoutineRepository routineRepository) {
         routineRepository.remove(id);
     }
