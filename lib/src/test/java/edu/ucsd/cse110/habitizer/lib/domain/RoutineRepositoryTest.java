@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -141,8 +142,42 @@ public class RoutineRepositoryTest {
         );
 
         assertRoutineListEqual(expRoutines, actRoutines);
-
     }
+
+    @Test
+    public void test_remove_multiple(){
+        InMemoryRoutineDataSource routineDataSource;
+        routineDataSource = InMemoryRoutineDataSource.fromDefault();
+
+        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+
+        defaultRoutineRepository.remove(0);
+        defaultRoutineRepository.remove(1);
+
+        List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
+        List<Routine> expRoutines = List.of();
+
+        assertRoutineListEqual(expRoutines, actRoutines);
+    }
+
+    @Test
+    public void test_remove_nonexisting() {
+        InMemoryRoutineDataSource routineDataSource = InMemoryRoutineDataSource.fromDefault();
+        RoutineRepository defaultRoutineRepository = new RoutineRepository(routineDataSource);
+
+        // Verify the exception is thrown when trying to remove a non-existent routine
+        assertThrows(IllegalArgumentException.class, () -> defaultRoutineRepository.remove(9));
+
+        // Verify the repository wasn't modified by the failed removal
+        List<Routine> actRoutines = defaultRoutineRepository.findAll().getValue();
+        List<Routine> expRoutines = List.of(
+                new Routine(0, 0, "Morning Routine", InMemoryTaskDataSource.fromDefaultMorning()),
+                new Routine(1, 1, "Evening Routine", InMemoryTaskDataSource.fromDefaultEvening())
+        );
+
+        assertRoutineListEqual(expRoutines, actRoutines);
+    }
+
 
     @Test
     public void testRemoveBug(){

@@ -2,6 +2,7 @@ package edu.ucsd.cse110.habitizer.app.ui.tasklist.routine;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,7 +44,15 @@ public class HomePageRoutineFragment extends Fragment {
 
     public HomePageRoutineFragment() {}
 
-    private void deleteMode(TextView menuDescription, Button createRoutineButton){
+    /**
+     * Toggles delete mode for the fragment.
+     * When delete mode is enabled, clicking on a routine will prompt for deletion.
+     *
+     * @param menuDescription The TextView displaying the menu description.
+     * @param createRoutineButton The Button for creating a new routine.
+     * @require menuDescription != null && createRoutineButton != null
+     */
+    private void deleteMode(@NonNull TextView menuDescription, @NonNull Button createRoutineButton){
         Log.d("Delete Button", "Deleting is working");
         deleteMode = !deleteMode;
         if (deleteMode){
@@ -56,7 +65,16 @@ public class HomePageRoutineFragment extends Fragment {
 
         adapter.setDeleteMode(deleteMode);
     }
-    private void editMode(TextView menuDescription, Button createRoutineButton){
+
+    /**
+     * Toggles edit mode for the fragment.
+     * When edit mode is enabled, clicking on a routine will open the edit routine fragment.
+     *
+     * @param menuDescription The TextView displaying the menu description.
+     * @param createRoutineButton The Button for creating a new routine.
+     * @require menuDescription != null && createRoutineButton != null
+     */
+    private void editMode(@NonNull TextView menuDescription, @NonNull Button createRoutineButton){
         Log.d("Edit Button", "Editing is working");
         editMode = !editMode;
 

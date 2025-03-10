@@ -100,7 +100,23 @@ public class InMemoryRoutineDataSource {
         allRoutinesSubject.setValue(getRoutines());
     }
 
+    /**
+     * Removes a routine with the specified ID from the in-memory data store.
+     *
+     * This method performs the following actions:
+     * - Removes the routine with the given ID from the collection.
+     * - Adjusts the sort orders of other routines to maintain continuity.
+     * - Updates associated subjects to notify observers about the changes.
+     *
+     * @param id The unique identifier of the routine to remove.
+     * @throws IllegalArgumentException If no routine with the specified ID exists.
+     * @require routines.containsKey(id)
+     * @ensure routines.size()@pre - 1 == routines.size()@post
+     */
     public void removeRoutine(int id) {
+        if (!routines.containsKey(id)){
+            throw new IllegalArgumentException("Cannot remove non-existent routine with id: " + id);
+        }
         var routine = routines.get(id);
         var sortOrder = routine.sortOrder();
 

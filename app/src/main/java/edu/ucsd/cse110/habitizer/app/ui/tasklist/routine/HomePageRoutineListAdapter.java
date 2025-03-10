@@ -34,11 +34,23 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
     private boolean deleteMode = false;
     private boolean editMode = false;
 
+    /**
+     * Sets the delete mode for the adapter.
+     * When delete mode is enabled, clicking on a routine will prompt for deletion.
+     *
+     * @param deleteMode True to enable delete mode, false to disable.
+     */
     public void setDeleteMode(boolean deleteMode) {
         this.deleteMode = deleteMode;
         notifyDataSetChanged(); // This refreshes all visible items
     }
 
+    /**
+     * Sets the edit mode for the adapter.
+     * When edit mode is enabled, clicking on a routine will open the edit routine fragment.
+     *
+     * @param editMode True to enable edit mode, false to disable.
+     */
     public void setEditMode(boolean editMode){
         this.editMode = editMode;
         notifyDataSetChanged();
@@ -75,10 +87,6 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
             var layoutInflater = LayoutInflater.from(getContext());
             binding = ListItemRoutineBinding.inflate(layoutInflater, parent, false);
         }
-
-
-
-        // Populate the view with the task's data.
 
         // Apply color based on delete mode
         if (deleteMode) {
