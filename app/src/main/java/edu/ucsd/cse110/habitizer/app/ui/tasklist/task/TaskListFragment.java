@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,14 +56,17 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(getArguments() != null){
-            routineID = getArguments().getInt("ROUTINE_ID", 0);
-            elapsedTimeMinutes = getArguments().getInt("ELAPSED_TIME_MINUTES", 0);
+            this.routineID = getArguments().getInt("ROUTINE_ID", -1);
+            this.elapsedTimeMinutes = getArguments().getInt("ELAPSED_TIME_MINUTES", 0);
+            storeRoutineIDInSharedPreferences();
         }
+
         // Initialize the Model
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
 
         Runnable endRoutineCallback = () -> {
             if (getActivity() != null) {
@@ -150,6 +156,12 @@ public class TaskListFragment extends Fragment {
 
     public MainViewModel getActivityModel(){return this.activityModel;}
 
+    public void storeRoutineIDInSharedPreferences(){
+        var sharedPreferences = getContext().getSharedPreferences("habitizer", MODE_PRIVATE);
+        sharedPreferences.edit().putInt("routineID",this.routineID).apply();
+        Log.d("stored routine id", Integer.toString(this.routineID));
+    }
+
     /**
      * Called when the view hierarchy associated with the fragment is being removed.
      * This method is used to perform any final cleanup before the fragment's view is destroyed.
@@ -158,6 +170,8 @@ public class TaskListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         stopwatch.stop();
+        this.routineID = -1;
+        storeRoutineIDInSharedPreferences();
     }
 
 
