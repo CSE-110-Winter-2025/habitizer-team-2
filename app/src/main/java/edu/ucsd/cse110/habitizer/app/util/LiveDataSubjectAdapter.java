@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.util.observables.Observer;
+import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 
 
@@ -56,4 +57,12 @@ public class LiveDataSubjectAdapter<T> implements Subject<T>{
         throw new UnsupportedOperationException("getObservers() not supported by LiveDataToSubjectAdapter.");
     }
 
+    public static void example() {
+        var subj = new PlainMutableSubject<Integer>();
+
+        var obs = subj.observe(value -> { /**/ });
+        subj.removeObserver(obs);
+    }
+
 }
+

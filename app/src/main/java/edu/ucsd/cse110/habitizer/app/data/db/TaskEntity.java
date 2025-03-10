@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -34,6 +35,15 @@ public class TaskEntity {
     @ColumnInfo(name="routine_id")
     public Integer routineId;
 
+    @Ignore
+    TaskEntity(int id, int sortOrder, @NonNull String name, @NonNull Boolean checkedOff, @NonNull Integer routineId){
+        this.id = id;
+        this.sortOrder = sortOrder;
+        this.name = name;
+        this.checkedOff = checkedOff;
+        this.routineId = routineId;
+    }
+
     TaskEntity(int sortOrder, @NonNull String name, @NonNull Boolean checkedOff, @NonNull Integer routineId){
         this.sortOrder = sortOrder;
         this.name = name;
@@ -41,8 +51,8 @@ public class TaskEntity {
         this.routineId = routineId;
     }
 
-    public static TaskEntity fromTask (Task task){
-        var taskEntity = new TaskEntity(task.sortOrder(), task.name(), task.checkedOff(), -1);
+    public static TaskEntity fromTask (Task task, Integer routineId){
+        var taskEntity = new TaskEntity(task.sortOrder(), task.name(), task.checkedOff(), routineId);
         taskEntity.id = task.id();
         return taskEntity;
     }

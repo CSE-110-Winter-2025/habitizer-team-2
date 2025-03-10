@@ -78,11 +78,11 @@ public class TaskListFragment extends Fragment {
         var tasksData = activityModel.getOrderedTasks(routineID);
 
         // activityModel.getRoutine(routineID)
-        List<Task> oldTasks = tasksData.getValue();
-        for (int i = 0; i < oldTasks.size(); i++){
-            activityModel.removeCheckOff(oldTasks.get(i).id(),
-                    routineID);
-        }
+//        List<Task> oldTasks = tasksData.getValue();
+//        for (int i = 0; i < oldTasks.size(); i++){
+//            activityModel.removeCheckOff(oldTasks.get(i).id(),
+//                    routineID);
+//        }
 
         tasksData.observe(tasks -> {
             if (tasks == null) return;

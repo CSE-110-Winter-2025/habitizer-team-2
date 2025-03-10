@@ -51,7 +51,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         db.runInTransaction(() -> {
             // Handle each task...
             for (var task : routine.tasks()) {
-                taskDao.insert(TaskEntity.fromTask(task));
+                taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
             routineDao.insert(ConvertUtils.dataFromRoutine(routine));
         });
@@ -63,7 +63,7 @@ public class RoomRoutineRepository implements RoutineRepository {
             db.runInTransaction(() -> {
                 // Handle each task of each routine
                 for (var task: routine.tasks()) {
-                    taskDao.insert(TaskEntity.fromTask(task));
+                    taskDao.insert(TaskEntity.fromTask(task, routine.id()));
                 }
                 routineDao.insert(ConvertUtils.dataFromRoutine(routine));
             });
@@ -78,6 +78,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     @Override
     public void remove(int id) {
         routineDao.delete(id);
+
     }
 
     @Override
@@ -85,7 +86,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         db.runInTransaction(() -> {
             // Handle each task...
             for (var task : routine.tasks()) {
-                taskDao.append(TaskEntity.fromTask(task));
+                taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
             routineDao.append(ConvertUtils.dataFromRoutine(routine));
         });
@@ -96,7 +97,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         db.runInTransaction(() -> {
             // Handle each task...
             for (var task : routine.tasks()) {
-                taskDao.prepend(TaskEntity.fromTask(task));
+                taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
             routineDao.prepend(ConvertUtils.dataFromRoutine(routine));
         });
@@ -134,27 +135,27 @@ public class RoomRoutineRepository implements RoutineRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
 
-    public void saveTask(Task task) {
-        taskDao.insert(TaskEntity.fromTask(task));
+    public void saveTask(Task task, Integer routineId) {
+        taskDao.insert(TaskEntity.fromTask(task, routineId));
     }
 
-    public void saveTask(List<Task> tasks) {
-        var entities = tasks.stream()
-                .map(TaskEntity::fromTask)
-                .collect(Collectors.toList());
-        taskDao.insert(entities);
-    }
+//    public void saveTask(List<Task> tasks) {
+//        var entities = tasks.stream()
+//                .map(TaskEntity::fromTask)
+//                .collect(Collectors.toList());
+//        taskDao.insert(entities);
+//    }
 
     public void removeTask(int id) {
         taskDao.delete(id);
     }
 
-    public void appendTask(Task task) {
-        taskDao.append(TaskEntity.fromTask(task));
+    public void appendTask(Task task, Routine routine) {
+        taskDao.append(TaskEntity.fromTask(task, routine.id()));
     }
 
-    public void prependTask(Task task) {
-        taskDao.prepend(TaskEntity.fromTask(task));
+    public void prependTask(Task task, Routine routine) {
+        taskDao.prepend(TaskEntity.fromTask(task, routine.id()));
     }
 
     public void renameTask(int id, String name) {

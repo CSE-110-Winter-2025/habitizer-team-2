@@ -39,30 +39,31 @@ public interface TaskDao {
     @Query("SELECT COUNT(*) FROM tasks")
     int count();
 
-    @Query("SELECT MIN(sort_order) FROM tasks")
-    int getMinSortOrder();
+    @Query("SELECT MIN(sort_order) FROM tasks WHERE routine_id = :routineId")
+    int getMinSortOrder(Integer routineId);
 
-    @Query("SELECT MAX(sort_order) FROM tasks")
-    int getMaxSortOrder();
+    @Query("SELECT MAX(sort_order) FROM tasks WHERE routine_id = :routineId")
+    int getMaxSortOrder(Integer routineId);
 
     @Query("UPDATE tasks SET sort_order = sort_order + :by " +
-            "WHERE sort_order >= :from AND sort_order <= :to")
-    void shiftSortOrders(int from, int to, int by);
+            "WHERE sort_order >= :from AND sort_order <= :to " +
+            "AND routine_id = :routineId")
+    void shiftSortOrders(int from, int to, int by, Integer routineId);
 
     @Transaction
     default int append(TaskEntity task) {
-        var maxSortOrder = getMaxSortOrder();
+        var maxSortOrder = getMaxSortOrder(task.routineId);
         var newTask = new TaskEntity(
-                maxSortOrder + 1, task.name, task.checkedOff, task.id
+                maxSortOrder + 1, task.name, task.checkedOff, task.routineId
         );
         return Math.toIntExact(insert(newTask));
     }
 
     @Transaction
     default int prepend(TaskEntity task) {
-        shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
+        shiftSortOrders(getMinSortOrder(task.routineId), getMaxSortOrder(task.routineId), 1, task.routineId);
         var newTask = new TaskEntity(
-                getMinSortOrder() - 1, task.name, task.checkedOff, task.id
+                getMinSortOrder(task.routineId) - 1, task.name, task.checkedOff, task.routineId
         );
         return Math.toIntExact(insert(newTask));
     }
