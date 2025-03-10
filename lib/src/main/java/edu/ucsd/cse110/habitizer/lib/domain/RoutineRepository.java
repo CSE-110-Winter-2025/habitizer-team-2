@@ -34,12 +34,16 @@ public class RoutineRepository {
     }
 
     public void append(Routine routine){
+        if(routineDataSource.getRoutines().isEmpty()){
+            routineDataSource.putRoutine(routine.withSortOrder(0)); return;}
         routineDataSource.putRoutine(
                 routine.withSortOrder(routineDataSource.getMaxSortOrder() + 1)
         );
     }
 
     public void prepend(Routine routine) {
+        if(routineDataSource.getRoutines().isEmpty()){
+            routineDataSource.putRoutine(routine.withSortOrder(0)); return;}
         routineDataSource.shiftSortOrders(0, routineDataSource.getMaxSortOrder(), 1);
         routineDataSource.putRoutine(
                 routine.withSortOrder(routineDataSource.getMinSortOrder()-1)
@@ -49,5 +53,4 @@ public class RoutineRepository {
     public void rename(int id, String name) {
         routineDataSource.replaceName(id, name);
     }
-
 }
