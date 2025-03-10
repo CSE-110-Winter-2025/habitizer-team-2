@@ -23,13 +23,15 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class EditTaskListAdapter extends ArrayAdapter<Task> {
     private final MainViewModel activityModel;
+    private final int routineID; // Add this line to store routine ID
     Consumer<Integer> onEditClick;
     Consumer<Integer> onDeleteClick;
 
     // Parameters are tasks, if it is morning routine selected, and activity model
-    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel, Consumer<Integer> onEditClick, Consumer<Integer> onDeleteClick) {
+    public EditTaskListAdapter(Context context, List<Task> tasks, MainViewModel activityModel, int routineID, Consumer<Integer> onEditClick, Consumer<Integer> onDeleteClick) {
         super(context, 0, tasks);
         this.activityModel = activityModel;
+        this.routineID = routineID;
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
     }
@@ -67,6 +69,26 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
             var id = task.id();
             assert id != null;
             onDeleteClick.accept(id);
+        });
+
+        //binding to up and down arrows for modified task positions
+        binding.btnMoveUp.setOnClickListener(v -> {
+                if(position == 0) return;
+
+                activityModel.swap(routineID,
+                        (int)getItemId(position),
+                        (int)getItemId(position - 1));
+
+                notifyDataSetChanged();
+        });
+
+        binding.btnMoveDown.setOnClickListener(v -> {
+                if(position == getCount() - 1) return;
+
+                activityModel.swap(routineID,
+                        (int)getItemId(position),
+                        (int)getItemId(position + 1));
+                notifyDataSetChanged();
         });
 
         return convertView;

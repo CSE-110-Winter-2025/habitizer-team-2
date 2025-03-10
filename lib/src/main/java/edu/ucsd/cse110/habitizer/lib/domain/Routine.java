@@ -82,16 +82,24 @@ public class Routine implements Serializable {
     }
 
     public void append(Task task){
+        if(dataSource.getTasks().isEmpty()){
+            dataSource.putTask(task.withSortOrder(0)); return;}
         dataSource.putTask(
                 task.withSortOrder(dataSource.getMaxSortOrder() + 1)
         );
     }
 
     public void prepend(Task task) {
+        if(dataSource.getTasks().isEmpty()){
+            dataSource.putTask(task.withSortOrder(0)); return;}
         dataSource.shiftSortOrders(0, dataSource.getMaxSortOrder(), 1);
         dataSource.putTask(
                 task.withSortOrder(dataSource.getMinSortOrder()-1)
         );
+    }
+
+    public void swapTasks(long id1, long id2){
+        dataSource.swapSortOrders(Math.toIntExact(id1), Math.toIntExact(id2)); //added to communicate to task data source
     }
 
     public int getGoalTime(){
@@ -105,7 +113,5 @@ public class Routine implements Serializable {
     public void rename(int id, String name) {
         dataSource.replaceName(id, name);
     }
-
-
 
 }
