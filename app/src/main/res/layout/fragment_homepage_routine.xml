@@ -96,7 +96,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
-        android:text="Create a Routine"
+        android:text="@string/create_a_routine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

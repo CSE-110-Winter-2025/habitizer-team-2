@@ -30,6 +30,7 @@ import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditTaskListAdapter;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListAdapter;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 
@@ -150,6 +151,8 @@ public class HomePageRoutineFragment extends Fragment {
                     deleteMode(menuDescription, createRoutineButton);
                 } else if(editMode){
                     editMode(menuDescription, createRoutineButton);
+                } else {
+                    activityModel.appendRoutine(new Routine(null,-1, "New Routine", InMemoryTaskDataSource.fromDefaultNew()));
                 }
             });
 

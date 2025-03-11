@@ -11,4 +11,5 @@
     <string name="uncompletedTaskString">-</string>
     <string name="ff_button">TODO</string>
     <string name="stop_button">TODO</string>
+    <string name="create_a_routine">Create a Routine</string>
 </resources>
