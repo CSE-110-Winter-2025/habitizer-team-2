@@ -19,7 +19,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     int routineID;
     Stopwatch stopwatch;
+
     int taskStartTime = 0;
+
+    int timeElapsed = 0;
 
     private Runnable endRoutineCallback;
     public TaskListAdapter(Context context,
@@ -66,10 +69,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         binding.taskBox.setOnClickListener(b -> {
             int completedTime = stopwatch.getElapsedTimeSeconds();
-            int timeElapsed = (completedTime - taskStartTime) / 60 + 1;
+            timeElapsed = (completedTime - taskStartTime) / 60 + 1;
             taskStartTime = completedTime;
 
             String timeCompleted = "[" + timeElapsed + " m]";
+
+
 
             activityModel.getRoutine(routineID);
             activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
@@ -101,6 +106,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     public boolean hasStableIds() {
         return true;
     }
+
+    public int getTaskTime(){
+        return timeElapsed;
+    }
+
 
     @Override
     public long getItemId(int position) {
