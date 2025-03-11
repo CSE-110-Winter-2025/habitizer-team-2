@@ -98,8 +98,8 @@ public class Routine implements Serializable {
         );
     }
 
-    public void swapTasks(long id1, long id2){
-        dataSource.swapSortOrders(Math.toIntExact(id1), Math.toIntExact(id2)); //added to communicate to task data source
+    public void swapTasks(int id1, int id2){
+        dataSource.swapSortOrders(id1, id2); //added to communicate to task data source
     }
 
     public int getGoalTime(){

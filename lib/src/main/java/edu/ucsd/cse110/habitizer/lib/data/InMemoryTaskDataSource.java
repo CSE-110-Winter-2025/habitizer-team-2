@@ -59,8 +59,9 @@ public class InMemoryTaskDataSource {
 
     );
 
-    private void notifyTaskChanged(@Nullable Integer taskID){
-        Objects.requireNonNull(taskID);
+    private void notifyTaskChanged(@Nullable int taskID){
+        System.out.println("THIS IS THE TASK ID: " + taskID);
+
         taskSubjects.get(taskID).setValue(tasks.get(taskID));
     }
 
@@ -196,9 +197,9 @@ public class InMemoryTaskDataSource {
     }
 
     //set sort orders here (flipping orders of tasks in Routine would be 'swap' method)
-    public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
-        var task1 = Objects.requireNonNull(tasks.get(id1)); //getting id
-        var task2 = Objects.requireNonNull(tasks.get(id2));
+    public void swapSortOrders(int id1, int id2){ //makes persistence easier when tasks are swapped
+        var task1 = tasks.get(id1); //getting id
+        var task2 = tasks.get(id2);
 
         var updatedTask1 = task1.withSortOrder(task2.sortOrder());
         var updatedTask2 = task2.withSortOrder(task1.sortOrder());

@@ -2,6 +2,7 @@ package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
         binding.btnMoveUp.setOnClickListener(v -> {
                 if(position == 0) return;
 
+                Log.d("routine id: ", String.valueOf(routineID));
+
                 activityModel.swap(routineID,
                         (int)getItemId(position),
                         (int)getItemId(position - 1));
@@ -85,6 +88,7 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
         binding.btnMoveDown.setOnClickListener(v -> {
                 if(position == getCount() - 1) return;
 
+            Log.d("routine id: ", String.valueOf(routineID));
                 activityModel.swap(routineID,
                         (int)getItemId(position),
                         (int)getItemId(position + 1));

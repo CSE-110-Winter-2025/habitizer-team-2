@@ -147,7 +147,7 @@ public class MainViewModel extends ViewModel {
         routine.prepend(task);
     }
  
-    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
+    public void swap(int routineID, int taskID1, int taskID2){
         getRoutine(routineID).swapTasks(taskID1, taskID2);
     }
 
