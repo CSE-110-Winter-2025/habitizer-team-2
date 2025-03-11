@@ -87,6 +87,36 @@ public class RoutineTest {
     }
 
     @Test
+    public void testPrependDefaultNew(){
+
+        InMemoryTaskDataSource dataSource;
+        Routine routine;
+        dataSource = InMemoryTaskDataSource.fromDefaultNew();
+        Task newTask = new Task(0,0,"Put Night Mask On", false);
+        routine = new Routine(0, 0, "Evening", dataSource);
+        routine.prepend(newTask);
+
+        List<Task> actTasks = routine.findAll().getValue();
+
+        List<Task> expTasks = List.of(
+                new Task(0,0,"Put Night Mask On", false)
+        );
+
+        printTasks(actTasks);
+        printTasks(expTasks);
+
+        assertEquals(actTasks, expTasks);
+
+    }
+
+    public void printTasks(List<Task> tasks){
+        System.out.println(tasks.get(0).name());
+        System.out.println(tasks.get(0).id());
+        System.out.println(tasks.get(0).sortOrder());
+        System.out.println(tasks.get(0).checkedOff());
+    }
+
+    @Test
     public void testAppend(){
 
         InMemoryTaskDataSource dataSource;
@@ -206,9 +236,6 @@ public class RoutineTest {
         );
 
         assertEquals(actTasks, expTasks);
-
-
-
     }
 
 }

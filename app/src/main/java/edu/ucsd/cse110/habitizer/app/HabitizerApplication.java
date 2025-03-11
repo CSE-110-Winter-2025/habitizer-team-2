@@ -9,8 +9,8 @@ import edu.ucsd.cse110.habitizer.app.domain.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryRoutineDataSource;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 
+
 public class HabitizerApplication extends Application {
-    private InMemoryRoutineDataSource routineDataSource;
 
     private RoomRoutineRepository routineRepository;
 
@@ -19,6 +19,7 @@ public class HabitizerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         var database = Room.databaseBuilder(
                         getApplicationContext(),
@@ -42,19 +43,6 @@ public class HabitizerApplication extends Application {
                     .apply();
         }
 
-//        var morningDataSource = InMemoryTaskDataSource.fromDefaultMorning();
-//        var eveningDataSource = InMemoryTaskDataSource.fromDefaultEvening();
-//
-//        var morningRoutine = new Routine(0, 0, "Morning Routine", 45, morningDataSource);
-//        var eveningRoutine = new Routine(1, 1, "Evening Routine", 45 ,eveningDataSource);
-//
-//        var routineDataSource = InMemoryRoutineDataSource.fromDefault();
-//        this.routineRepository = new SimpleRoutineRepository(routineDataSource);
-//
-//        routineRepository.append(morningRoutine);
-//        routineRepository.append(eveningRoutine);
-//
-//        routineRepository.append(new Routine(2, 2, "Custom Routine", 45, InMemoryTaskDataSource.fromDefaultNew()));
     }
 
     public RoomRoutineRepository getRoutineRepository() {

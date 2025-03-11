@@ -74,7 +74,7 @@ public class EditRoutineTasksFragment extends Fragment {
         activityModel.setActiveRoutine(routineID);
         var tasksData = activityModel.getOrderedTasks();
 
-        this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, id -> {
+        this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, routineID, id -> {
             var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, routineID);
             dialogFragment.show(getParentFragmentManager(), "ConfirmEditTaskDialogFragment");
         }, id -> {

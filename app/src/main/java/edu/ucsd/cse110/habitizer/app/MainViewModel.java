@@ -24,11 +24,12 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Transformations;
 
 public class MainViewModel extends ViewModel {
-
+    
     private final RoomRoutineRepository repo;
     private final MutableSubject<Integer> activeRoutineId;
     private final Subject<Routine> activeRoutine;
     private final Subject<List<Task>> activeRoutineOrderedTasks;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -88,6 +89,7 @@ public class MainViewModel extends ViewModel {
 
     public void checkOff(int taskID){
           repo.saveTask(getTask(taskID).withCheckedOff(true), activeRoutineId.getValue());
+
     }
 
     public void removeCheckOff(int taskID){
@@ -148,8 +150,13 @@ public class MainViewModel extends ViewModel {
         repo.appendTask(task, routine);
     }
 
+
     public void prependTask(Task task, Routine routine){
         repo.prependTask(task, routine);
+    }
+ 
+    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
+        getRoutine(routineID).swapTasks(taskID1, taskID2);
     }
 
     // routine methods

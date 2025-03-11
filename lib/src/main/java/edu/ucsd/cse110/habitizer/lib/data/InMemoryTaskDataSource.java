@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import androidx.annotation.Nullable;
+
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +58,15 @@ public class InMemoryTaskDataSource {
 
     );
 
+    private void notifyTaskChanged(@Nullable Integer taskID){
+        Objects.requireNonNull(taskID);
+        taskSubjects.get(taskID).setValue(tasks.get(taskID));
+    }
+
+    private void notifyAllTasksChanged(){
+        allTasksSubject.setValue(getTasks());
+    }
+
     public void setGoalTime(int goalTime){
         this.goalTime = goalTime;
     }
@@ -80,8 +92,6 @@ public class InMemoryTaskDataSource {
         data.setGoalTime(0); //0 goal time
         return data;
     }
-
-
 
     public List<Task> getTasks() {
         return List.copyOf(tasks.values());
@@ -135,7 +145,7 @@ public class InMemoryTaskDataSource {
     public void putTasks(List<Task> tasks) {
         var fixedTasks = tasks.stream()
                 .map(this::preInsert)
-                .collect(Collectors.toList());
+                .toList();
 
         fixedTasks.forEach(task -> this.tasks.put(task.id(), task));
         postInsert();
@@ -153,11 +163,11 @@ public class InMemoryTaskDataSource {
         var task = tasks.get(id);
         var sortOrder = task.sortOrder();
 
-        tasks.remove(id);
+        tasks.remove(id); //remove task from list
         shiftSortOrders(sortOrder, maxSortOrder, -1);
 
         if (taskSubjects.containsKey(id)) {
-            taskSubjects.get(id).setValue(null);
+            taskSubjects.get(id).setValue(null); //ask about this line
         }
         allTasksSubject.setValue(getTasks());
     }
@@ -176,14 +186,36 @@ public class InMemoryTaskDataSource {
         }
     }
 
-    public void shiftSortOrders(int from, int to, int by) {
+    public void shiftSortOrders(int from, int to, int by) { //by is how much you want to switch
         var tasks = this.tasks.values().stream()
-                .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to)
-                .map(task -> task.withSortOrder(task.sortOrder() + by))
-                .collect(Collectors.toList());
-
+                .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to) //-> means for each
+                .map(task -> task.withSortOrder(task.sortOrder() + by)) //shifting happens here
+                .collect(Collectors.toList()); //put into list (making new list)
         putTasks(tasks);
     }
+
+    //set sort orders here (flipping orders of tasks in Routine would be 'swap' method)
+    public void swapSortOrders(Integer id1, Integer id2){ //makes persistence easier when tasks are swapped
+        var task1 = Objects.requireNonNull(tasks.get(id1)); //getting id
+        var task2 = Objects.requireNonNull(tasks.get(id2));
+
+        var updatedTask1 = task1.withSortOrder(task2.sortOrder());
+        var updatedTask2 = task2.withSortOrder(task1.sortOrder());
+
+        //notify observers
+        tasks.put(id1, updatedTask1);
+        tasks.put(id2, updatedTask2);
+        assertSortOrderConstraints();
+
+        notifyTaskChanged(id1);
+        notifyTaskChanged(id2);
+        notifyAllTasksChanged();
+    }
+
+    public int getNumTasks(){
+        return tasks.size(); //get number of tasks in list
+    }
+
 
     /**
      * Private utility method to maintain state of the fake DB: ensures that new
@@ -244,4 +276,6 @@ public class InMemoryTaskDataSource {
         assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
+
+    //private void
 }
