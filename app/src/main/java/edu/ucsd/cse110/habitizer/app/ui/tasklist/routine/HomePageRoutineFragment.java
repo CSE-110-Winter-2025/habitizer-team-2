@@ -102,6 +102,7 @@ public class HomePageRoutineFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
+        ;
 
         var routinesData = activityModel.getOrderedRoutines();
 

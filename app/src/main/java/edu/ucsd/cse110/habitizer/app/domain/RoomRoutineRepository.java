@@ -175,6 +175,11 @@ public class RoomRoutineRepository implements RoutineRepository {
         taskDao.rename(id, name);
     }
 
+    public void swapTasks(int taskId1, int newSortOrder1, int taskId2, int newSortOrder2){
+        taskDao.swapTasks(taskId1, newSortOrder1, taskId2, newSortOrder2);
+    }
+
+
     public void setGoalTime(int routineId, int goalTime){
         routineDao.setGoalTime(routineId, goalTime);
     }

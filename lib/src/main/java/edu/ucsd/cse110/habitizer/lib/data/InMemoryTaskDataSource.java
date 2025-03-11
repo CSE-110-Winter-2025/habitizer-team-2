@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
@@ -59,7 +60,7 @@ public class InMemoryTaskDataSource {
     );
 
     private void notifyTaskChanged(@Nullable Integer taskID){
-        Objects.requireNonNull(taskID);
+//        Objects.requireNonNull(taskID);
         taskSubjects.get(taskID).setValue(tasks.get(taskID));
     }
 

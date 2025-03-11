@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -24,7 +25,7 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Transformations;
 
 public class MainViewModel extends ViewModel {
-    
+
     private final RoomRoutineRepository repo;
     private final MutableSubject<Integer> activeRoutineId;
     private final Subject<Routine> activeRoutine;
@@ -49,6 +50,7 @@ public class MainViewModel extends ViewModel {
                     .sorted(Comparator.comparingInt(Task::sortOrder))
                     .toList();
         });
+//        this.activeRoutineOrderedTasks = Transformations.switchMap(activeRoutineId, repo::findTasksByRoutine);
     }
 
     // KICKS EVERYTHING OFF
@@ -85,6 +87,10 @@ public class MainViewModel extends ViewModel {
     // retrieves a routine's repository based on the ID
     public Routine getRoutine(int routineID){
         return repo.find(routineID).getValue();
+    }
+
+    public Routine getActiveRoutine(){
+        return this.activeRoutine.getValue();
     }
 
     public void checkOff(int taskID){
@@ -155,17 +161,23 @@ public class MainViewModel extends ViewModel {
         repo.prependTask(task, routine);
     }
  
-    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
-        getRoutine(routineID).swapTasks(taskID1, taskID2);
+    public void swap(Integer taskID1, Integer taskID2){
+        var task1 = getTask(taskID1);
+        var task2 = getTask(taskID2);
+        repo.swapTasks(taskID1, task2.sortOrder(), taskID2, task1.sortOrder());
     }
 
     // routine methods
     public void removeRoutine(int id) {
-        repo.remove(id);
+//        var tasks = getOrderedTasks().getValue();
         var tasks = repo.findTasksByRoutine(id).getValue();
+        assert tasks!=null;
         for (Task task: tasks){
             repo.removeTask(task.id());
+            Log.d("Task", task.name());
         }
+
+        repo.remove(id);
     }
 
     public void renameRoutine(int id, String name) {

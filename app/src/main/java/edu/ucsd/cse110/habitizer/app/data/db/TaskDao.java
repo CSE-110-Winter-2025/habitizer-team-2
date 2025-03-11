@@ -68,6 +68,14 @@ public interface TaskDao {
         return Math.toIntExact(insert(newTask));
     }
 
+    @Query("UPDATE tasks SET sort_order = " +
+            "CASE " +
+            "WHEN id = :taskId1 THEN :newSortOrder1 " +
+            "WHEN id = :taskId2 THEN :newSortOrder2 " +
+            "END " +
+            "WHERE id IN (:taskId1, :taskId2)")
+    void swapTasks(int taskId1, int newSortOrder1, int taskId2, int newSortOrder2);
+
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
 

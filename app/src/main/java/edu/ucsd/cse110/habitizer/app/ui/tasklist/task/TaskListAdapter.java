@@ -71,7 +71,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             taskStartTime = completedTime;
 
             String timeCompleted = "[" + timeElapsed + " m]";
-            
+
             activityModel.checkOff(task.id());
 
             binding.timeComplete.setText(timeCompleted);

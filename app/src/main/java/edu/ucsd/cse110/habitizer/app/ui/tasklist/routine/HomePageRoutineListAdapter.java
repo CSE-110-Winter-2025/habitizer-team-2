@@ -73,6 +73,8 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
         var routine = getItem(position);
         assert routine != null;
 
+//        activityModel.setActiveRoutine(routine.id());
+
 
         // Check if a view is being reused...
         ListItemRoutineBinding binding;
