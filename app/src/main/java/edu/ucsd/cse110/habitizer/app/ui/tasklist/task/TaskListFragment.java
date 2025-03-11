@@ -89,7 +89,6 @@ public class TaskListFragment extends Fragment {
             }
         }
 
-
         tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
@@ -133,10 +132,18 @@ public class TaskListFragment extends Fragment {
         });
         // Start the Stopwatch
         stopwatch.start();
-        stopwatchTask.start(); //no need for adapter?
+        stopwatchTask.start();
 
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
+        adapter.setStopwatchTask(stopwatchTask);
+
+        if(adapter.isTimeTaskReset() ==true){ //not working???
+            stopwatchTask.stop();
+            stopwatchTask.reset();
+            view.elapsedTaskTimeTextView.setText(String.valueOf(stopwatchTask.getElapsedTimeInMinutes()));
+            stopwatchTask.start();
+        }
 
         view.timeButton.setOnClickListener( v -> { //added for task time as well
                 if(stopwatch.isRunning) {

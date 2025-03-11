@@ -20,6 +20,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     int routineID;
     Stopwatch stopwatch;
 
+    Stopwatch stopwatchTask;
+
+    private boolean shouldResetStopwatchTask = false;
+
     int taskStartTime = 0;
 
     int timeElapsed = 0;
@@ -41,6 +45,14 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     public void setStopwatch (Stopwatch stopwatch) {
         this.stopwatch = stopwatch;
+    }
+
+    public void setStopwatchTask(Stopwatch stopwatch){
+        this.stopwatchTask = stopwatch;
+    }
+
+    public boolean shouldResetStopwatchTask() {
+        return shouldResetStopwatchTask;
     }
 
     @NonNull
@@ -74,8 +86,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
             String timeCompleted = "[" + timeElapsed + " m]";
 
-
-
             activityModel.getRoutine(routineID);
             activityModel.checkOff(task.id(), activityModel.getRoutine(routineID));
 
@@ -91,6 +101,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         if(task.checkedOff()){
             binding.taskImg.setImageResource(R.drawable.silvringchecked);
+            //Set flag to reset stopwatch
+            shouldResetStopwatchTask = true;
+
         } else {
             binding.taskImg.setImageResource(R.drawable.silvring);
         }
@@ -107,8 +120,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         return true;
     }
 
-    public int getTaskTime(){
-        return timeElapsed;
+    public boolean isTimeTaskReset(){
+        return shouldResetStopwatchTask;
     }
 
 

@@ -12,6 +12,7 @@ public class Stopwatch {
     private int elapsedTimeSeconds;
     private final Handler handler;
     private final TextView elapsedTimeTextView;
+
     private final Runnable updateRunnable;
 
     public Boolean isRunning;
@@ -67,6 +68,11 @@ public class Stopwatch {
         elapsedTimeSeconds+=seconds;
         elapsedTimeTextView.setText(String.valueOf(elapsedTimeSeconds/60));
     }
+
+    public void reset(){
+        elapsedTimeSeconds = 0;
+    }
+
 
     /**
      * Returns the elapsed time in minutes.
