@@ -138,10 +138,10 @@ public class TaskListFragment extends Fragment {
         adapter.setStopwatch(stopwatch);
         adapter.setStopwatchTask(stopwatchTask);
 
-        if(adapter.isTimeTaskReset() ==true){ //not working???
+        if(adapter.isTimeTaskReset() == true){ //not working???
             stopwatchTask.stop();
             stopwatchTask.reset();
-            view.elapsedTaskTimeTextView.setText(String.valueOf(stopwatchTask.getElapsedTimeInMinutes()));
+            view.elapsedTaskTimeTextView.setText(String.valueOf(0));
             stopwatchTask.start();
         }
 

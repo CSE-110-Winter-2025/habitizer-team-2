@@ -102,10 +102,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         if(task.checkedOff()){
             binding.taskImg.setImageResource(R.drawable.silvringchecked);
             //Set flag to reset stopwatch
-            shouldResetStopwatchTask = true;
+            shouldResetStopwatchTask = true; //added here
 
         } else {
             binding.taskImg.setImageResource(R.drawable.silvring);
+            shouldResetStopwatchTask = false; //added here
         }
 
         return binding.getRoot();
