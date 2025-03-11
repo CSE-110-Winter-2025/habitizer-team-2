@@ -36,8 +36,6 @@ public class HabitizerApplication extends Application {
 
         if (isFirstRun && database.routineDao().count() == 0 && database.taskDao().count() == 0){
             routineRepository.save(InMemoryRoutineDataSource.DEFAULT_ROUTINES);
-//            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_MORNING);
-//            routineRepository.saveTask(InMemoryTaskDataSource.DEFAULT_TASKS_EVENING);
 
             sharedPreferences.edit()
                     .putBoolean("isFirstRun", false)

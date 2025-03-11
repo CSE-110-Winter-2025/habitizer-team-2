@@ -8,12 +8,11 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.habitizer.app.data.db.ConvertUtils;
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoutineDao;
-import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.app.data.db.TaskDao;
 import edu.ucsd.cse110.habitizer.app.data.db.TaskEntity;
 import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 

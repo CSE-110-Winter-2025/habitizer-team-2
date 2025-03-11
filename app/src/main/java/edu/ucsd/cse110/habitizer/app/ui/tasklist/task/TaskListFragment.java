@@ -1,11 +1,9 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Button;
 
@@ -20,8 +18,6 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.Stopwatch;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -30,9 +26,7 @@ public class TaskListFragment extends Fragment {
 
     public int routineID;
     public int elapsedTimeMinutes;
-    private Runnable updateRunnable;
-    private Handler handler;
-    private TextView elapsedTimeTextView;
+
     private Stopwatch stopwatch;
 
     public TaskListFragment() {
@@ -75,7 +69,7 @@ public class TaskListFragment extends Fragment {
         // Initialize the Adapter (with an empty list for now)
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, endRoutineCallback);
 
-        var tasksData = activityModel.getOrderedTasks(routineID);
+        var tasksData = activityModel.getOrderedTasks();
 
         // activityModel.getRoutine(routineID)
 //        List<Task> oldTasks = tasksData.getValue();
@@ -91,7 +85,6 @@ public class TaskListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        handler = new Handler();
     }
 
     @Nullable
@@ -103,13 +96,7 @@ public class TaskListFragment extends Fragment {
         view.taskList.setAdapter(adapter);
 
         // activityModel.getRoutine(routineID)
-        String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).goalTime());
-        view.goalTextView.setText(goalTimeString);
-
-
-
-        // Getting the elapsedTime text from layout
-        elapsedTimeTextView = view.elapsedTimeTextView;
+        activityModel.getGoalTimeText().observe(view.goalTextView::setText);
 
         // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
         stopwatch = new Stopwatch(view.elapsedTimeTextView);

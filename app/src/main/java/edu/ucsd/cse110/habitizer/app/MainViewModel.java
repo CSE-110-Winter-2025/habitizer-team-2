@@ -5,17 +5,14 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.app.domain.RoomRoutineRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.util.observables.MutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.Transformations;
@@ -24,10 +21,9 @@ public class MainViewModel extends ViewModel {
 
     private final RoomRoutineRepository repo;
 
-    // UI state
-
-    // routine implementation
-
+    private final MutableSubject<Integer> activeRoutineId;
+    private final Subject<Routine> activeRoutine;
+    private final Subject<List<Task>> activeRoutineOrderedTasks;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -40,26 +36,38 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(RoomRoutineRepository routineRepository) {
         this.repo = routineRepository;
+
+        this.activeRoutineId = new PlainMutableSubject<>();
+        this.activeRoutine = Transformations.switchMap(activeRoutineId, repo::find);
+        this.activeRoutineOrderedTasks = Transformations.map(activeRoutine, routine -> {
+            return routine.tasks()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Task::sortOrder))
+                    .toList();
+        });
+    }
+
+    // KICKS EVERYTHING OFF
+    public void setActiveRoutine(int routineId) {
+        this.activeRoutineId.setValue(routineId);
     }
 
     public Subject<List<Routine>> getOrderedRoutines() {
-        // Equivalent Code to Map below:
-        //
-        // var result = new PlainMutableSubject<List<Routine>>();
-        // repo.findAll().observe(input -> {
-        //     var output = input.stream().sorted().toList();
-        //     result.setValue(output);
-        // })
-
         return Transformations.map(repo.findAll(), unsorted -> {
-            return unsorted.stream().sorted().toList();
+            return unsorted.stream()
+                    .sorted(Comparator.comparingInt(Routine::sortOrder))
+                    .toList();
         });
     }
 
 
-    public Subject<List<Task>> getOrderedTasks(int routineID) {
-        return Transformations.map(repo.findTasksByRoutine(routineID), unsorted -> {
-            return unsorted.stream().sorted().toList();
+    public Subject<List<Task>> getOrderedTasks() {
+        return activeRoutineOrderedTasks;
+    }
+
+    public Subject<String> getGoalTimeText() {
+        return Transformations.map(activeRoutine, routine -> {
+            return Integer.toString(routine.goalTime());
         });
     }
 
