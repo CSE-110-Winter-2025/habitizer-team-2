@@ -56,27 +56,13 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        Runnable endRoutineCallback = () -> {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    Button endButton = getView().findViewById(R.id.end_button);
-                    if (endButton != null) {
-                        endButton.performClick();
-                    }
-                });
-            }
-        };
+        activityModel.setActiveRoutine(routineID);
+
         // Initialize the Adapter (with an empty list for now)
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, endRoutineCallback);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, getEndButtonCallback());
+
 
         var tasksData = activityModel.getOrderedTasks();
-
-        // activityModel.getRoutine(routineID)
-//        List<Task> oldTasks = tasksData.getValue();
-//        for (int i = 0; i < oldTasks.size(); i++){
-//            activityModel.removeCheckOff(oldTasks.get(i).id(),
-//                    routineID);
-//        }
 
         tasksData.observe(tasks -> {
             if (tasks == null) return;
@@ -86,6 +72,8 @@ public class TaskListFragment extends Fragment {
         });
 
     }
+
+
 
     @Nullable
     @Override
@@ -132,12 +120,25 @@ public class TaskListFragment extends Fragment {
             stopwatch.fastforward(30);
         });
 
+
         return view.getRoot();
     }
 
 //    public boolean getIsMorning(){return this.isMorning;}
 
-    public MainViewModel getActivityModel(){return this.activityModel;}
+    public Runnable getEndButtonCallback(){
+        Runnable endRoutineCallback = () -> {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Button endButton = getView().findViewById(R.id.end_button);
+                    if (endButton != null) {
+                        endButton.performClick();
+                    }
+                });
+            }
+        };
+        return endRoutineCallback;
+    }
 
     /**
      * Called when the view hierarchy associated with the fragment is being removed.
@@ -147,6 +148,7 @@ public class TaskListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         stopwatch.stop();
+        activityModel.uncheckTasks();
     }
 
 

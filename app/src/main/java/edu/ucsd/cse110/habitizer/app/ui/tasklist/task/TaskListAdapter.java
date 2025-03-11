@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist.task;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // Get the task for this position.
         var task = getItem(position);
 
-
         assert task != null;
 
         // Check if a view is being reused...
@@ -69,25 +69,25 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
 
         binding.taskBox.setOnClickListener(b -> {
+
             int completedTime = stopwatch.getElapsedTimeSeconds();
             int timeElapsed = (completedTime - taskStartTime) / 60 + 1;
             taskStartTime = completedTime;
 
             String timeCompleted = "[" + timeElapsed + " m]";
 
-            // activityModel.getRoutine(routineID)
-            activityModel.checkOff(task.id(), routineID);
+            activityModel.checkOff(task.id());
 
             binding.timeComplete.setText(timeCompleted);
-            notifyDataSetChanged();
 
-            if (allTasksCompleted()) {
-                if (endRoutineCallback != null) {
-                    endRoutineCallback.run();
-                }
-            }
             binding.taskBox.setEnabled(false);
         });
+
+        if (activityModel.allTasksCompleted()) {
+            if (endRoutineCallback != null) {
+                endRoutineCallback.run();
+            }
+        }
 
         if(task.checkedOff()){
             binding.taskImg.setImageResource(R.drawable.silvringchecked);
@@ -116,15 +116,5 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         assert id != null;
 
         return id;
-    }
-
-    private boolean allTasksCompleted() {
-        for (int i = 0; i < getCount(); i++) {
-            Task task = getItem(i);
-            if (task != null && !task.checkedOff()) {
-                return false;
-            }
-        }
-        return true;
     }
 }

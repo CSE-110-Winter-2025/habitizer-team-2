@@ -6,9 +6,7 @@ import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
 
 public interface RoutineRepository {
     Subject<Routine> find(int id);
-
     Subject<List<Routine>> findAll();
-
     void save(Routine routine);
 
     void save(List<Routine> routines);

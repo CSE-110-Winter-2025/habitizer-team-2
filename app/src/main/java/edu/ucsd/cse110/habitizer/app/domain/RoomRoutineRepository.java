@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.domain;
 
+import android.util.Log;
+
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
@@ -49,10 +51,10 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void save(Routine routine) {
         db.runInTransaction(() -> {
             // Handle each task...
+        routineDao.insert(ConvertUtils.dataFromRoutine(routine));
             for (var task : routine.tasks()) {
                 taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
-            routineDao.insert(ConvertUtils.dataFromRoutine(routine));
         });
     }
 
@@ -61,10 +63,11 @@ public class RoomRoutineRepository implements RoutineRepository {
         for (Routine routine : routines) {
             db.runInTransaction(() -> {
                 // Handle each task of each routine
+             routineDao.insert(ConvertUtils.dataFromRoutine(routine));
                 for (var task: routine.tasks()) {
                     taskDao.insert(TaskEntity.fromTask(task, routine.id()));
                 }
-                routineDao.insert(ConvertUtils.dataFromRoutine(routine));
+
             });
         }
 //
@@ -84,10 +87,11 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void append(Routine routine) {
         db.runInTransaction(() -> {
             // Handle each task...
+        routineDao.append(ConvertUtils.dataFromRoutine(routine));
             for (var task : routine.tasks()) {
                 taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
-            routineDao.append(ConvertUtils.dataFromRoutine(routine));
+
         });
     }
 
@@ -95,11 +99,12 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void prepend(Routine routine) {
         db.runInTransaction(() -> {
             // Handle each task...
+            routineDao.prepend(ConvertUtils.dataFromRoutine(routine));
             for (var task : routine.tasks()) {
                 taskDao.insert(TaskEntity.fromTask(task, routine.id()));
             }
-            routineDao.prepend(ConvertUtils.dataFromRoutine(routine));
-        });
+
+       });
     }
 
     @Override
@@ -110,9 +115,18 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     public Subject<Task> findTask(int id) {
         var entityLiveData = taskDao.findAsLiveData(id);
+        if(taskDao.findAsLiveData(id).getValue() == null){Log.d("fucke me", "true");}
+//        Log.d("entname",entityLiveData.getValue().name);
         var taskLiveData = Transformations.map(entityLiveData, ConvertUtils::taskFromData);
-        return new LiveDataSubjectAdapter<>(taskLiveData);
+        var sub =  new LiveDataSubjectAdapter<>(taskLiveData);
+//        Log.d("db subTaskId", sub.getValue().name());
+        return sub;
     }
+//
+//    public Task findTaskValue(int id) {
+//        var task = taskDao.find(id);
+//        return new Task(task.id, task.sortOrder, task.name, task.checkedOff);
+//    }
 
     public Subject<List<Task>> findAllTasks() {
         var entitiesLiveData = taskDao.findAllAsLiveData();
