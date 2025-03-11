@@ -88,7 +88,6 @@ public class MainViewModel extends ViewModel {
 
     public void checkOff(int taskID){
           repo.saveTask(getTask(taskID).withCheckedOff(true), activeRoutineId.getValue());
-
     }
 
     public void removeCheckOff(int taskID){
