@@ -22,8 +22,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     Stopwatch stopwatchTask; //reference to TaskListFragment
 
-    private boolean shouldResetStopwatchTask = false;
-
     int taskStartTime = 0;
 
     int timeElapsed = 0;
@@ -49,10 +47,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     public void setStopwatchTask(Stopwatch stopwatch){
         this.stopwatchTask = stopwatch;
-    }
-
-    public boolean shouldResetStopwatchTask() {
-        return shouldResetStopwatchTask;
     }
 
     @NonNull
@@ -118,10 +112,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     @Override
     public boolean hasStableIds() {
         return true;
-    }
-
-    public boolean isTimeTaskReset(){  //correct?? right direction?
-        return shouldResetStopwatchTask;
     }
 
 
