@@ -12,7 +12,6 @@ public class Stopwatch {
     private int elapsedTimeSeconds;
     private final Handler handler;
     private final TextView elapsedTimeTextView;
-
     private final Runnable updateRunnable;
 
     public Boolean isRunning;
@@ -71,6 +70,7 @@ public class Stopwatch {
 
     public void reset(){
         elapsedTimeSeconds = 0;
+        elapsedTimeTextView.setText(String.valueOf(0)); //updates the UI
     }
 
 

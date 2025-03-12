@@ -138,12 +138,16 @@ public class TaskListFragment extends Fragment {
         adapter.setStopwatch(stopwatch);
         adapter.setStopwatchTask(stopwatchTask);
 
-        if(adapter.isTimeTaskReset() == true){ //not working???
-            stopwatchTask.stop();
-            stopwatchTask.reset();
-            view.elapsedTaskTimeTextView.setText(String.valueOf(0));
-            stopwatchTask.start();
-        }
+        // Delay checking isTimeTaskReset until after ListView processing
+        view.taskList.post(() -> {
+            Log.d("DEBUG", "Post-check isTimeTaskReset: " + adapter.isTimeTaskReset());
+            if (adapter.isTimeTaskReset()) {
+                Log.d("DEBUG", "Resetting stopwatchTask...");
+                stopwatchTask.stop();
+                stopwatchTask.reset();
+                stopwatchTask.start();
+            }
+        });
 
         view.timeButton.setOnClickListener( v -> { //added for task time as well
                 if(stopwatch.isRunning) {
