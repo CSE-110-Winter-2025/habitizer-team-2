@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
@@ -78,7 +80,15 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             timeElapsed = (completedTime - taskStartTime) / 60 + 1;
             taskStartTime = completedTime;
 
-            String timeCompleted = "[" + timeElapsed + " m]";
+            String timeCompleted;
+            if (timeElapsed < 60) {
+                int roundSeconds = (timeElapsed/5) * 5;
+                timeCompleted = String.format(Locale.US, "[%d:%02d]", roundSeconds / 60, roundSeconds % 60);
+            } else {
+                timeCompleted = String.format(Locale.US, "[%d m]", timeElapsed / 60);
+            }
+
+            //String timeCompleted = "[" + timeElapsed + " m]";
 
             //Set flag to reset stopwatch
             //shouldResetStopwatchTask = true; //added here? needed
