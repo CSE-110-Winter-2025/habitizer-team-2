@@ -75,6 +75,11 @@ public class MainViewModel extends ViewModel {
             return Integer.toString(routine.goalTime());
         });
     }
+    public Subject<String> getRoutineName() {
+        return Transformations.map(activeRoutine, routine -> {
+            return routine.name();
+        });
+    }
 
     public Task getTask(int taskID){
         var tasks = getOrderedTasks().getValue();

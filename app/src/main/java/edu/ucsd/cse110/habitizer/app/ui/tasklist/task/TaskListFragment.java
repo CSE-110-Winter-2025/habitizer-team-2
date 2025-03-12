@@ -94,8 +94,7 @@ public class TaskListFragment extends Fragment {
         activityModel.getGoalTimeText().observe(view.goalTextView::setText);
 
         //activityModel.getRoutine(name)
-        String routineName = activityModel.getRoutine(routineID).name();
-        view.toolbarTitle.setText(routineName);
+        activityModel.getRoutineName().observe(view.toolbarTitle::setText);
 
         //activityModel.getRoutine(name)
 //        String routineName = activityModel.getActiveRoutine().name();
