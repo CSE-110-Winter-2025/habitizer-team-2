@@ -104,6 +104,19 @@ public class EditRoutineTasksFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         this.view = FragmentEditRoutineTasksBinding.inflate(inflater, container, false);
 
+        view.saveNewRtnNameButton.setOnClickListener(v -> {
+            String userInput = view.editNewRoutineName.getText().toString();
+
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Success!")
+                    .setMessage("Routine Name saved")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+            activityModel.renameRoutine(routineID, userInput, activityModel.getRoutineRepository());
+            view.editNewRoutineName.setText("");
+        });
+
+
 
         view.saveGoalButton.setOnClickListener(v -> {
             String userInput = view.goalTimeInput.getText().toString();
