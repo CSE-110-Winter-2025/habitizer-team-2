@@ -75,7 +75,7 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
         binding.btnMoveUp.setOnClickListener(v -> {
                 if(position == 0) return;
 
-                activityModel.swap(routineID,
+                activityModel.swap(
                         (int)getItemId(position),
                         (int)getItemId(position - 1));
 
@@ -85,7 +85,7 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
         binding.btnMoveDown.setOnClickListener(v -> {
                 if(position == getCount() - 1) return;
 
-                activityModel.swap(routineID,
+                activityModel.swap(
                         (int)getItemId(position),
                         (int)getItemId(position + 1));
                 notifyDataSetChanged();

@@ -11,23 +11,14 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditRoutineTasksBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmDeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.CreateTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 // TO DO: Make two lists for morning and evening -> update methods to return those lists -> update edit list
 
@@ -80,7 +71,8 @@ public class EditRoutineTasksFragment extends Fragment {
 
         // Below is the updated code when default morning and evening lists are created instead of just one default
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
-        var tasksData = activityModel.getOrderedTasks(routineID);
+        activityModel.setActiveRoutine(routineID);
+        var tasksData = activityModel.getOrderedTasks();
 
         this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, routineID, id -> {
             var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, routineID);
@@ -114,7 +106,7 @@ public class EditRoutineTasksFragment extends Fragment {
                         .setMessage("Goal time saved")
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .show();
-                activityModel.getRoutine(routineID).setGoalTime(intUserInput);
+                activityModel.setGoalTimeByRoutine(routineID, intUserInput);
             } catch (NumberFormatException e) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Fail!")

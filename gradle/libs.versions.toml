@@ -10,6 +10,7 @@ androidxAnnotations = "1.9.1"
 androidxAppCompat = "1.7.0"
 androidxConstraintlayout = "2.2.0"
 androidxLifecycle = "2.8.7"
+androidxRoom = "2.6.1"
 androidxTestExtEspressoCore = "3.6.1"
 androidxTestExtJUnit = "1.2.1"
 hamcrest = "3.0"
@@ -23,6 +24,9 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintlayout" }
 androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle", version.ref = "androidxLifecycle" }
 androidx-lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "androidxLifecycle" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-apt = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 androidx-test-ext-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxTestExtEspressoCore" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExtJUnit" }
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrest" }

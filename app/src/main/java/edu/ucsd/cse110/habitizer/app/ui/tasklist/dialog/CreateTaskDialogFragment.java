@@ -68,7 +68,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
         var name = view.addTaskNameText.getText().toString();
 
         // depending on isMorning, the appropriate task repository is chosen
-        var designatedRepo = activityModel.getRoutine(routineID);
+        var designatedRepo = activityModel.getActiveRoutine();
 //        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
         var task = new Task(null, -1, name, false);
 

@@ -11,28 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.util.ArrayList;
-import java.util.Collection;
+
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentHomepageRoutineBinding;
 
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmDeleteTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditRoutinesDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmEditTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.CreateTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditTaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.TaskListFragment;
+
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryTaskDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
-
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class HomePageRoutineFragment extends Fragment {
 
@@ -108,6 +102,7 @@ public class HomePageRoutineFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         // Initialize the Adapter (with an empty list for now)
+        ;
 
         var routinesData = activityModel.getOrderedRoutines();
 
@@ -152,7 +147,7 @@ public class HomePageRoutineFragment extends Fragment {
                 } else if(editMode){
                     editMode(menuDescription, createRoutineButton);
                 } else {
-                    activityModel.appendRoutine(new Routine(null,-1, "New Routine", InMemoryTaskDataSource.fromDefaultNew()));
+                    activityModel.appendRoutine(new Routine(null, -1, "New Routine", 0, new ArrayList<Task>()));
                 }
             });
 
