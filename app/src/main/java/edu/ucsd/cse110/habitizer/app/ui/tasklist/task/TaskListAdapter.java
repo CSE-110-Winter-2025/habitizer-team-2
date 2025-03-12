@@ -22,7 +22,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     int routineID;
     Stopwatch stopwatch;
+
+    Stopwatch stopwatchTask; //reference to TaskListFragment
+
     int taskStartTime = 0;
+
+    int timeElapsed = 0;
 
     private Runnable endRoutineCallback;
     public TaskListAdapter(Context context,
@@ -41,6 +46,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     public void setStopwatch (Stopwatch stopwatch) {
         this.stopwatch = stopwatch;
+    }
+
+    public void setStopwatchTask(Stopwatch stopwatch){
+        this.stopwatchTask = stopwatch;
     }
 
     @NonNull
@@ -69,7 +78,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         binding.taskBox.setOnClickListener(b -> {
 
             int completedTime = stopwatch.getElapsedTimeSeconds();
-            int timeElapsed = completedTime - taskStartTime;
+            timeElapsed = (completedTime - taskStartTime) / 60 + 1;
             taskStartTime = completedTime;
 
             String timeCompleted;
@@ -82,6 +91,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
             //String timeCompleted = "[" + timeElapsed + " m]";
 
+            //Set flag to reset stopwatch
+            //shouldResetStopwatchTask = true; //added here? needed
+            stopwatchTask.reset(); //added here to possibly reset this when button is pressed
+
+            activityModel.getRoutine(routineID);
             activityModel.checkOff(task.id());
 
             binding.timeComplete.setText(timeCompleted);
@@ -100,7 +114,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         } else {
             binding.taskImg.setImageResource(R.drawable.silvring);
         }
-
         return binding.getRoot();
     }
 
@@ -112,6 +125,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     public boolean hasStableIds() {
         return true;
     }
+
 
     @Override
     public long getItemId(int position) {

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Handler;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,13 @@ public class TaskListFragment extends Fragment {
 
     public int routineID;
     public int elapsedTimeMinutes;
+
+    private Runnable updateRunnable;
+    private Handler handler;
+    private TextView elapsedTimeTextView;
+
+    private Stopwatch stopwatchTask;
+
 
     private Stopwatch stopwatch;
 
@@ -86,35 +94,52 @@ public class TaskListFragment extends Fragment {
         // activityModel.getRoutine(routineID)
         activityModel.getGoalTimeText().observe(view.goalTextView::setText);
 
+
+        //activityModel.getRoutine(name)
+        String routineName = activityModel.getRoutine(routineID).name();
+        view.toolbarTitle.setText(routineName);
+
+
+        // Getting the elapsedTime text from layout
+        elapsedTimeTextView = view.elapsedTimeTextView;
+
         // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
         stopwatch = new Stopwatch(view.elapsedTimeTextView);
+        stopwatchTask = new Stopwatch(view.elapsedTaskTimeTextView); //added for taskTime
 
         // End Routine Button;
         Button endButton = view.getRoot().findViewById((R.id.end_button));
         endButton.setOnClickListener(v -> {
             view.elapsedTimeTextView.setText(String.valueOf(stopwatch.getElapsedTimeInMinutes()+1));
+            view.elapsedTaskTimeTextView.setText(String.valueOf(0)); //edge case when end routine is done (set to 0)
             stopwatch.stop();
+            stopwatchTask.stop();
             disableInteractions();
         });
+
         // Start the Stopwatch
         stopwatch.start();
-
+        stopwatchTask.start();
 
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
+        adapter.setStopwatchTask(stopwatchTask);
 
-        view.timeButton.setOnClickListener( v -> {
+        view.timeButton.setOnClickListener( v -> { //added for task time as well
                 if(stopwatch.isRunning) {
                     stopwatch.stop();
+                    stopwatchTask.stop();
                     view.timeButton.setImageResource(R.drawable.playbutton);
                 }else{
                     stopwatch.start();
+                    stopwatchTask.start();
                     view.timeButton.setImageResource(R.drawable.stopbutton);
                 }
         });
 
         view.ffButton.setOnClickListener(v -> {
             stopwatch.fastforward(15);
+            stopwatchTask.fastforward(15);
         });
 
 
@@ -146,6 +171,7 @@ public class TaskListFragment extends Fragment {
         super.onDestroyView();
         stopwatch.stop();
         activityModel.uncheckTasks();
+        stopwatchTask.stop();
     }
 
 
