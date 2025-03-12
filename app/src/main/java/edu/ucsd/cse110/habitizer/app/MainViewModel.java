@@ -66,6 +66,10 @@ public class MainViewModel extends ViewModel {
         });
     }
 
+    public Subject<String> getRoutineName() {
+        return Transformations.map(activeRoutine, routine ->{return routine.name();} );
+    }
+
     public Subject<List<Task>> getOrderedTasks() {
         return activeRoutineOrderedTasks;
     }

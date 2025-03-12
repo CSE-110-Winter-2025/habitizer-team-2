@@ -34,7 +34,6 @@ public class InMemoryTaskDataSource {
     // default time for both morning and evening routine goal time
     public final static int DEFAULT_GOAL_TIME = 45;
 
-
     public final static List<Task> DEFAULT_TASKS_MORNING = List.of(
 
             new Task(0,0 , "Shower", false),
