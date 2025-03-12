@@ -96,8 +96,8 @@ public class TaskListFragment extends Fragment {
 
 
         //activityModel.getRoutine(name)
-        String routineName = activityModel.getRoutine(routineID).name();
-        view.toolbarTitle.setText(routineName);
+//        String routineName = activityModel.getActiveRoutine().name();
+//        view.toolbarTitle.setText(routineName);
 
 
         // Getting the elapsedTime text from layout

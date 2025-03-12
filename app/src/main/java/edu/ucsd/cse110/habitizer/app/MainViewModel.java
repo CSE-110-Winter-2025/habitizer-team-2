@@ -170,12 +170,12 @@ public class MainViewModel extends ViewModel {
     // routine methods
     public void removeRoutine(int id) {
 //        var tasks = getOrderedTasks().getValue();
-        var tasks = repo.findTasksByRoutine(id).getValue();
-        assert tasks!=null;
-        for (Task task: tasks){
-            repo.removeTask(task.id());
-            Log.d("Task", task.name());
-        }
+//        var tasks = repo.findTasksByRoutine(id).getValue();
+//        assert tasks!=null;
+//        for (Task task: tasks){
+//            repo.removeTask(task.id());
+//            Log.d("Task", task.name());
+//        }
 
         repo.remove(id);
     }
