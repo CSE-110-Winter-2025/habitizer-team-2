@@ -33,6 +33,9 @@ public class TaskListFragment extends Fragment {
     private Runnable updateRunnable;
     private Handler handler;
     private TextView elapsedTimeTextView;
+
+    private Stopwatch stopwatchTask;
+
     private Stopwatch stopwatch;
 
     public TaskListFragment() {
@@ -77,7 +80,7 @@ public class TaskListFragment extends Fragment {
 
         var tasksData = activityModel.getOrderedTasks(routineID);
 
-         activityModel.getRoutine(routineID);
+        activityModel.getRoutine(routineID);
         List<Task> oldTasks = tasksData.getValue();
         if(oldTasks != null){
             for (int i = 0; i < oldTasks.size(); i++){
@@ -85,7 +88,6 @@ public class TaskListFragment extends Fragment {
                         activityModel.getRoutine(routineID));
             }
         }
-
 
         tasksData.observe(tasks -> {
             if (tasks == null) return;
@@ -107,6 +109,9 @@ public class TaskListFragment extends Fragment {
         String goalTimeString = Integer.toString(activityModel.getRoutine(routineID).getGoalTime());
         view.goalTextView.setText(goalTimeString);
 
+        //activityModel.getRoutine(name)
+        String routineName = activityModel.getRoutine(routineID).name();
+        view.toolbarTitle.setText(routineName);
 
 
         // Getting the elapsedTime text from layout
@@ -114,33 +119,41 @@ public class TaskListFragment extends Fragment {
 
         // Creating a new stopwatch object and passing in elapsedTimeTextView to update it with minutes
         stopwatch = new Stopwatch(view.elapsedTimeTextView);
+        stopwatchTask = new Stopwatch(view.elapsedTaskTimeTextView); //added for taskTime
 
         // End Routine Button;
         Button endButton = view.getRoot().findViewById((R.id.end_button));
         endButton.setOnClickListener(v -> {
             view.elapsedTimeTextView.setText(String.valueOf(stopwatch.getElapsedTimeInMinutes()+1));
+            view.elapsedTaskTimeTextView.setText(String.valueOf(0)); //edge case when end routine is done (set to 0)
             stopwatch.stop();
+            stopwatchTask.stop();
             disableInteractions();
         });
+
         // Start the Stopwatch
         stopwatch.start();
-
+        stopwatchTask.start();
 
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
+        adapter.setStopwatchTask(stopwatchTask);
 
-        view.timeButton.setOnClickListener( v -> {
+        view.timeButton.setOnClickListener( v -> { //added for task time as well
                 if(stopwatch.isRunning) {
                     stopwatch.stop();
+                    stopwatchTask.stop();
                     view.timeButton.setImageResource(R.drawable.playbutton);
                 }else{
                     stopwatch.start();
+                    stopwatchTask.start();
                     view.timeButton.setImageResource(R.drawable.stopbutton);
                 }
         });
 
         view.ffButton.setOnClickListener(v -> {
             stopwatch.fastforward(15);
+            stopwatchTask.fastforward(15);
         });
 
         return view.getRoot();
@@ -158,6 +171,7 @@ public class TaskListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         stopwatch.stop();
+        stopwatchTask.stop();
     }
 
 

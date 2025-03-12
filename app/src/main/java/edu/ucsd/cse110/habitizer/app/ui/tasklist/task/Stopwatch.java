@@ -68,6 +68,11 @@ public class Stopwatch {
         elapsedTimeTextView.setText(String.valueOf(elapsedTimeSeconds/60));
     }
 
+    public void reset(){
+        elapsedTimeSeconds = 0;
+        elapsedTimeTextView.setText(String.valueOf(0)); //updates the UI
+    }
+
     /**
      * Returns the elapsed time in minutes.
      *
