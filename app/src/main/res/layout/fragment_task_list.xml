@@ -15,14 +15,14 @@
         android:background="@color/white"
         android:contentDescription="@string/ff_button"
         app:layout_constraintBottom_toTopOf="@+id/task_list"
-        app:layout_constraintEnd_toStartOf="@+id/stop_button"
+        app:layout_constraintEnd_toStartOf="@+id/time_button"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ffbutton"
         app:tint="#737373"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <ImageButton
-        android:id="@+id/stop_button"
+        android:id="@+id/time_button"
         style="@android:style/Widget.DeviceDefault.ImageButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -30,21 +30,8 @@
         android:background="@color/white"
         android:contentDescription="@string/stop_button"
         app:layout_constraintBottom_toTopOf="@+id/task_list"
-        app:layout_constraintEnd_toStartOf="@+id/play_button"
         app:layout_constraintStart_toEndOf="@+id/ff_button"
         app:srcCompat="@drawable/stopbutton"
-        app:tint="#737373" />
-
-    <ImageButton
-        android:id="@+id/play_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintBottom_toTopOf="@+id/task_list"
-        app:layout_constraintStart_toEndOf="@+id/stop_button"
-        app:srcCompat="@drawable/playbutton"
         app:tint="#737373" />
 
     <LinearLayout
