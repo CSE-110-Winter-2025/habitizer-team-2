@@ -104,7 +104,7 @@ public class EditRoutineTasksFragment extends Fragment {
                     .setMessage("Routine Name saved")
                     .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                     .show();
-            activityModel.renameRoutine(routineID, userInput, activityModel.getRoutineRepository());
+            activityModel.renameRoutine(routineID, userInput);
             view.editNewRoutineName.setText("");
         });
 
