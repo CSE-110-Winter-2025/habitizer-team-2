@@ -130,6 +130,7 @@ public class TaskListFragment extends Fragment {
             stopwatchTask.stop();
             disableInteractions();
         });
+
         // Start the Stopwatch
         stopwatch.start();
         stopwatchTask.start();
@@ -137,17 +138,6 @@ public class TaskListFragment extends Fragment {
         // Give stopwatch access to adapter
         adapter.setStopwatch(stopwatch);
         adapter.setStopwatchTask(stopwatchTask);
-
-        // Delay checking isTimeTaskReset until after ListView processing
-        view.taskList.post(() -> {
-            Log.d("DEBUG", "Post-check isTimeTaskReset: " + adapter.isTimeTaskReset());
-            if (adapter.isTimeTaskReset()) {
-                Log.d("DEBUG", "Resetting stopwatchTask...");
-                stopwatchTask.stop();
-                stopwatchTask.reset();
-                stopwatchTask.start();
-            }
-        });
 
         view.timeButton.setOnClickListener( v -> { //added for task time as well
                 if(stopwatch.isRunning) {
