@@ -72,7 +72,6 @@ public class TaskListFragment extends Fragment {
 
         var tasksData = activityModel.getOrderedTasks();
 
-
         tasksData.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
@@ -94,6 +93,9 @@ public class TaskListFragment extends Fragment {
         // activityModel.getRoutine(routineID)
         activityModel.getGoalTimeText().observe(view.goalTextView::setText);
 
+        //activityModel.getRoutine(name)
+        String routineName = activityModel.getRoutine(routineID).name();
+        view.toolbarTitle.setText(routineName);
 
         //activityModel.getRoutine(name)
 //        String routineName = activityModel.getActiveRoutine().name();

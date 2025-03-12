@@ -78,7 +78,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         binding.taskBox.setOnClickListener(b -> {
 
             int completedTime = stopwatch.getElapsedTimeSeconds();
+
             timeElapsed = (completedTime - taskStartTime);
+
+
             taskStartTime = completedTime;
 
             String timeCompleted;
