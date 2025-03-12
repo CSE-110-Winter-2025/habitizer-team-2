@@ -2,41 +2,34 @@ package edu.ucsd.cse110.habitizer.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
+import edu.ucsd.cse110.habitizer.app.domain.RoomRoutineRepository;
+import edu.ucsd.cse110.habitizer.app.util.MutableLiveDataSubjectAdapter;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.util.observables.MutableSubject;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
+import edu.ucsd.cse110.habitizer.lib.util.observables.Subject;
+import edu.ucsd.cse110.habitizer.lib.util.observables.Transformations;
 
 public class MainViewModel extends ViewModel {
 
-    private final RoutineRepository routineRepository;
-//    private final Map<Integer, Routine> routines;
-
-    // UI state
-
-    // routine implementation
-    private final PlainMutableSubject<List<Routine>> orderedRoutines;
-
-    Map<Integer, Routine> routineMap;
-
-    private final Map<Integer, PlainMutableSubject<List<Task>>> orderedTasksByRoutine;
-    private final Map<Integer, PlainMutableSubject<Boolean>> isCheckedOffByRoutine;
-    private final Map<Integer, PlainMutableSubject<Integer>> goalTimeByRoutine;
-    private final Map<Integer, PlainMutableSubject<Double>> elapsedTimeByRoutine;
-    private final Map<Integer, PlainMutableSubject<String>> displayedTextByRoutine;
-
-
+    private final RoomRoutineRepository repo;
+    private final MutableSubject<Integer> activeRoutineId;
+    private final Subject<Routine> activeRoutine;
+    private final Subject<List<Task>> activeRoutineOrderedTasks;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -47,125 +40,156 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getRoutineRepository());
                     });
 
-    public MainViewModel(RoutineRepository routineRepository) {
-        this.routineRepository = routineRepository;
-        this.routineMap = new HashMap<>();
-        this.orderedRoutines = new PlainMutableSubject<>();
-        this.orderedTasksByRoutine = new HashMap<>();
-        this.isCheckedOffByRoutine = new HashMap<>();
-        this.goalTimeByRoutine = new HashMap<>();
-        this.elapsedTimeByRoutine = new HashMap<>();
-        this.displayedTextByRoutine = new HashMap<>();
+    public MainViewModel(RoomRoutineRepository routineRepository) {
+        this.repo = routineRepository;
+        this.activeRoutineId = new PlainMutableSubject<>();
+        this.activeRoutine = Transformations.switchMap(activeRoutineId, repo::find);
+        this.activeRoutineOrderedTasks = Transformations.map(activeRoutine, routine -> {
+            return routine.tasks()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Task::sortOrder))
+                    .toList();
+        });
+//        this.activeRoutineOrderedTasks = Transformations.switchMap(activeRoutineId, repo::findTasksByRoutine);
+    }
 
-        // When the list of tasks changes (or is first loaded), reset the ordering.
+    // KICKS EVERYTHING OFF
+    public void setActiveRoutine(int routineId) {
+        this.activeRoutineId.setValue(routineId);
+    }
 
-        routineRepository.findAll().observe(routines -> {
-            if (routines == null) return; // not ready yet, ignore
-
-            var newOrderedRoutines = routines.stream()
+    public Subject<List<Routine>> getOrderedRoutines() {
+        return Transformations.map(repo.findAll(), unsorted -> {
+            return unsorted.stream()
                     .sorted(Comparator.comparingInt(Routine::sortOrder))
-                    .collect(Collectors.toList());
-            orderedRoutines.setValue(newOrderedRoutines);
-            routines.forEach( routine -> {if(routine==null) return;
-            routineMap.put(routine.id(),routine);});
-            routinesObserve();
+                    .toList();
         });
-        routinesObserve();
     }
 
-    public void routinesObserve(){
+    public Subject<List<Task>> getOrderedTasks() {
+        return activeRoutineOrderedTasks;
+    }
 
-        routineRepository.findAll().getValue().forEach(routine -> {
-            if (routine == null) return;
-
-            PlainMutableSubject<List<Task>> orderedTasks = getOrderedTasks(routine.id());
-            routine.findAll().observe(tasks->{
-                if (tasks == null) return; // not ready yet, ignore
-
-                PlainMutableSubject<Boolean> isCheckedOff = getIsCheckedOff(routine.id());
-
-                var newOrderedTasks = tasks.stream()
-                        .sorted(Comparator.comparingInt(Task::sortOrder))
-                        .collect(Collectors.toList());
-                orderedTasks.setValue(newOrderedTasks);
-
-                orderedTasks.getValue().forEach( task -> {
-                    if(task == null){return;}
-                    isCheckedOff.setValue(task.checkedOff());
-                });
-            });
-            orderedTasksByRoutine.put(routine.id(), orderedTasks);
+    public Subject<String> getGoalTimeText() {
+        return Transformations.map(activeRoutine, routine -> {
+            return Integer.toString(routine.goalTime());
         });
-
     }
 
-    public PlainMutableSubject<List<Routine>> getOrderedRoutines() {
-        return orderedRoutines;
-    }
-
-    public PlainMutableSubject<List<Task>> getOrderedTasks(int routineID) {
-        if(orderedTasksByRoutine.get(routineID) == null){return new PlainMutableSubject<>();}
-        return orderedTasksByRoutine.get(routineID);
+    public Task getTask(int taskID){
+        var tasks = getOrderedTasks().getValue();
+        for(Task task : tasks){
+            if(task.id() == taskID){return task;}
+        }
+        return null;
     }
 
     // retrieves a routine's repository based on the ID
-    public Routine getRoutine(int routineID){return routineMap.get(routineID);}
-
-    public RoutineRepository getRoutineRepository(){return this.routineRepository;}
-
-    public PlainMutableSubject<Boolean> getIsCheckedOff(int routineID){
-        if(isCheckedOffByRoutine.get(routineID) == null){return new PlainMutableSubject<>();}
-            return isCheckedOffByRoutine.get(routineID);
-    }
-    public void checkOff(int id, Routine routine){
-        var task = routine.find(id);
-        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), true);
-        routine.save(checkedOffTask);
+    public Routine getRoutine(int routineID){
+        return repo.find(routineID).getValue();
     }
 
-    public void removeCheckOff(int id, Routine routine){
-        var task = routine.find(id);
-        var checkedOffTask = new Task(task.getValue().id(), task.getValue().sortOrder(), task.getValue().name(), false);
-        routine.save(checkedOffTask);
+    public Routine getActiveRoutine(){
+        return this.activeRoutine.getValue();
     }
 
+    public void checkOff(int taskID){
+          repo.saveTask(getTask(taskID).withCheckedOff(true), activeRoutineId.getValue());
+
+    }
+
+    public void removeCheckOff(int taskID){
+        repo.saveTask(getTask(taskID).withCheckedOff(false), activeRoutineId.getValue());
+    }
+
+    public void uncheckTasks(){
+        var tasks = getOrderedTasks().getValue();
+        if(tasks!=null){tasks.forEach( task -> {removeCheckOff(task.id());});}
+    }
+
+    public void setGoalTimeByRoutine(int routineId, int goalTime){
+        repo.setGoalTime(routineId, goalTime);
+    }
+
+    public int getNumTasks(){
+        return getOrderedTasks().getValue().size();
+    }
+
+    public boolean allTasksCompleted(){
+        var tasks = getOrderedTasks().getValue();
+        int numTasksCheckedOff = 0;
+        for(Task task : tasks){if(task.checkedOff()){numTasksCheckedOff++;}};
+        return numTasksCheckedOff == getNumTasks();
+    }
+
+// TODO : Everything below this!
 
     public void removeTask(int id, Routine routine) {
-        routine.remove(id);
+//        List<Task> updatedTasks = routine.tasks().stream()
+//                .filter(task -> task.id() == null || task.id() != id) // Remove task with matching ID
+//                .toList(); // Creates a new immutable list
+//
+//        Routine updatedRoutine = routine.withTasks(updatedTasks);
+
+        repo.removeTask(id);
+//        repo.save(updatedRoutine);
     }
 
     public void renameTask(int id, String name, Routine routine) {
-        routine.rename(id, name);
+//        List<Task> updatedTasks = routine.tasks().stream()
+//                .map(task -> (task.id() != null && task.id() == id) ? task.withName(name) : task) // Rename the matching task
+//                .toList(); // Creates a new immutable list
+//
+//        Routine updatedRoutine = routine.withTasks(updatedTasks);
+//
+//        repo.save(updatedRoutine);
+        repo.renameTask(id, name);
+
     }
 
     public void appendTask(Task task, Routine routine) {
-        routine.append(task);
+//        List<Task> updatedTasks = new ArrayList<>(routine.tasks());
+//        updatedTasks.add(task); // Append the new task
+//
+//        Routine updatedRoutine = routine.withTasks(List.copyOf(updatedTasks));
+//
+        repo.appendTask(task, routine);
     }
 
 
     public void prependTask(Task task, Routine routine){
-        routine.prepend(task);
+        repo.prependTask(task, routine);
     }
  
-    public void swap(Integer routineID, Integer taskID1, Integer taskID2){
-        getRoutine(routineID).swapTasks(taskID1, taskID2);
+    public void swap(Integer taskID1, Integer taskID2){
+        var task1 = getTask(taskID1);
+        var task2 = getTask(taskID2);
+        repo.swapTasks(taskID1, task2.sortOrder(), taskID2, task1.sortOrder());
     }
 
     // routine methods
-    public void removeRoutine(int id, RoutineRepository routineRepository) {
-        routineRepository.remove(id);
+    public void removeRoutine(int id) {
+//        var tasks = getOrderedTasks().getValue();
+//        var tasks = repo.findTasksByRoutine(id).getValue();
+//        assert tasks!=null;
+//        for (Task task: tasks){
+//            repo.removeTask(task.id());
+//            Log.d("Task", task.name());
+//        }
+
+        repo.remove(id);
     }
 
-    public void renameRoutine(int id, String name, RoutineRepository routineRepository) {
-        routineRepository.rename(id, name);
+    public void renameRoutine(int id, String name) {
+        repo.rename(id, name);
     }
 
     public void appendRoutine(Routine routine) {
-        this.routineRepository.append(routine);
+        repo.append(routine);
     }
 
-    public void prependRoutine(Routine routine, RoutineRepository routineRepository){
-        routineRepository.prepend(routine);
+    public void prependRoutine(Routine routine){
+        repo.prepend(routine);
     }
 
 }

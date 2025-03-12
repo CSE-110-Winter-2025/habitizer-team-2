@@ -6,8 +6,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.util.observables.PlainMutableSubject;
@@ -36,7 +36,7 @@ public class InMemoryTaskDataSource {
 
     public final static List<Task> DEFAULT_TASKS_MORNING = List.of(
 
-            new Task(0,0 , "Shower", false ),
+            new Task(0,0 , "Shower", false),
             new Task(1,1,"Brush Teeth", false),
             new Task(2,2,"Dress", false),
             new Task(3,3,"Make Coffee", false),
@@ -48,18 +48,18 @@ public class InMemoryTaskDataSource {
 
     public final static List<Task> DEFAULT_TASKS_EVENING = List.of(
 
-            new Task(0,0 , "Prepare Dinner", false),
-            new Task(1,1,"Eat Dinner", false),
-            new Task(2,2,"Do Laundry", false),
-            new Task(3,3,"Watch TV", false),
-            new Task(4,4,"Walk Dog", false),
-            new Task(5,5,"Shower", false),
-            new Task(6,6,"Get in Bed", false)
+            new Task(7,0 , "Prepare Dinner", false),
+            new Task(8,1,"Eat Dinner", false),
+            new Task(9,2,"Do Laundry", false),
+            new Task(10,3,"Watch TV", false),
+            new Task(11,4,"Walk Dog", false),
+            new Task(12,5,"Shower", false),
+            new Task(13,6,"Get in Bed", false)
 
     );
 
     private void notifyTaskChanged(@Nullable Integer taskID){
-        Objects.requireNonNull(taskID);
+//        Objects.requireNonNull(taskID);
         taskSubjects.get(taskID).setValue(tasks.get(taskID));
     }
 

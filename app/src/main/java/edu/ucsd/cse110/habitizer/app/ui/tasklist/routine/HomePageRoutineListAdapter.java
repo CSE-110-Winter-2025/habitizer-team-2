@@ -15,12 +15,9 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.databinding.EditListItemTaskBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.ListItemEditRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmDeleteRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.task.EditRoutineTasksFragment;
@@ -75,6 +72,8 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
         // Get the task for this position.
         var routine = getItem(position);
         assert routine != null;
+
+//        activityModel.setActiveRoutine(routine.id());
 
 
         // Check if a view is being reused...

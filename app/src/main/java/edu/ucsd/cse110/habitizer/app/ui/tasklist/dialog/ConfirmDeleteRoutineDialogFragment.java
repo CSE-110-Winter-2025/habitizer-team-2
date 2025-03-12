@@ -92,7 +92,7 @@ public class ConfirmDeleteRoutineDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which){
         try{
-            activityModel.removeRoutine(routineID, activityModel.getRoutineRepository());
+            activityModel.removeRoutine(routineID);
         } catch(Exception e){
             Log.e("DeleteRoutine", "Error d");
         }finally {
