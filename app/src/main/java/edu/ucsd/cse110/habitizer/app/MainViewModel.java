@@ -68,7 +68,12 @@ public class MainViewModel extends ViewModel {
             orderedRoutines.setValue(newOrderedRoutines);
             routines.forEach( routine -> {if(routine==null) return;
             routineMap.put(routine.id(),routine);});
+            routinesObserve();
         });
+        routinesObserve();
+    }
+
+    public void routinesObserve(){
 
         routineRepository.findAll().getValue().forEach(routine -> {
             if (routine == null) return;
@@ -91,7 +96,6 @@ public class MainViewModel extends ViewModel {
             });
             orderedTasksByRoutine.put(routine.id(), orderedTasks);
         });
-
 
     }
 
@@ -156,8 +160,8 @@ public class MainViewModel extends ViewModel {
         routineRepository.rename(id, name);
     }
 
-    public void appendRoutine(Routine routine, RoutineRepository routineRepository) {
-        routineRepository.append(routine);
+    public void appendRoutine(Routine routine) {
+        this.routineRepository.append(routine);
     }
 
     public void prependRoutine(Routine routine, RoutineRepository routineRepository){
