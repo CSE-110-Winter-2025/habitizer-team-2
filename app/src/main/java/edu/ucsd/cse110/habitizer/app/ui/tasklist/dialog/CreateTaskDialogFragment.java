@@ -68,15 +68,14 @@ public class CreateTaskDialogFragment extends DialogFragment {
         var name = view.addTaskNameText.getText().toString();
 
         // depending on isMorning, the appropriate task repository is chosen
-        var designatedRepo = activityModel.getActiveRoutine();
 //        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
         var task = new Task(null, -1, name, false);
 
         // appends tasks to given list
         if (view.appendRadioBtn.isChecked()){
-            activityModel.appendTask(task, designatedRepo);
+            activityModel.appendTask(task, routineID);
         } else if(view.prependRadioBtn.isChecked()){
-            activityModel.prependTask(task, designatedRepo);
+            activityModel.prependTask(task, routineID);
         } else{
             throw new IllegalStateException("no radio button is checked.");
         }

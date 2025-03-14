@@ -119,14 +119,12 @@ public class HomePageRoutineListAdapter extends ArrayAdapter<Routine> {
 
     private void openTaskListFragment(int routineID) {
         fragment.requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(routineID))  // Make sure this ID matches your container
-                .addToBackStack(null)  // Allows back navigation
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance(routineID))  // Make sure this ID matches your containe
                 .commit();
     }
 
     private void openEditRoutineTasksFragment(int routineID) {
         fragment.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, EditRoutineTasksFragment.newInstance(routineID))
-                .addToBackStack(null)
                 .commit();
     }
 

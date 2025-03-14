@@ -71,8 +71,8 @@ public class EditRoutineTasksFragment extends Fragment {
 
         // Below is the updated code when default morning and evening lists are created instead of just one default
         // would have to update getOrderedTasks() method to instead two methods that return desired tasks
-        activityModel.setActiveRoutine(routineID);
-        var tasksData = activityModel.getOrderedTasks();
+
+        var tasksData = activityModel.getOrderedTasks(routineID);
 
         this.adapterList = new EditTaskListAdapter(requireContext(), new ArrayList<>(), activityModel, routineID, id -> {
             var dialogFragment = ConfirmEditTaskDialogFragment.newInstance(id, routineID);

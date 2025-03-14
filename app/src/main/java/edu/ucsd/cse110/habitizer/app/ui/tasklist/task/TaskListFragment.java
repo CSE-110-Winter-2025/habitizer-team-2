@@ -64,13 +64,11 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        activityModel.setActiveRoutine(routineID);
-
         // Initialize the Adapter (with an empty list for now)
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel, routineID, getEndButtonCallback());
 
 
-        var tasksData = activityModel.getOrderedTasks();
+        var tasksData = activityModel.getOrderedTasks(routineID);
 
         tasksData.observe(tasks -> {
             if (tasks == null) return;
@@ -91,10 +89,10 @@ public class TaskListFragment extends Fragment {
         view.taskList.setAdapter(adapter);
 
         // activityModel.getRoutine(routineID)
-        activityModel.getGoalTimeText().observe(view.goalTextView::setText);
+        activityModel.getGoalTimeText(routineID).observe(view.goalTextView::setText);
 
         //activityModel.getRoutine(name)
-        activityModel.getRoutineName().observe(view.toolbarTitle::setText);
+        activityModel.getRoutineName(routineID).observe(view.toolbarTitle::setText);
 
 
 
@@ -144,7 +142,6 @@ public class TaskListFragment extends Fragment {
         return view.getRoot();
     }
 
-//    public boolean getIsMorning(){return this.isMorning;}
 
     public Runnable getEndButtonCallback(){
         Runnable endRoutineCallback = () -> {
@@ -167,8 +164,8 @@ public class TaskListFragment extends Fragment {
      */
     public void onDestroyView() {
         super.onDestroyView();
+        activityModel.uncheckTasks(routineID);
         stopwatch.stop();
-        activityModel.uncheckTasks();
         stopwatchTask.stop();
     }
 

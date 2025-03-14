@@ -92,13 +92,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 timeCompleted = String.format(Locale.US, "[%d m]", timeElapsed / 60);
             }
 
-            //String timeCompleted = "[" + timeElapsed + " m]";
+//            String timeCompleted = "[" + timeElapsed + " m]";
 
             //Set flag to reset stopwatch
-            //shouldResetStopwatchTask = true; //added here? needed
+//            shouldResetStopwatchTask = true; //added here? needed
             stopwatchTask.reset(); //added here to possibly reset this when button is pressed
-
-            activityModel.getRoutine(routineID);
             activityModel.checkOff(task.id());
 
             binding.timeComplete.setText(timeCompleted);
@@ -106,7 +104,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             binding.taskBox.setEnabled(false);
         });
 
-        if (activityModel.allTasksCompleted()) {
+        if (activityModel.allCheckedOff(routineID)) {
             if (endRoutineCallback != null) {
                 endRoutineCallback.run();
             }
@@ -117,6 +115,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         } else {
             binding.taskImg.setImageResource(R.drawable.silvring);
         }
+
+
         return binding.getRoot();
     }
 

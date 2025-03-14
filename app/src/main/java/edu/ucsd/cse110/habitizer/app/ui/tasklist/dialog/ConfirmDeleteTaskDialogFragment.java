@@ -65,7 +65,7 @@ public class ConfirmDeleteTaskDialogFragment extends DialogFragment {
         try {
             var designatedRepo = activityModel.getRoutine(routineID);
             Log.d("designated Repo", Integer.valueOf(routineID).toString());
-            activityModel.removeTask(taskID, designatedRepo);
+            activityModel.removeTask(taskID);
         } catch (Exception e) {
             Log.e("DeleteTask", "Error deleting task: " + e.getMessage(), e);
         } finally {

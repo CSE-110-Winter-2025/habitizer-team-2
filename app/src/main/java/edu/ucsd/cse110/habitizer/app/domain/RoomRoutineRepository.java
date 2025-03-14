@@ -107,6 +107,8 @@ public class RoomRoutineRepository implements RoutineRepository {
        });
     }
 
+
+
     @Override
     public void rename(int id, String name) {
         routineDao.rename(id, name);
@@ -163,20 +165,40 @@ public class RoomRoutineRepository implements RoutineRepository {
         taskDao.delete(id);
     }
 
-    public void appendTask(Task task, Routine routine) {
-        taskDao.append(TaskEntity.fromTask(task, routine.id()));
+    public void appendTask(Task task, int routineID) {
+        taskDao.append(TaskEntity.fromTask(task, routineID));
     }
 
-    public void prependTask(Task task, Routine routine) {
-        taskDao.prepend(TaskEntity.fromTask(task, routine.id()));
+    public void prependTask(Task task, int routineID) {
+        taskDao.prepend(TaskEntity.fromTask(task, routineID));
     }
 
     public void renameTask(int id, String name) {
         taskDao.rename(id, name);
     }
 
-    public void swapTasks(int taskId1, int newSortOrder1, int taskId2, int newSortOrder2){
-        taskDao.swapTasks(taskId1, newSortOrder1, taskId2, newSortOrder2);
+    public void swapTasks(int taskId1, int sortorder1, int taskId2, int sortorder2){
+        taskDao.swapTasks(taskId1, sortorder1, taskId2, sortorder2);
+    }
+
+
+    public void checkoff(int taskId) {
+        taskDao.checkOff(taskId, true);
+    }
+
+    public void uncheckoff(int taskId) {
+        taskDao.checkOff(taskId, false);
+    }
+
+    public void uncheckoffall(int routineID) {
+        taskDao.checkOffAll(routineID, false);
+    }
+
+    public boolean allCheckedOff(int routineID){
+        int numCheckedOff = taskDao.numCheckedOff(routineID);
+        int numTasksInRoutine = taskDao.inrutcount(routineID);
+        if(numCheckedOff == numTasksInRoutine){return true;}
+        return false;
     }
 
 

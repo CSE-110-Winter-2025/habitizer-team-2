@@ -74,22 +74,21 @@ public class EditTaskListAdapter extends ArrayAdapter<Task> {
         //binding to up and down arrows for modified task positions
         binding.btnMoveUp.setOnClickListener(v -> {
                 if(position == 0) return;
-
-                activityModel.swap(
-                        (int)getItemId(position),
-                        (int)getItemId(position - 1));
-
-                notifyDataSetChanged();
+                activityModel.swap(task.id(),
+                        position,
+                        getItem(position-1).id(),
+                        position - 1);
         });
 
         binding.btnMoveDown.setOnClickListener(v -> {
                 if(position == getCount() - 1) return;
-
-                activityModel.swap(
-                        (int)getItemId(position),
-                        (int)getItemId(position + 1));
-                notifyDataSetChanged();
+            activityModel.swap(task.id(),
+                    position,
+                    getItem(position+1).id(),
+                    position +1);
         });
+
+        notifyDataSetChanged();
 
         return convertView;
     }

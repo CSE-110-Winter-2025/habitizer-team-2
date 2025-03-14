@@ -79,7 +79,7 @@ public class ConfirmEditTaskDialogFragment extends DialogFragment {
         var designatedRepo = activityModel.getRoutine(routineID);
 //        var designatedRepo = isMorning ? activityModel.getMorningTaskRepository() : activityModel.getEveningTaskRepository();
 
-        activityModel.renameTask(taskID, newName, designatedRepo);
+        activityModel.renameTask(taskID, newName);
 
         dialog.dismiss();
     }

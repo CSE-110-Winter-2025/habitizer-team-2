@@ -39,6 +39,12 @@ public interface TaskDao {
     @Query("SELECT COUNT(*) FROM tasks")
     int count();
 
+    @Query("SELECT COUNT(*) FROM tasks WHERE routine_id = :routineID")
+    int inrutcount(Integer routineID);
+
+    @Query("SELECT COUNT(*) FROM tasks WHERE routine_id = :routineID AND checked_off = true")
+    int numCheckedOff(Integer routineID);
+
     @Query("SELECT MIN(sort_order) FROM tasks WHERE routine_id = :routineId")
     int getMinSortOrder(Integer routineId);
 
@@ -68,13 +74,21 @@ public interface TaskDao {
         return Math.toIntExact(insert(newTask));
     }
 
+    @Query("Update tasks SET checked_off= :checkOff "+
+            "WHERE id = :id")
+    void checkOff(int id, boolean checkOff);
+
+    @Query("Update tasks SET checked_off= :checkOff "+
+            "WHERE routine_id = :id")
+    void checkOffAll(int id, boolean checkOff);
+
     @Query("UPDATE tasks SET sort_order = " +
             "CASE " +
             "WHEN id = :taskId1 THEN :newSortOrder1 " +
             "WHEN id = :taskId2 THEN :newSortOrder2 " +
             "END " +
             "WHERE id IN (:taskId1, :taskId2)")
-    void swapTasks(int taskId1, int newSortOrder1, int taskId2, int newSortOrder2);
+    void swapTasks(int taskId1, int newSortOrder2, int taskId2, int newSortOrder1);
 
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
